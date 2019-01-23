@@ -69,12 +69,13 @@ export function getSchemaType(schema) {
   if (!type && schema.enum) {
     type = 'string';
   }
+  console.log("getSchemaType", type);
   return type;
 }
 
 export function getWidget(schema, widget, registeredWidgets = {}) {
   const type = getSchemaType(schema);
-
+  console.log('schema type',type);
   function mergeOptions(Widget) {
     // cache return value as property of widget for proper react reconciliation
     if (!Widget.MergedWidget) {
