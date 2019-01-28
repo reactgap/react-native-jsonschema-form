@@ -767,3 +767,11 @@ export function rangeSpec(schema) {
   }
   return spec;
 }
+
+export function getTypeForm(schema) {
+  let typeForm = "form";
+  if (schema.hasOwnProperty('type')) {
+    return schema['type'];
+  }
+  return typeForm;
+}

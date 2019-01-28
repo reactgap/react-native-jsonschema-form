@@ -25,7 +25,7 @@ const COMPONENT_TYPES = {
   number: "NumberField",
   object: "ObjectField",
   string: "StringField",
-  flatList: "FlatList"
+  flatList: "ObjectFlatList"
 };
 
 function getFieldComponent(schema, uiSchema, idSchema, fields) {
@@ -233,7 +233,7 @@ function SchemaFieldRender(props) {
 
   if (Object.keys(schema).length === 0) {
     // See #312: Ensure compatibility with old versions of React.
-    return <div />;
+    return <View />;
   }
 
   const uiOptions = getUiOptions(uiSchema);

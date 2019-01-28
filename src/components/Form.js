@@ -11,6 +11,7 @@ import {
   setState,
   getDefaultRegistry,
   deepEquals,
+  getTypeForm
 } from "../utils";
 import validateFormData, { toErrorList } from "../validate";
 import styles from './styles';
@@ -24,6 +25,7 @@ export default class Form extends Component {
     safeRenderCompletion: false,
     noHtml5Validate: false,
     ErrorList: DefaultErrorList,
+    typeForm: 'form'
   };
 
   constructor(props) {
@@ -63,7 +65,7 @@ export default class Form extends Component {
     const { definitions } = schema;
     const formData = getDefaultFormState(schema, props.formData, definitions);
     const retrievedSchema = retrieveSchema(schema, definitions, formData);
-
+    const typeForm = getTypeForm(schema);
     const { errors, errorSchema } = mustValidate
       ? this.validate(formData, schema)
       : {
@@ -78,6 +80,7 @@ export default class Form extends Component {
       props.idPrefix
     );
     return {
+      typeForm,
       schema,
       uiSchema,
       idSchema,
@@ -202,7 +205,21 @@ export default class Form extends Component {
     }
   }
 
-  render() {
+  renderSubmit() {
+    const { children } = this.props;
+    const { typeForm } = this.state;
+    if (children) {
+      return children;
+    } else if (typeForm === 'form') {
+      return (
+        <View>
+          <Button onPress={this.onSubmit}  title="Add" disabled={false} />
+        </View>
+      )
+    }
+    return null;
+  }
+  renderSchemaForm() {
     const {
       children,
       safeRenderCompletion,
@@ -220,16 +237,14 @@ export default class Form extends Component {
       disabled,
     } = this.props;
 
-    const { schema, uiSchema, formData, errorSchema, idSchema } = this.state;
+    const { typeForm, schema, uiSchema, formData, errorSchema, idSchema } = this.state;
     const registry = this.getRegistry();
     const _SchemaField = registry.fields.SchemaField;
 
     console.log("Form render",this.state);
-    console.log("Form render registry",registry);
+    console.log("Form render idSchema",idSchema);
     return (
-      <View style={ this.props.styles == null ?  styles.base.full : this.props.styles }>
-        {this.renderErrors()}
-        <_SchemaField
+      <_SchemaField
           schema={schema}
           uiSchema={uiSchema}
           errorSchema={errorSchema}
@@ -243,15 +258,19 @@ export default class Form extends Component {
           safeRenderCompletion={safeRenderCompletion}
           disabled={disabled}
         />
-        {children ? (
-          children
-        ) : (
-          <View>
-            <Button onPress={this.onSubmit}  title="Add" disabled={false} />
-          </View>
-        )}
-        
+    );
+  }
+
+  render() {
+    return (
+      <View style={ this.props.styles == null ?  styles.base.full : this.props.styles }>
+        {this.renderErrors()}
+        {this.renderSchemaForm()}
+        {this.renderSubmit()}
       </View>
+    );
+  }
+}
       // <form
       //   className={className ? className : "rjsf"}
       //   id={id}
@@ -269,10 +288,6 @@ export default class Form extends Component {
       //   }}>
         
       // </form>
-    );
-  }
-}
-
 
 if (process.env.NODE_ENV !== "production") {
   Form.propTypes = {

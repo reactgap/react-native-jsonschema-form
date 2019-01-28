@@ -6,7 +6,7 @@ import ObjectField from "./ObjectField";
 import SchemaField from "./SchemaField";
 import StringField from "./StringField";
 import TitleField from "./TitleField";
-import FlatList from "./FlatList";
+import ObjectFlatList from "./ObjectFlatList";
 import UnsupportedField from "./UnsupportedField";
 
 export default {
@@ -18,6 +18,6 @@ export default {
   SchemaField,
   StringField,
   TitleField,
-  FlatList,
+  ObjectFlatList,
   UnsupportedField,
 };
