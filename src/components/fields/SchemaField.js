@@ -25,7 +25,8 @@ const COMPONENT_TYPES = {
   number: "NumberField",
   object: "ObjectField",
   string: "StringField",
-  flatList: "ObjectFlatList"
+  flatList: "ObjectFlatList",
+  view: "ObjectView"
 };
 
 function getFieldComponent(schema, uiSchema, idSchema, fields) {
@@ -39,6 +40,9 @@ function getFieldComponent(schema, uiSchema, idSchema, fields) {
 
   const componentName = COMPONENT_TYPES[getSchemaType(schema)];
   console.log("componentName",componentName);
+  // if (componentName === 'view') {
+  //   return null;
+  // }
   return componentName in fields
     ? fields[componentName]
     : () => {

@@ -8,6 +8,7 @@ import StringField from "./StringField";
 import TitleField from "./TitleField";
 import ObjectFlatList from "./ObjectFlatList";
 import UnsupportedField from "./UnsupportedField";
+import ObjectView from "./ObjectView";
 
 export default {
   ArrayField,
@@ -20,4 +21,5 @@ export default {
   TitleField,
   ObjectFlatList,
   UnsupportedField,
+  ObjectView
 };
