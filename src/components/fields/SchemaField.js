@@ -250,6 +250,9 @@ function SchemaFieldRender(props) {
   if (schema.type === "object") {
     displayLabel = false;
   }
+  if (schema.type === "flatList") {
+    displayLabel = false;
+  }
   if (schema.type === "boolean" && !uiSchema["ui:widget"]) {
     displayLabel = false;
   }

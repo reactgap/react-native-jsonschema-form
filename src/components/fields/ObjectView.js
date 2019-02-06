@@ -30,7 +30,6 @@ function DefaultObjectFieldTemplate(props) {
   const { TitleField, DescriptionField } = props;
   return (
     <View>
-       <Text>View</Text>
        {props.properties.map(prop => prop.content)}
     </View>
   );
