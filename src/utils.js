@@ -64,6 +64,12 @@ export function getDefaultRegistry() {
   };
 }
 
+export function getDefaultIcons() {
+  return {
+    icons: require('./components/icons').default
+  }
+}
+
 export function getSchemaType(schema) {
   let { type } = schema;
   if (!type && schema.enum) {
