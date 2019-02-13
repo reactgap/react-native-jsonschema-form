@@ -1,7 +1,7 @@
 // @flow
 
-import React from 'react'
-import { View, Text, TouchableHighlight, StyleSheet, Platform } from 'react-native'
+import React, { Component } from 'react'
+import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native'
 import {
   getDefaultIcons
 } from '../../../utils';
@@ -39,17 +39,34 @@ function getIconComponent(type, icon, icons) {
   }
 }
 
-const MenuItem = ({ item } : Props) => {
+class MenuItem extends Component<Props> {
 
-  const { title, type, icon } = item;
-  const { icons } = getDefaultIcons();
-  return(
-    <View style={styles.GridViewBlockStyle}>
-      {getIconComponent(type, icon, icons)}
-      <Text style={styles.GridViewInsideTextItemStyle}>{title}</Text>
-    </View>
-  )
+  onPress = () => {
+    const { item, onSelected } = this.props;
+    if (onSelected) {
+      onSelected(item);
+    }
+  }
+
+  render() {
+    const { item } = this.props;
+    const { title, type, icon } = item;
+    const { icons } = getDefaultIcons();
+    return(
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={this.onPress}
+        style={styles.GridViewBlockStyle}
+      >
+        <View>
+          {getIconComponent(type, icon, icons)}
+          <Text style={styles.GridViewInsideTextItemStyle}>{title}</Text>
+        </View>
+      </TouchableOpacity>
+    )
+  }
 }
+
 
 const styles = StyleSheet.create({
   MainContainer :{

@@ -158,6 +158,12 @@ export default class Form extends Component {
     }
   };
 
+  onAction = (...args) => {
+    if (this.props.onAction) {
+      this.props.onAction(...args);
+    }
+  };
+
   onSubmit = () => {
 
     if (!this.props.noValidate) {
@@ -254,6 +260,7 @@ export default class Form extends Component {
           onChange={this.onChange}
           onBlur={this.onBlur}
           onFocus={this.onFocus}
+          onAction={this.onAction}
           registry={registry}
           safeRenderCompletion={safeRenderCompletion}
           disabled={disabled}

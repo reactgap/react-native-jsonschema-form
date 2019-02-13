@@ -11,9 +11,21 @@ import MenuItem from './card/MenuItem';
 class ObjectFlatList extends Component {
   _keyExtractor = (item, index) => item.key != null ? item.key : index.toString();
 
-  renderItem = ({ item, index }) => (
-    <MenuItem item={item} />
-  );
+  onPressItem = (data) => {
+    const { onAction } = this.props;
+    if(onAction) {
+      onAction(data)
+    }
+  }
+
+  renderItem = ({ item, index }) => {
+    return (
+      <MenuItem 
+        item={item} 
+        onSelected={this.onPressItem}
+      />
+    )
+  };
   
   render() {
     const {

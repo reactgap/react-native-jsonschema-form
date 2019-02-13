@@ -145,6 +145,7 @@ class ObjectView extends Component {
       readonly,
       idPrefix,
       onBlur,
+      onAction,
       onFocus,
       registry = getDefaultRegistry(),
     } = this.props;
@@ -195,6 +196,7 @@ class ObjectView extends Component {
                 onChange={this.onPropertyChange(name)}
                 onBlur={onBlur}
                 onFocus={onFocus}
+                onAction={onAction}
                 registry={registry}
                 disabled={disabled}
                 readonly={readonly}
