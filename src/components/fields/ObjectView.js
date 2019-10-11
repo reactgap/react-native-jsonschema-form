@@ -171,7 +171,6 @@ class ObjectView extends Component {
         </View>
       );
     }
-    console.log('ObjectField ObjectField ObjectField', );
     const Template = registry.ObjectFieldTemplate || DefaultObjectFieldTemplate;
 
     const templateProps = {

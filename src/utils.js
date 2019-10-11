@@ -21,16 +21,20 @@ const widgetMap = {
     uri: 'URLWidget',
     'data-url': 'FileWidget',
     radio: 'RadioWidget',
-    select: 'SelectWidget',
+    select: 'PickerOption',
     textarea: 'TextareaWidget',
-    hidden: 'HiddenWidget',
-    date: 'DateWidget',
-    datetime: 'DateTimeWidget',
-    'date-time': 'DateTimeWidget',
-    'alt-date': 'AltDateWidget',
-    'alt-datetime': 'AltDateTimeWidget',
-    color: 'ColorWidget',
-    file: 'FileWidget',
+    // hidden: 'HiddenWidget',
+    // date: 'DateWidget',
+    // datetime: 'DateTimeWidget',
+    // 'date-time': 'DateTimeWidget',
+    // 'alt-date': 'AltDateWidget',
+    // 'alt-datetime': 'AltDateTimeWidget',
+    // color: 'ColorWidget',
+    // file: 'FileWidget',
+    avatar: 'Avatar',
+    textFieldPicker: 'TextFieldPicker',
+    PickerOption: 'PickerOption',
+    TextField: 'TextField',
   },
   number: {
     text: 'TextWidget',
@@ -75,13 +79,11 @@ export function getSchemaType(schema) {
   if (!type && schema.enum) {
     type = 'string';
   }
-  console.log("getSchemaType", type);
   return type;
 }
 
 export function getWidget(schema, widget, registeredWidgets = {}) {
   const type = getSchemaType(schema);
-  console.log('schema type',type);
   function mergeOptions(Widget) {
     // cache return value as property of widget for proper react reconciliation
     if (!Widget.MergedWidget) {
@@ -92,7 +94,7 @@ export function getWidget(schema, widget, registeredWidgets = {}) {
     }
     return Widget.MergedWidget;
   }
-
+  console.log('widget', widget);
   if (typeof widget === 'function') {
     return mergeOptions(widget);
   }
@@ -475,6 +477,7 @@ function resolveDependencies(schema, definitions, formData) {
   let { dependencies = {}, ...resolvedSchema } = schema;
   // Process dependencies updating the local schema properties as appropriate.
   for (const dependencyKey in dependencies) {
+   
     // Skip this dependency if its trigger property is not present.
     if (formData[dependencyKey] === undefined) {
       continue;
@@ -517,6 +520,7 @@ function withDependentSchema(
     definitions,
     formData
   );
+
   schema = mergeSchemas(schema, dependentSchema);
   // Since it does not contain oneOf, we return the original schema.
   if (oneOf === undefined) {

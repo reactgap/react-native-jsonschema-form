@@ -8,7 +8,7 @@ function DescriptionField(props) {
     // See #312: Ensure compatibility with old versions of React.
     return <View />;
   }
-  if (typeof description === 'string') {
+  if (typeof description === 'string' && description.length > 0) {
     return <Text>{description}</Text>;
   }
   return <View>{description}</View>;

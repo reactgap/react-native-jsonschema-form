@@ -39,7 +39,6 @@ function getFieldComponent(schema, uiSchema, idSchema, fields) {
   }
 
   const componentName = COMPONENT_TYPES[getSchemaType(schema)];
-  console.log("componentName",componentName);
   // if (componentName === 'view') {
   //   return null;
   // }
@@ -60,7 +59,10 @@ function Label(props) {
   const { label, required, id } = props;
   if (!label) {
     // See #312: Ensure compatibility with old versions of React.
-    return <View />;
+    return null;
+  }
+  if (label.length === 0) {
+    return null;
   }
   const labelValue = required ? label + REQUIRED_FIELD_SYMBOL : label;
   return (
@@ -153,27 +155,9 @@ function DefaultTemplate(props) {
       {displayLabel && <Label label={label} required={required} id={id} />}
       {displayLabel && description ? description : null}
       {children}
-      {errors}
+      {/* {errors} */}
       {help}
     </View>
-    // <div className={classNames}>
-    //   {additional && (
-    //     <div className="form-group">
-    //       <Label label={keyLabel} required={required} id={`${id}-key`} />
-    //       <LabelInput
-    //         label={label}
-    //         required={required}
-    //         id={`${id}-key`}
-    //         onChange={onKeyChange}
-    //       />
-    //     </div>
-    //   )}
-    //   {displayLabel && <Label label={label} required={required} id={id} />}
-    //   {displayLabel && description ? description : null}
-    //   {children}
-    //   {errors}
-    //   {help}
-    // </div>
   );
 }
 
@@ -214,6 +198,7 @@ function SchemaFieldRender(props) {
     name,
     onKeyChange,
     required,
+    onChangeReferKey,
     registry = getDefaultRegistry(),
   } = props;
   const {
@@ -229,7 +214,6 @@ function SchemaFieldRender(props) {
     idSchema
   );
   const FieldComponent = getFieldComponent(schema, uiSchema, idSchema, fields);
-  console.log('FieldComponent',FieldComponent);
   const { DescriptionField } = fields;
   const disabled = Boolean(props.disabled || uiSchema["ui:disabled"]);
   const readonly = Boolean(props.readonly || uiSchema["ui:readonly"]);
@@ -259,8 +243,16 @@ function SchemaFieldRender(props) {
   if (uiSchema["ui:field"]) {
     displayLabel = false;
   }
+  if (uiSchema["ui:widget"] === 'avatar') {
+    displayLabel = false;
+  }
 
-  console.log('FieldComponent',label);
+  let currentIndex = 0
+  if (uiSchema["ui:widget"] === "PickerOption") {
+    if (schema && schema.hasOwnProperty('currentIndex')) {
+      currentIndex = schema['currentIndex']
+    }
+  }
 
   const { __errors, ...fieldErrorSchema } = errorSchema;
 
@@ -277,6 +269,8 @@ function SchemaFieldRender(props) {
       errorSchema={fieldErrorSchema}
       formContext={formContext}
       rawErrors={__errors}
+      currentIndex={currentIndex}
+      onChangeReferKey={onChangeReferKey}
     />
   );
 

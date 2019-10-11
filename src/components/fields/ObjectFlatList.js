@@ -41,7 +41,6 @@ class ObjectFlatList extends Component {
       onChange,
       rawErrors,
     } = this.props;
-    console.log("FlatList",this.props);
     const { data, numColumns} = schema;
     return(
         <View>

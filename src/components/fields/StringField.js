@@ -17,6 +17,8 @@ function StringField(props) {
     onChange,
     onBlur,
     onFocus,
+    referValue,
+    onChangeReferKey,
     registry = getDefaultRegistry(),
     rawErrors,
   } = props;
@@ -25,10 +27,18 @@ function StringField(props) {
   const enumOptions = isSelect(schema) && optionsList(schema);
   const defaultWidget = format || (enumOptions ? 'select' : 'text');
   const { widget = defaultWidget, placeholder = '', ...options } = getUiOptions(uiSchema);
-  console.log('widget detect', widget);
+  let currentIndex = 0
+  if (uiSchema["ui:widget"] === "PickerOption") {
+    if (schema && schema.hasOwnProperty('currentIndex')) {
+      currentIndex = schema['currentIndex']
+    }
+  }
   const Widget = getWidget(schema, widget, widgets);
+  const additonalProps = { ...schema } || {}
+  
   return (
     <Widget
+      {...additonalProps}
       options={{ ...options, enumOptions }}
       schema={schema}
       id={idSchema && idSchema.$id}
@@ -37,6 +47,8 @@ function StringField(props) {
       onChange={onChange}
       onBlur={onBlur}
       onFocus={onFocus}
+      referValue={referValue}
+      autoCapitalize={additonalProps.autoCapitalize || 'none'}
       required={required}
       disabled={disabled}
       readonly={readonly}
@@ -44,7 +56,9 @@ function StringField(props) {
       autofocus={autofocus}
       registry={registry}
       placeholder={placeholder}
+      currentIndex={currentIndex}
       rawErrors={rawErrors}
+      onChangeReferKey={onChangeReferKey}
     />
   );
 }

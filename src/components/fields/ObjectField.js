@@ -127,6 +127,19 @@ class ObjectField extends Component {
     };
   };
 
+  onReferPropertyChange = (name, value) => {
+    const errorSchema = value ? {} : { "__errors": ["is a require property"] }
+    const newFormData = { ...this.props.formData, [name]: value };
+    this.props.onChange(
+      newFormData,
+      errorSchema &&
+        this.props.errorSchema && {
+          ...this.props.errorSchema,
+          [name]: errorSchema,
+        }
+    );
+  }
+
   getDefaultValue(type) {
     switch (type) {
       case "string":
@@ -174,7 +187,7 @@ class ObjectField extends Component {
     const { definitions, fields, formContext } = registry;
     const { SchemaField, TitleField, DescriptionField } = fields;
     const schema = retrieveSchema(this.props.schema, definitions, formData);
-    const title = schema.title === undefined ? name : schema.title;
+    const title = schema.title === undefined ? null : schema.title;
     const description = uiSchema["ui:description"] || schema.description;
     let orderedProperties;
 
@@ -192,15 +205,16 @@ class ObjectField extends Component {
         </View>
       );
     }
-    console.log('ObjectField ObjectField ObjectField');
     const Template = registry.ObjectFieldTemplate || DefaultObjectFieldTemplate;
-
+    const styleObject = uiSchema["ui:style"] ? uiSchema["ui:style"] : null;
     const templateProps = {
       title: uiSchema["ui:title"] || title,
       description,
       TitleField,
       DescriptionField,
       properties: orderedProperties.map(name => {
+        const schemaField = schema.properties[name]
+        const referName = schemaField.referKey ? schemaField.referKey : null;
         return {
           content: (
             <SchemaField
@@ -213,7 +227,9 @@ class ObjectField extends Component {
               idSchema={idSchema[name]}
               idPrefix={idPrefix}
               formData={formData[name]}
+              referValue={referName?  formData[referName] : ""}
               onKeyChange={this.onKeyChange(name)}
+              onChangeReferKey={ (name, value) =>  this.onReferPropertyChange(name, value)}
               onChange={this.onPropertyChange(name)}
               onBlur={onBlur}
               onFocus={onFocus}
@@ -235,7 +251,11 @@ class ObjectField extends Component {
       formData,
       formContext,
     };
-    return <Template {...templateProps} onAddClick={this.handleAddClick} />;
+    return (
+      <View style={styleObject}>
+        <Template {...templateProps} onAddClick={this.handleAddClick} />
+      </View>
+    )
   }
 }
 

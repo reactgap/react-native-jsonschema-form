@@ -6,7 +6,7 @@ import BaseInput from './BaseInput';
 // import ColorWidget from "./ColorWidget";
 // import DateWidget from "./DateWidget";
 // import DateTimeWidget from "./DateTimeWidget";
-// import EmailWidget from "./EmailWidget";
+import EmailWidget from "./Email/EmailWidget";
 // import FileWidget from "./FileWidget";
 // import HiddenWidget from "./HiddenWidget";
 import PasswordWidget from "./PasswordWidget";
@@ -17,6 +17,11 @@ import TextareaWidget from "./TextareaWidget";
 import TextWidget from './TextWidget';
 // import URLWidget from "./URLWidget";
 // import UpDownWidget from "./UpDownWidget";
+import Avatar from './Avatar';
+import TextFieldPicker from './TextField/TextFieldPicker'
+import TextField from './TextField/TextField'
+import PickerOption from './Picker/PickerOption'
+
 
 export default {
   BaseInput,
@@ -25,12 +30,13 @@ export default {
   // UpDownWidget,
   // RangeWidget,
   // SelectWidget,
+  TextField,
   TextWidget,
   // DateWidget,
   // DateTimeWidget,
   // AltDateWidget,
   // AltDateTimeWidget,
-  // EmailWidget,
+  EmailWidget,
   // URLWidget,
   TextareaWidget,
   // HiddenWidget,
@@ -38,4 +44,7 @@ export default {
   // FileWidget,
   // CheckboxWidget,
   // CheckboxesWidget,
+  Avatar,
+  TextFieldPicker,
+  PickerOption
 };

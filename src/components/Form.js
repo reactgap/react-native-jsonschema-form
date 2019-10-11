@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { View, Text, Button, StyleSheet } from 'react-native';
-
+import CSButton from './widgets/Button/CSButton/CSButton';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { default as DefaultErrorList } from "./ErrorList";
 import {
   getDefaultFormState,
@@ -25,14 +26,13 @@ export default class Form extends Component {
     safeRenderCompletion: false,
     noHtml5Validate: false,
     ErrorList: DefaultErrorList,
-    typeForm: 'form'
+    typeForm: 'form',
+    externalSubmit: false,
   };
 
   constructor(props) {
     super(props);
-    console.log("Form props", props);
     this.state = this.getStateFromProps(props);
-    console.log("state : after getStateFromProps", this.state);
     if (
       this.props.onChange &&
       !deepEquals(this.state.formData, this.props.formData)
@@ -52,7 +52,6 @@ export default class Form extends Component {
       this.props.onChange(nextState);
     }
     this.setState(nextState);
-    console.log("componentWillReceiveProps",nextState);
   }
 
   getStateFromProps(props) {
@@ -108,7 +107,6 @@ export default class Form extends Component {
   }
 
   renderErrors() {
-    console.log('renderErrors');
     const { errors, errorSchema, schema, uiSchema } = this.state;
     const { ErrorList, showErrorList, formContext } = this.props;
 
@@ -165,12 +163,8 @@ export default class Form extends Component {
   };
 
   onSubmit = () => {
-
     if (!this.props.noValidate) {
       const { errors, errorSchema } = this.validate(this.state.formData);
-      console.log('onSubmit errors: ', errors)
-      console.log('onSubmit errorSchema: ', errorSchema)
-      console.log('onSubmit formdata', this.state.formData);
       if (Object.keys(errors).length > 0) {
         setState(this, { errors, errorSchema }, () => {
           if (this.props.onError) {
@@ -212,19 +206,27 @@ export default class Form extends Component {
   }
 
   renderSubmit() {
-    const { children } = this.props;
+    const { children, disabled, externalSubmit } = this.props;
     const { typeForm } = this.state;
     if (children) {
       return children;
-    } else if (typeForm === 'form') {
+    } else if ((typeForm === 'form' || typeForm === 'object') && !disabled && !externalSubmit) {
       return (
         <View>
-          <Button onPress={this.onSubmit}  title="Add" disabled={false} />
+           <CSButton
+              title={'Tiếp Tục'}
+              type="primary"
+              onPress={this.onSubmit}
+              style={{
+                marginTop: styles.vars.csBoxSpacing2x
+              }}
+            />
         </View>
       )
     }
     return null;
   }
+
   renderSchemaForm() {
     const {
       children,
@@ -247,8 +249,6 @@ export default class Form extends Component {
     const registry = this.getRegistry();
     const _SchemaField = registry.fields.SchemaField;
 
-    console.log("Form render",this.state);
-    console.log("Form render idSchema",idSchema);
     return (
       <_SchemaField
           schema={schema}
@@ -270,11 +270,13 @@ export default class Form extends Component {
 
   render() {
     return (
+      <KeyboardAwareScrollView>
       <View style={ this.props.styles == null ?  styles.base.full : this.props.styles }>
-        {this.renderErrors()}
+        {/* {this.renderErrors()} */}
         {this.renderSchemaForm()}
         {this.renderSubmit()}
       </View>
+      </KeyboardAwareScrollView>
     );
   }
 }
