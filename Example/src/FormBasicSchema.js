@@ -13,7 +13,7 @@ module.exports = {
     properties: {
       lastName: {
         type: "string",
-        title: "Họ đệm",
+        title: "First Name",
         keyboardAppearance: "light",
         placeholder: "Nguyễn Văn",
         maxLength: 50,
@@ -22,7 +22,7 @@ module.exports = {
       },
       firstName: {
         type: "string",
-        title: "Tên",
+        title: "Last Name",
         placeholder: "A",
         keyboardAppearance: "light",
         maxLength: 50,
@@ -38,10 +38,20 @@ module.exports = {
         placeholder: "holder@sample.com",
         icon: 'envelope'
       },
+      password: {
+        type: "string",
+        title: "Password",
+        keyboardAppearance: "light",
+        placeholder: "Password",
+        password: true,
+        maxLength: 15,
+        minLength: 6,
+        icon: 'lock'
+      },
       phoneNumber: {
         type: "string",
         fieldType: 'phone',
-        title: "Số điện thoại",
+        title: "Phone",
         keyboardAppearance: "light",
         keyboardType: "number-pad",
         placeholder: "0999999999",
@@ -51,7 +61,7 @@ module.exports = {
       },
       idNumber: {
         type: "string",
-        title: "CMND / CCCD",
+        title: "Number",
         keyboardAppearance: "light",
         keyboardType: "number-pad",
         maxLength: 20,
@@ -183,6 +193,9 @@ module.exports = {
       "ui:autofocus": true,
     },
     firstName: {
+      "ui:widget": "TextField",
+    },
+    password: {
       "ui:widget": "TextField",
     },
     idNumber: {

@@ -3,8 +3,7 @@
 import React, { PureComponent } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import Form from 'react-native-jsonschema-form'
-import ApplicationBasicSchema from './ApplicationBasicSchema'
-
+import FormBasicSchema from './FormBasicSchema'
 
 type Props = {
 }
@@ -56,8 +55,8 @@ class FormBasic extends PureComponent<Props> {
 
   render = () => {
     const { application, mode } = this.props
-    const schema = ApplicationBasicSchema.schema;
-    const uiSchema = ApplicationBasicSchema.uiSchema;
+    const schema = FormBasicSchema.schema;
+    const uiSchema = FormBasicSchema.uiSchema;
     const formData = null;
     return (
       <Form schema={schema}
