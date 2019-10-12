@@ -127,7 +127,7 @@ class TextField extends PureComponent<Props, State> {
             keyboardType={keyboardTypeUse}
             value={value ? `${value}` : ''}
             onChangeText={this._onChange}
-            secureTextEntry={type != null && type === 'password' ? true : false}
+            secureTextEntry={password || false}
             style={[
               styles.textInput,
               multiline ? styles.textInputMultiLine : null,

@@ -214,7 +214,7 @@ export default class Form extends Component {
       return (
         <View>
            <CSButton
-              title={'Tiếp Tục'}
+              title={'Next'}
               type="primary"
               onPress={this.onSubmit}
               style={{

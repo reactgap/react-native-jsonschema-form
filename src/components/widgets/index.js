@@ -9,7 +9,7 @@ import BaseInput from './BaseInput';
 import EmailWidget from "./Email/EmailWidget";
 // import FileWidget from "./FileWidget";
 // import HiddenWidget from "./HiddenWidget";
-import PasswordWidget from "./PasswordWidget";
+// import PasswordWidget from "./PasswordWidget";
 // import RadioWidget from "./RadioWidget";
 // import RangeWidget from "./RangeWidget";
 // import SelectWidget from "./SelectWidget";
@@ -21,12 +21,11 @@ import Avatar from './Avatar';
 import TextFieldPicker from './TextField/TextFieldPicker'
 import TextField from './TextField/TextField'
 import PickerOption from './Picker/PickerOption'
-
+import RadioWidget from './RadioWidget/RadioWidget'
 
 export default {
   BaseInput,
-  PasswordWidget,
-  // RadioWidget,
+  RadioWidget,
   // UpDownWidget,
   // RangeWidget,
   // SelectWidget,

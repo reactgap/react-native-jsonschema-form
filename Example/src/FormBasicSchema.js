@@ -11,6 +11,11 @@ module.exports = {
       "phoneNumber"
     ],
     properties: {
+      radio: {
+        type: "string",
+        title: "radio",
+        maxLength: 50,
+      },
       lastName: {
         type: "string",
         title: "First Name",
@@ -182,6 +187,9 @@ module.exports = {
     }
   },
   uiSchema: {
+    radio: {
+      "ui:widget": "radio"
+    },
     AddressType: {
       "ui:widget": "PickerOption"
     },
