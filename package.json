@@ -14,7 +14,7 @@
     "dynamic"
   ],
   "files": [
-    "/src/index.js"
+    "src"
   ],
   "author": "Air Team",
   "license": "MIT",
