@@ -44,10 +44,10 @@ export default class SliderWidget extends Component {
     this.setState({
       isSeeking: false,
     });
-    const { onSeekRelease } = this.props;
-    if (onSeekRelease) {
+    const { onChange } = this.props;
+    if (onChange) {
       const { distance } = this.state;
-      onSeekRelease(distance);
+      onChange(distance);
     }
   };
 
@@ -200,7 +200,8 @@ SliderWidget.propTypes = {
   iconColor: PropTypes.string,
   iconName: PropTypes.string,
   unit: PropTypes.string,
-  iconSize: PropTypes.number
+  iconSize: PropTypes.number,
+  onChange: PropTypes.func,
 };
 
 SliderWidget.defaultProps = {
