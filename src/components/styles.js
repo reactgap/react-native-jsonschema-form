@@ -1,10 +1,11 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import { DEVICE_BOTTOM_SAFE,
   DEVICE_TOP_SAFE,
   IS_DEVICE_SHORT_HEIGHT,
   IS_DEVICE_VERY_LONG_WIDTH } from '../deviceHelper'
   
 const vars = {
+  csBlue: '#0088FF',
   csGrey: '#515151',
   csLightGrey: '#8E8E93',
   csGreen: '#2A593F',
@@ -188,12 +189,19 @@ const base = StyleSheet.create({
     marginBottom: 2
   },
   shadow: {
-    // IOS
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    // Android
-    elevation: 3,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { 
+          width: 0, 
+          height: 2
+        },
+        shadowOpacity: 0.2,
+      },
+      android: {
+        elevation: 3,
+      }
+    })
   }
 });
 

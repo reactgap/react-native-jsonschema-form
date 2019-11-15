@@ -97,6 +97,14 @@ module.exports = {
           marginBottom: 5
         },
       },
+      money: {
+        type: "string",
+        title: "Tiền",
+        minValue: 0,
+        maxValue: 20000000,
+        value: 0,
+        step: 1000000
+      }
       // addressForm: {
       //   "$ref": "#/definitions/AddressObj"
       // },
@@ -237,6 +245,9 @@ module.exports = {
     },
     gender: {
       "ui:widget": "PickerOption"
+    },
+    money: {
+      "ui:widget": "SliderWidget"
     }
   },
 };

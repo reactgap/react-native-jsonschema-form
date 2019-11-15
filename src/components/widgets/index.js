@@ -22,6 +22,7 @@ import TextFieldPicker from './TextField/TextFieldPicker'
 import TextField from './TextField/TextField'
 import PickerOption from './Picker/PickerOption'
 import RadioWidget from './RadioWidget/RadioWidget'
+import SliderWidget from './Slider/SliderWidget'
 
 export default {
   BaseInput,
@@ -45,5 +46,6 @@ export default {
   // CheckboxesWidget,
   Avatar,
   TextFieldPicker,
-  PickerOption
+  PickerOption,
+  SliderWidget
 };
