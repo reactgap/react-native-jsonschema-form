@@ -4,7 +4,8 @@ import range from 'lodash.range';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import PropTypes from 'prop-types';
 
-import csstyles from '../../styles'
+import csstyles from '../../styles';
+import { formatCurrency } from '../../../utils';
 
 const ICON_CONTAINER_WIDTH = 44;
 
@@ -44,10 +45,10 @@ export default class SliderWidget extends Component {
     this.setState({
       isSeeking: false,
     });
-    const { onSeekRelease } = this.props;
-    if (onSeekRelease) {
+    const { onChange } = this.props;
+    if (onChange) {
       const { distance } = this.state;
-      onSeekRelease(distance);
+      onChange(distance);
     }
   };
 
@@ -154,6 +155,9 @@ export default class SliderWidget extends Component {
 
   renderTextValue() {
     const { progress, distance } = this.state;
+    const { isCurrency, options } = this.props;
+    const txtValue = isCurrency ? formatCurrency(distance) : `${distance}`;
+
     return (
       <View style={styles.textBar}>
         <Text style={{ flexGrow: progress }} />
@@ -166,7 +170,7 @@ export default class SliderWidget extends Component {
           ]}
           numberOfLines={1}
         >
-            {`${distance} ${this.props.unit}`}
+            {txtValue}
         </Text>
       </View>
     );
@@ -199,8 +203,10 @@ SliderWidget.propTypes = {
   value: PropTypes.number,
   iconColor: PropTypes.string,
   iconName: PropTypes.string,
-  unit: PropTypes.string,
-  iconSize: PropTypes.number
+  options: PropTypes.object,
+  isCurrency: PropTypes.bool,
+  iconSize: PropTypes.number,
+  onChange: PropTypes.func,
 };
 
 SliderWidget.defaultProps = {
@@ -211,7 +217,14 @@ SliderWidget.defaultProps = {
   iconSize: 20,
   iconColor: csstyles.vars.csGrey,
   iconName: 'hand-holding-usd',
-  unit: 'VND'
+  options: {
+    currencyFormat: '{amount} VNĐ',
+    amountPattern: '{amount}',
+    thousandSeparator: ',',
+    decimalSeparator: '.',
+    decimalNumber: 0,
+  },
+  isCurrency: true
 };
 
 const styles = StyleSheet.create({

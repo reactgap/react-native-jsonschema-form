@@ -98,7 +98,7 @@ module.exports = {
         },
       },
       money: {
-        type: "string",
+        type: "number",
         title: "Tiền",
         minValue: 0,
         maxValue: 20000000,
