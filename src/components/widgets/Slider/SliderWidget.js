@@ -155,9 +155,8 @@ export default class SliderWidget extends Component {
 
   renderTextValue() {
     const { progress, distance } = this.state;
-    const { isCurrency, options } = this.props;
-    const txtValue = isCurrency ? formatCurrency(distance) : `${distance}`;
-
+    const { isCurrency, currencyOption } = this.props;
+    const txtValue = isCurrency ? formatCurrency(distance, currencyOption) : `${distance}`;
     return (
       <View style={styles.textBar}>
         <Text style={{ flexGrow: progress }} />
@@ -203,7 +202,7 @@ SliderWidget.propTypes = {
   value: PropTypes.number,
   iconColor: PropTypes.string,
   iconName: PropTypes.string,
-  options: PropTypes.object,
+  currencyOption: PropTypes.object,
   isCurrency: PropTypes.bool,
   iconSize: PropTypes.number,
   onChange: PropTypes.func,
@@ -217,7 +216,7 @@ SliderWidget.defaultProps = {
   iconSize: 20,
   iconColor: csstyles.vars.csGrey,
   iconName: 'hand-holding-usd',
-  options: {
+  currencyOption: {
     currencyFormat: '{amount} VNĐ',
     amountPattern: '{amount}',
     thousandSeparator: ',',

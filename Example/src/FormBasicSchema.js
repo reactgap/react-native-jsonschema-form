@@ -103,8 +103,12 @@ module.exports = {
         minValue: 0,
         maxValue: 20000000,
         value: 0,
-        step: 1000000
-      }
+        step: 1000000,
+        currencyOption: {
+          currencyFormat: '{amount} VND',
+          decimalNumber: 2,
+        }
+      },
       // addressForm: {
       //   "$ref": "#/definitions/AddressObj"
       // },
@@ -248,6 +252,6 @@ module.exports = {
     },
     money: {
       "ui:widget": "SliderWidget"
-    }
+    },
   },
 };

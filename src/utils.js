@@ -748,15 +748,17 @@ const formatNumber = (number, options) => {
 	).replace(new RegExp(re, 'g'), `$&${thousandSeparator}`);
 };
 
-export const formatCurrency = (number = 0, options = {
-  currencyFormat: '{amount} VNĐ',
-  amountPattern: '{amount}',
-  thousandSeparator: ',',
-  decimalSeparator: '.',
-  decimalNumber: 0,
-}) => {
-  const { currencyFormat, amountPattern } = options;
-  return currencyFormat.replace(amountPattern, formatNumber(number, options));
+export const formatCurrency = (number = 0, 
+  { 
+    currencyFormat = '{amount} VNĐ',
+    amountPattern = '{amount}',
+    thousandSeparator = ',',
+    decimalSeparator = '.',
+    decimalNumber = 0,
+  } = {}) => {
+  return currencyFormat.replace(amountPattern, formatNumber(number, {
+    currencyFormat, amountPattern, thousandSeparator, decimalSeparator, decimalNumber
+  }));
 }
 
 export function dataURItoBlob(dataURI) {
