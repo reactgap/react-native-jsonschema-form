@@ -103,8 +103,26 @@ module.exports = {
         minValue: 0,
         maxValue: 20000000,
         value: 0,
-        step: 1000000
-      }
+        step: 1000000,
+        currencyOptions: {
+          symbol: 'VND',
+          decimal: '.',
+          thousand: ',',
+          precision: 0,
+          format: '%v %s',
+        },
+      },
+      fee: {
+        type: "string",
+        title: "Phí thu",
+        maxLength: 20,
+        minLength: 7,
+        currencyOptions: {
+          symbol: 'VND',
+          format: '%v',
+        },
+        placeholder: "0"
+      },
       // addressForm: {
       //   "$ref": "#/definitions/AddressObj"
       // },
@@ -248,6 +266,9 @@ module.exports = {
     },
     money: {
       "ui:widget": "SliderWidget"
+    },
+    fee: {
+      "ui:widget": "MoneyField"
     }
   },
 };

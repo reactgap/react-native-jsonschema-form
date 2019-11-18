@@ -2,12 +2,20 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import range from 'lodash.range';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import currencyFormatter from 'currency-formatter';
 import PropTypes from 'prop-types';
 
 import csstyles from '../../styles';
-import { formatCurrency } from '../../../utils';
 
 const ICON_CONTAINER_WIDTH = 44;
+
+const DEFAULT_CURRENCY_OPTIONS = {
+  symbol: 'VND',
+  decimal: '.',
+  thousand: ',',
+  precision: 0,
+  format: '%v %s',
+}
 
 export default class SliderWidget extends Component {
   constructor(props) {
@@ -132,9 +140,7 @@ export default class SliderWidget extends Component {
             onResponderRelease={this.onSeekRelease}
             onResponderTerminate={this.onSeekRelease}
           />
-          <View
-            style={[styles.seekBarBackground, { flexGrow: 100 - progress }]}
-          />
+          <View style={[styles.seekBarBackground, { flexGrow: 100 - progress }]} />
           <View style={styles.seekBarEndPoint} />
         </View>
       </View>
@@ -155,9 +161,9 @@ export default class SliderWidget extends Component {
 
   renderTextValue() {
     const { progress, distance } = this.state;
-    const { isCurrency, options } = this.props;
-    const txtValue = isCurrency ? formatCurrency(distance) : `${distance}`;
-
+    const { isCurrency, currencyOptions } = this.props;
+    const mergedCurrencyOptions = { ...DEFAULT_CURRENCY_OPTIONS, ...currencyOptions };
+    const txtValue = isCurrency ?  currencyFormatter.format(distance, mergedCurrencyOptions) : `${distance}`;
     return (
       <View style={styles.textBar}>
         <Text style={{ flexGrow: progress }} />
@@ -203,7 +209,7 @@ SliderWidget.propTypes = {
   value: PropTypes.number,
   iconColor: PropTypes.string,
   iconName: PropTypes.string,
-  options: PropTypes.object,
+  currencyOptions: PropTypes.object,
   isCurrency: PropTypes.bool,
   iconSize: PropTypes.number,
   onChange: PropTypes.func,
@@ -217,13 +223,7 @@ SliderWidget.defaultProps = {
   iconSize: 20,
   iconColor: csstyles.vars.csGrey,
   iconName: 'hand-holding-usd',
-  options: {
-    currencyFormat: '{amount} VNĐ',
-    amountPattern: '{amount}',
-    thousandSeparator: ',',
-    decimalSeparator: '.',
-    decimalNumber: 0,
-  },
+  currencyOptions: DEFAULT_CURRENCY_OPTIONS,
   isCurrency: true
 };
 
