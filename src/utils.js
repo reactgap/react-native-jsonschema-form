@@ -733,34 +733,6 @@ export function setState(instance, state, callback) {
   }
 }
 
-const formatNumber = (number, options) => {
-  const { decimalNumber, decimalSeparator, thousandSeparator } = options;
-	const THOUSAND_GROUP_NUMBER = 3;
-	const floatNumber = parseFloat(number || 0) || 0;
-	const re = `\\d(?=(\\d{${THOUSAND_GROUP_NUMBER}})+${decimalNumber > 0 ? '\\D' : '$'})`;
-	const num = floatNumber.toFixed(
-		Math.max(0, Math.floor(decimalNumber))
-	);
-
-	return (decimalSeparator
-		? num.replace('.', decimalSeparator)
-		: num
-	).replace(new RegExp(re, 'g'), `$&${thousandSeparator}`);
-};
-
-export const formatCurrency = (number = 0, 
-  { 
-    currencyFormat = '{amount} VNĐ',
-    amountPattern = '{amount}',
-    thousandSeparator = ',',
-    decimalSeparator = '.',
-    decimalNumber = 0,
-  } = {}) => {
-  return currencyFormat.replace(amountPattern, formatNumber(number, {
-    currencyFormat, amountPattern, thousandSeparator, decimalSeparator, decimalNumber
-  }));
-}
-
 export function dataURItoBlob(dataURI) {
   // Split metadata from data
   const splitted = dataURI.split(',');
