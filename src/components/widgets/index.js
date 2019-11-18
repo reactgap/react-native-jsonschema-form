@@ -22,7 +22,8 @@ import TextFieldPicker from './TextField/TextFieldPicker'
 import TextField from './TextField/TextField'
 import PickerOption from './Picker/PickerOption'
 import RadioWidget from './RadioWidget/RadioWidget'
-import SliderWidget from './Slider/SliderWidget'
+import SliderWidget from './Slider/SliderWidget';
+import MoneyField from './Money/MoneyField';
 
 export default {
   BaseInput,
@@ -47,5 +48,6 @@ export default {
   Avatar,
   TextFieldPicker,
   PickerOption,
-  SliderWidget
+  SliderWidget,
+  MoneyField
 };
