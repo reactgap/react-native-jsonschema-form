@@ -27,6 +27,7 @@ type Props = {
   password?: PropTypes.bool,
   wrapperStyle?: ViewStyle,
   inputStyle?: ViewStyle,
+  currencySymbolStyle?: ViewStyle,
   invalid?: PropTypes.bool,
   invalidMessage?: Proptypes.string,
   blurOnSubmit?: PropTypes.bool,
@@ -37,7 +38,7 @@ type Props = {
   rawErrors: PropTypes.array,
   keyboardAppearance: Proptypes.string,
   icon?: Proptypes.string,
-  currencyOptions: Proptypes.object
+  currencyOptions: Proptypes.object,
 }
 
 type State = {
@@ -94,16 +95,24 @@ class MoneyField extends PureComponent<Props, State> {
       const mergedCurrencyOptions = { ...DEFAULT_CURRENCY_OPTIONS, ...currencyOptions };
       const numberValue = currencyFormatter.unformat(value, mergedCurrencyOptions);
       const stringValue = currencyFormatter.format(numberValue, mergedCurrencyOptions);
-      this.setState({
-          numberValue,
-          stringValue,
-      }, () => {
-          this.props.onChange(numberValue);
+      this.setState({ numberValue, stringValue }, () => {
+        this.props.onChange(numberValue);
       });
       return;
     }
 
     this.props.onChange(options.emptyValue);
+  }
+
+  renderCurrencySymbol() {
+    const { currencyOptions, currencySymbolStyle } = this.props;
+    const mergedCurrencyOptions = { ...DEFAULT_CURRENCY_OPTIONS, ...currencyOptions };
+    const { symbol } = mergedCurrencyOptions;
+    return (
+      <View style={[styles.currencySymbol, currencySymbolStyle]}>
+        <Text>{symbol}</Text>
+      </View>
+    );
   }
 
   render() {
@@ -150,11 +159,6 @@ class MoneyField extends PureComponent<Props, State> {
     return (
       <Fragment>
         <View style={[styles.wrapper, wrapperStyle]}>
-          {icon && (
-            <View style={styles.inputIcon}>
-              <FontAwesome5 size={15} name={icon} color={'#646A64'} />
-            </View>
-          )}
           <TextInput
             placeholder={placeholderUse}
             keyboardType={keyboardTypeUse}
@@ -181,6 +185,7 @@ class MoneyField extends PureComponent<Props, State> {
             returnKeyType={returnKeyType}
             editable={!disabled}
           />
+          {this.renderCurrencySymbol()}
         </View>
         <View>
           {showError && (
@@ -203,7 +208,8 @@ MoneyField.defaultProps = {
   keyboardType: 'default',
   multiline: false,
   currencyOptions: DEFAULT_CURRENCY_OPTIONS,
-}
+  currencySymbolStyle: {},
+};
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -211,6 +217,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#EBEBEB',
     flexDirection: 'row',
+    alignItems: 'center',
   },
   inputIcon:{
     width: 44,
@@ -231,6 +238,10 @@ const styles = StyleSheet.create({
     ...csstyles.text.regular,
     fontSize: 15,
     // ...csstyles.base.shadow
+  },
+  currencySymbol: {
+    justifyContent: 'center',
+    paddingHorizontal: 16,
   },
   formatMoney: {
     color: csstyles.vars.csGreen,
@@ -259,5 +270,5 @@ const styles = StyleSheet.create({
     color: csstyles.vars.csDanger,
     fontStyle: 'italic',
     fontSize: 13
-  }
+  },
 });
