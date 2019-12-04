@@ -1,8 +1,7 @@
 // @flow
 
-import React, { PureComponent, Fragment } from 'react'
+import React, { PureComponent, Fragment } from 'react';
 import { Text, View, TextInput, StyleSheet, type ViewStyle } from 'react-native';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import currencyFormatter from 'currency-formatter';
 import Proptypes from 'prop-types';
 
@@ -14,7 +13,7 @@ const DEFAULT_CURRENCY_OPTIONS = {
   thousand: ',',
   precision: 0,
   format: '%v',
-}
+};
 
 type Props = {
   placeholder: Proptypes.string,
@@ -39,47 +38,47 @@ type Props = {
   keyboardAppearance: Proptypes.string,
   icon?: Proptypes.string,
   currencyOptions: Proptypes.object,
-}
+};
 
 type State = {
   touched: PropTypes.bool,
   numberValue: Proptypes.number,
   stringValue: Proptypes.string,
-}
+};
 
 class MoneyField extends PureComponent<Props, State> {
   state: State = {
     touched: false,
     numberValue: 0,
-    stringValue: ''
-  }
+    stringValue: '',
+  };
 
-  inputRef: TextInput | null = null
+  inputRef: TextInput | null = null;
 
   onBlur = () => {
-    const { touched } = this.state
+    const { touched } = this.state;
 
     if (!touched) {
       this.setState({
-        touchede: true
-      })
+        touchede: true,
+      });
     }
     this.props.onBlur();
-  }
+  };
 
   focus = () => {
-    this.inputRef && this.inputRef.focus()
+    this.inputRef && this.inputRef.focus();
     this.props.onFocus();
-  }
+  };
 
   blur = () => {
-    this.inputRef && this.inputRef.blur()
+    this.inputRef && this.inputRef.blur();
     this.props.onBlur();
-  }
+  };
 
-  formatCurrencyToNumber = (strValue) => {
+  formatCurrencyToNumber = strValue => {
     if (strValue) {
-      const numberValue =  strValue.replace(new RegExp('\\' + ',', 'g'), '');
+      const numberValue = strValue.replace(new RegExp('\\' + ',', 'g'), '');
       try {
         const res = parseFloat(numberValue);
       } catch (err) {
@@ -87,9 +86,9 @@ class MoneyField extends PureComponent<Props, State> {
       }
     }
     return strValue;
-  }
+  };
 
-  _onChange = (value) => {
+  _onChange = value => {
     const { options, currencyOptions } = this.props;
     if (value !== '') {
       const mergedCurrencyOptions = { ...DEFAULT_CURRENCY_OPTIONS, ...currencyOptions };
@@ -102,7 +101,7 @@ class MoneyField extends PureComponent<Props, State> {
     }
 
     this.props.onChange(options.emptyValue);
-  }
+  };
 
   renderCurrencySymbol() {
     const { currencyOptions, currencySymbolStyle } = this.props;
@@ -140,20 +139,20 @@ class MoneyField extends PureComponent<Props, State> {
       keyboardType,
       type,
       keyboardAppearance,
-    } = this.props
-    const { touched } = this.state
-    const showError = rawErrors && rawErrors.length > 0
-    let keyboardTypeUse = keyboardType ? keyboardType : 'default'
-    let placeholderUse = placeholder
+    } = this.props;
+    const { touched } = this.state;
+    const showError = rawErrors && rawErrors.length > 0;
+    let keyboardTypeUse = keyboardType ? keyboardType : 'default';
+    let placeholderUse = placeholder;
     if (schema && schema.hasOwnProperty('keyboardType')) {
-      keyboardTypeUse = schema['keyboardType']
+      keyboardTypeUse = schema['keyboardType'];
     }
     if (schema && schema.hasOwnProperty('placeholder')) {
-      placeholderUse = schema['placeholder']
+      placeholderUse = schema['placeholder'];
     }
-    let maxLength = null
+    let maxLength = null;
     if (schema && schema.hasOwnProperty('maxLength')) {
-      maxLength = parseInt(schema.maxLength)
+      maxLength = parseInt(schema.maxLength);
     }
 
     return (
@@ -169,18 +168,18 @@ class MoneyField extends PureComponent<Props, State> {
               styles.textInput,
               multiline ? styles.textInputMultiLine : null,
               inputStyle,
-              showError ? styles.textInputInvalid : null
+              showError ? styles.textInputInvalid : null,
             ]}
             placeholderTextColor={csstyles.vars.csPlaceHolder}
             onBlur={this.onBlur}
             autoCapitalize={autoCapitalize ? autoCapitalize : 'none'}
             underlineColorAndroid="transparent"
             multiline={multiline}
-            keyboardAppearance={keyboardAppearance ? keyboardAppearance : "light"}
-            ref={(ref) => {
-              this.inputRef = ref
+            keyboardAppearance={keyboardAppearance ? keyboardAppearance : 'light'}
+            ref={ref => {
+              this.inputRef = ref;
             }}
-            maxLength={ maxLength ? maxLength : null }
+            maxLength={maxLength ? maxLength : null}
             blurOnSubmit={blurOnSubmit ? blurOnSubmit : true}
             returnKeyType={returnKeyType}
             editable={!disabled}
@@ -191,8 +190,11 @@ class MoneyField extends PureComponent<Props, State> {
           {showError && (
             <View style={styles.errorWrapper}>
               {rawErrors.map((error, i) => (
-                <Text key={i} style={styles.errorText}> {error}</Text>
-                ))}
+                <Text key={i} style={styles.errorText}>
+                  {' '}
+                  {error}
+                </Text>
+              ))}
             </View>
           )}
         </View>
@@ -219,7 +221,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  inputIcon:{
+  inputIcon: {
     width: 44,
     alignItems: 'center',
     justifyContent: 'center',
@@ -255,10 +257,10 @@ const styles = StyleSheet.create({
     minHeight: csstyles.vars.csInputHeight * 3,
     paddingTop: csstyles.vars.csInputHeight - 16 * 2,
     paddingBottom: csstyles.vars.csInputHeight - 16 * 2,
-    textAlignVertical: 'top'
+    textAlignVertical: 'top',
   },
   textInputInvalid: {
-    borderColor: csstyles.vars.csDanger
+    borderColor: csstyles.vars.csDanger,
   },
   errorWrapper: {
     marginTop: 3,
@@ -269,6 +271,6 @@ const styles = StyleSheet.create({
     ...csstyles.text.medium,
     color: csstyles.vars.csDanger,
     fontStyle: 'italic',
-    fontSize: 13
+    fontSize: 13,
   },
 });

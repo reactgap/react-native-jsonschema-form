@@ -1,0 +1,11 @@
+{
+    "editor.formatOnSave": false,
+    "editor.formatOnPaste": false,
+    "[javascript]": {
+        "editor.formatOnSave": true
+    },
+    "eslint.enable": true,
+    "editor.codeActionsOnSaveTimeout": 300,
+    "editor.tabSize": 2,
+    "git.ignoreLimitWarning": true
+}

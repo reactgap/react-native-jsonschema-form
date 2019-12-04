@@ -1,51 +1,46 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { TextInput } from 'react-native';
 import styles from '../styles';
 
-
 class TextareaWidget extends Component {
   state = {
-    focus: false
+    focus: false,
   };
 
-  onFocusInput = (e) => {
-    console.log('onFocusInput')
-    this.setState({  focus: true });
+  onFocusInput = e => {
+    this.setState({ focus: true });
     this.props.onFocus(e);
-  }
+  };
 
-  onBlurInput = (e) => {
-    console.log('onBlurInput')
-    this.setState({  focus: false });
+  onBlurInput = e => {
+    this.setState({ focus: false });
     this.props.onBlur(e);
-  }
+  };
 
   render() {
     const {
-      id,
       options,
       placeholder,
       value,
-      required,
       disabled,
       readonly,
       autofocus,
       onChange,
-      onBlur,
-      onFocus,
-      keyboardAppearance
+      keyboardAppearance,
     } = this.props;
-    const _onChange = (value) => {
-      return onChange(value === "" ? options.emptyValue : value);
+    const _onChange = value => {
+      return onChange(value === '' ? options.emptyValue : value);
     };
     const { focus } = this.state;
-    console.log('TextareaWidget component');
     return (
       <TextInput
-        value={typeof value === "undefined" ? "" : value}
-        style={[styles.component.textInputStyle, focus == true ? styles.component.textInputFocus : null]}
-        keyboardAppearance={keyboardAppearance == null ? "light" : keyboardAppearance }
+        value={typeof value === 'undefined' ? '' : value}
+        style={[
+          styles.component.textInputStyle,
+          focus == true ? styles.component.textInputFocus : null,
+        ]}
+        keyboardAppearance={keyboardAppearance == null ? 'light' : keyboardAppearance}
         autoFocus={autofocus}
         multiline={true}
         placeholder={placeholder}
@@ -80,7 +75,7 @@ TextareaWidget.defaultProps = {
   options: {},
 };
 
-if (process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV !== 'production') {
   TextareaWidget.propTypes = {
     schema: PropTypes.object.isRequired,
     id: PropTypes.string.isRequired,

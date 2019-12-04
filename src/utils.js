@@ -1,6 +1,6 @@
 import React from 'react';
-import fill from "core-js/library/fn/array/fill";
-import validateFormData from "./validate";
+import fill from 'core-js/library/fn/array/fill';
+import validateFormData from './validate';
 
 export const ADDITIONAL_PROPERTY_FLAG = '__additional_property';
 
@@ -70,8 +70,8 @@ export function getDefaultRegistry() {
 
 export function getDefaultIcons() {
   return {
-    icons: require('./components/icons').default
-  }
+    icons: require('./components/icons').default,
+  };
 }
 
 export function getSchemaType(schema) {
@@ -94,7 +94,6 @@ export function getWidget(schema, widget, registeredWidgets = {}) {
     }
     return Widget.MergedWidget;
   }
-  console.log('widget', widget);
   if (typeof widget === 'function') {
     return mergeOptions(widget);
   }
@@ -161,7 +160,7 @@ function computeDefaults(schema, parentDefaults, definitions = {}) {
             // populate the array with the defaults
             const fillerEntries = fill(
               new Array(schema.minItems - defaultsLength),
-              computeDefaults(schema.items, schema.items.defaults, definitions)
+              computeDefaults(schema.items, schema.items.defaults, definitions),
             );
             // then fill up the rest with either the item default or empty, up to minItems
 
@@ -224,8 +223,7 @@ export function mergeObjects(obj1, obj2, concatArrays = false) {
   return Object.keys(obj2).reduce((acc, key) => {
     const left = obj1 ? obj1[key] : {};
 
-      
-const right = obj2[key];
+    const right = obj2[key];
     if (obj1 && obj1.hasOwnProperty(key) && isObject(right)) {
       acc[key] = mergeObjects(left, right, concatArrays);
     } else if (concatArrays && Array.isArray(left) && Array.isArray(right)) {
@@ -309,10 +307,11 @@ export function isConstant(schema) {
 export function toConstant(schema) {
   if (Array.isArray(schema.enum) && schema.enum.length === 1) {
     return schema.enum[0];
-  } if (schema.hasOwnProperty("const")) {
+  }
+  if (schema.hasOwnProperty('const')) {
     return schema.const;
   } else {
-    throw new Error("schema cannot be inferred as a constant");
+    throw new Error('schema cannot be inferred as a constant');
   }
 }
 
@@ -321,7 +320,8 @@ export function isSelect(_schema, definitions = {}) {
   const altSchemas = schema.oneOf || schema.anyOf;
   if (Array.isArray(schema.enum)) {
     return true;
-  } if (Array.isArray(altSchemas)) {
+  }
+  if (Array.isArray(altSchemas)) {
     return altSchemas.every(altSchemas => isConstant(altSchemas));
   }
   return false;
@@ -335,11 +335,12 @@ export function isMultiSelect(schema, definitions = {}) {
 }
 
 export function isFilesArray(schema, uiSchema, definitions = {}) {
-  if (uiSchema["ui:widget"] === "files") {
+  if (uiSchema['ui:widget'] === 'files') {
     return true;
-  } if (schema.items) {
+  }
+  if (schema.items) {
     const itemsSchema = retrieveSchema(schema.items, definitions);
-    return itemsSchema.type === "string" && itemsSchema.format === "data-url";
+    return itemsSchema.type === 'string' && itemsSchema.format === 'data-url';
   }
   return false;
 }
@@ -365,14 +366,13 @@ export function optionsList(schema) {
       const label = (schema.enumNames && schema.enumNames[i]) || String(value);
       return { label, value };
     });
-  } 
-    const altSchemas = schema.oneOf || schema.anyOf;
-    return altSchemas.map((schema, i) => {
-      const value = toConstant(schema);
-      const label = schema.title || String(value);
-      return { label, value };
-    });
-  
+  }
+  const altSchemas = schema.oneOf || schema.anyOf;
+  return altSchemas.map((schema, i) => {
+    const value = toConstant(schema);
+    const label = schema.title || String(value);
+    return { label, value };
+  });
 }
 
 function findSchemaDefinition($ref, definitions = {}) {
@@ -401,20 +401,21 @@ function findSchemaDefinition($ref, definitions = {}) {
 //  based on the data we are defining
 export const guessType = function guessType(value) {
   if (Array.isArray(value)) {
-    return "array";
-  } if (typeof value === "string") {
-    return "string";
+    return 'array';
+  }
+  if (typeof value === 'string') {
+    return 'string';
   } else if (value == null) {
-    return "null";
-  } else if (typeof value === "boolean") {
-    return "boolean";
+    return 'null';
+  } else if (typeof value === 'boolean') {
+    return 'boolean';
   } else if (!isNaN(value)) {
-    return "number";
-  } else if (typeof value === "object") {
-    return "object";
+    return 'number';
+  } else if (typeof value === 'object') {
+    return 'object';
   }
   // Default to string if we can't figure it out
-  return "string";
+  return 'string';
 };
 
 // This function will create new "properties" items for each key in our formData
@@ -441,9 +442,10 @@ export function stubExistingAdditionalProperties(schema, definitions = {}, formD
 }
 
 export function resolveSchema(schema, definitions = {}, formData = {}) {
-  if (schema.hasOwnProperty("$ref")) {
+  if (schema.hasOwnProperty('$ref')) {
     return resolveReference(schema, definitions, formData);
-  } if (schema.hasOwnProperty("dependencies")) {
+  }
+  if (schema.hasOwnProperty('dependencies')) {
     const resolvedSchema = resolveDependencies(schema, definitions, formData);
     return retrieveSchema(resolvedSchema, definitions, formData);
   } else {
@@ -477,7 +479,6 @@ function resolveDependencies(schema, definitions, formData) {
   let { dependencies = {}, ...resolvedSchema } = schema;
   // Process dependencies updating the local schema properties as appropriate.
   for (const dependencyKey in dependencies) {
-   
     // Skip this dependency if its trigger property is not present.
     if (formData[dependencyKey] === undefined) {
       continue;
@@ -491,7 +492,7 @@ function resolveDependencies(schema, definitions, formData) {
         definitions,
         formData,
         dependencyKey,
-        dependencyValue
+        dependencyValue,
       );
     }
   }
@@ -508,39 +509,24 @@ function withDependentProperties(schema, additionallyRequired) {
   return { ...schema, required };
 }
 
-function withDependentSchema(
-  schema,
-  definitions,
-  formData,
-  dependencyKey,
-  dependencyValue
-) {
-  let { oneOf, ...dependentSchema } = retrieveSchema(
-    dependencyValue,
-    definitions,
-    formData
-  );
+function withDependentSchema(schema, definitions, formData, dependencyKey, dependencyValue) {
+  let { oneOf, ...dependentSchema } = retrieveSchema(dependencyValue, definitions, formData);
 
   schema = mergeSchemas(schema, dependentSchema);
   // Since it does not contain oneOf, we return the original schema.
   if (oneOf === undefined) {
     return schema;
-  } if (!Array.isArray(oneOf)) {
+  }
+  if (!Array.isArray(oneOf)) {
     throw new Error(`invalid: it is some ${typeof oneOf} instead of an array`);
   }
   // Resolve $refs inside oneOf.
   const resolvedOneOf = oneOf.map(subschema =>
-    subschema.hasOwnProperty("$ref")
+    subschema.hasOwnProperty('$ref')
       ? resolveReference(subschema, definitions, formData)
-      : subschema
+      : subschema,
   );
-  return withExactlyOneSubschema(
-    schema,
-    definitions,
-    formData,
-    dependencyKey,
-    resolvedOneOf
-  );
+  return withExactlyOneSubschema(schema, definitions, formData, dependencyKey, resolvedOneOf);
 }
 
 function withExactlyOneSubschema(schema, definitions, formData, dependencyKey, oneOf) {
@@ -562,7 +548,7 @@ function withExactlyOneSubschema(schema, definitions, formData, dependencyKey, o
   });
   if (validSubschemas.length !== 1) {
     console.warn(
-      "ignoring oneOf in dependencies because there isn't exactly one subschema that is valid"
+      "ignoring oneOf in dependencies because there isn't exactly one subschema that is valid",
     );
     return schema;
   }
@@ -586,11 +572,12 @@ export function deepEquals(a, b, ca = [], cb = []) {
   // https://github.com/othiym23/node-deeper
   if (a === b) {
     return true;
-  } if (typeof a === "function" || typeof b === "function") {
+  }
+  if (typeof a === 'function' || typeof b === 'function') {
     // Assume all functions are equivalent
     // see https://github.com/mozilla-services/react-jsonschema-form/issues/255
     return true;
-  } else if (typeof a !== "object" || typeof b !== "object") {
+  } else if (typeof a !== 'object' || typeof b !== 'object') {
     return false;
   } else if (a === null || b === null) {
     return false;
@@ -678,7 +665,7 @@ export function toIdSchema(schema, id, definitions, formData = {}, idPrefix = 'r
   }
   for (const name in schema.properties || {}) {
     const field = schema.properties[name];
-    const fieldId = `${idSchema.$id  }_${  name}`;
+    const fieldId = `${idSchema.$id}_${name}`;
     idSchema[name] = toIdSchema(field, fieldId, definitions, formData[name], idPrefix);
   }
   return idSchema;
@@ -741,7 +728,7 @@ export function dataURItoBlob(dataURI) {
   // Get mime-type from params
   const type = params[0].replace('data:', '');
   // Filter the name property from params
-  const properties = params.filter(param => param.split("=")[0] === "name");
+  const properties = params.filter(param => param.split('=')[0] === 'name');
   // Look for the name and use unknown if no name property.
   let name;
   if (properties.length !== 1) {
@@ -779,7 +766,7 @@ export function rangeSpec(schema) {
 }
 
 export function getTypeForm(schema) {
-  let typeForm = "form";
+  let typeForm = 'form';
   if (schema.hasOwnProperty('type')) {
     return schema['type'];
   }

@@ -27,15 +27,15 @@ function StringField(props) {
   const enumOptions = isSelect(schema) && optionsList(schema);
   const defaultWidget = format || (enumOptions ? 'select' : 'text');
   const { widget = defaultWidget, placeholder = '', ...options } = getUiOptions(uiSchema);
-  let currentIndex = 0
-  if (uiSchema["ui:widget"] === "PickerOption") {
+  let currentIndex = 0;
+  if (uiSchema['ui:widget'] === 'PickerOption') {
     if (schema && schema.hasOwnProperty('currentIndex')) {
-      currentIndex = schema['currentIndex']
+      currentIndex = schema['currentIndex'];
     }
   }
   const Widget = getWidget(schema, widget, widgets);
-  const additonalProps = { ...schema } || {}
-  
+  const additonalProps = { ...schema } || {};
+
   return (
     <Widget
       {...additonalProps}

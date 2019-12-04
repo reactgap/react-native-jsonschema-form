@@ -1,12 +1,12 @@
 // @flow
 
-import React, { PureComponent } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import Form from 'react-native-jsonschema-form'
-import FormBasicSchema from './FormBasicSchema'
+import React, { PureComponent } from 'react';
+import { StyleSheet } from 'react-native';
+import Form from 'react-native-jsonschema-form';
 
-type Props = {
-}
+import FormBasicSchema from './FormBasicSchema';
+
+type Props = {};
 
 class FormBasic extends PureComponent<Props> {
   constructor(props) {
@@ -16,52 +16,48 @@ class FormBasic extends PureComponent<Props> {
 
   onSubmit = ({ formData }) => {
     // submit here
-  }
+  };
 
   submit = () => {
     if (this.customerFormRef.current) {
-      this.customerFormRef.current.onSubmit()
+      this.customerFormRef.current.onSubmit();
     }
-  }
+  };
 
-  transformErrors = (errors) => {
-    console.log('transformErrors', errors)
+  transformErrors = errors => {
     return errors.map(error => {
-      if (error.name === "required") {
-        error.message = "Vui lòng nhập đầy đủ thông tin"
-      } else if (error.name === 'format' ) {
-        error.message = "Vui lòng nhập đúng định dạng email"
+      if (error.name === 'required') {
+        error.message = 'Vui lòng nhập đầy đủ thông tin';
+      } else if (error.name === 'format') {
+        error.message = 'Vui lòng nhập đúng định dạng email';
       } else if (error.name === 'minLength') {
-        const minLength = error.params.limit
+        const minLength = error.params.limit;
         if (error.property === '.phoneNumber') {
-          error.message = `Vui lòng nhập ít nhất ${minLength} số`
+          error.message = `Vui lòng nhập ít nhất ${minLength} số`;
         } else {
-          error.message = `Vui lòng nhập ít nhất ${minLength} ký tự`
+          error.message = `Vui lòng nhập ít nhất ${minLength} ký tự`;
         }
       } else if (error.name === 'pattern') {
-        error.message = 'Vui lòng chỉ nhập số'
+        error.message = 'Vui lòng chỉ nhập số';
       }
       return error;
     });
-  }
+  };
 
-  validate =(formData, errors) =>  {
+  validate = (formData, errors) => {
     return errors;
-  }
+  };
 
-  onchange = (formState) => {
-    console.log('formState', formState);
-  }
+  onchange = formState => {};
 
-  render = () => {
-    const { application, mode } = this.props
+  render() {
     const schema = FormBasicSchema.schema;
     const uiSchema = FormBasicSchema.uiSchema;
     const formData = null;
     return (
-      <Form schema={schema}
+      <Form
+        schema={schema}
         externalSubmit={false}
-        // disabled={false}
         formData={formData}
         validate={this.validate}
         transformErrors={this.transformErrors}
@@ -70,12 +66,13 @@ class FormBasic extends PureComponent<Props> {
         onChange={this.onchange}
         onSubmit={this.onSubmit}
         ref={this.customerFormRef}
-        onError={console.log("errors")}
+        onError={console.log('errors')}
       />
-    )
-    
+    );
   }
 }
+
+export default FormBasic;
 
 const styles = StyleSheet.create({
   container: {
@@ -86,7 +83,6 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     paddingTop: 10,
-    paddingBottom: 10
+    paddingBottom: 10,
   },
-})
-export default FormBasic
+});

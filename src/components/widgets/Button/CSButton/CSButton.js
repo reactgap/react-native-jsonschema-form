@@ -1,14 +1,16 @@
 // @flow
 
-import React from 'react'
-import { TouchableOpacity,
+import React from 'react';
+import {
+  TouchableOpacity,
   Text,
   StyleSheet,
   View,
   type ViewStyle,
-  type TextStyle } from 'react-native'
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
-import csstyles from '../../../styles'
+  type TextStyle,
+} from 'react-native';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import csstyles from '../../../styles';
 
 type Props = {
   title?: string,
@@ -19,8 +21,8 @@ type Props = {
   iconContainerStyle?: ViewStyle,
   iconStyle?: TextStyle,
   style?: ViewStyle,
-  disabled?: boolean
-}
+  disabled?: boolean,
+};
 
 const CSButton = ({
   title,
@@ -31,10 +33,10 @@ const CSButton = ({
   leftIcon,
   iconOnly,
   iconStyle,
-  iconContainerStyle
+  iconContainerStyle,
 }: Props) => {
-  const btnStyle = styles[type]
-  const textStyle = styles[`text_${type}`]
+  const btnStyle = styles[type];
+  const textStyle = styles[`text_${type}`];
 
   return (
     <TouchableOpacity
@@ -46,13 +48,12 @@ const CSButton = ({
         style,
         disabled
           ? {
-            opacity: 0.6
-          }
-          : null
+              opacity: 0.6,
+            }
+          : null,
       ]}
       activeOpacity={0.6}
-      disabled={disabled}
-    >
+      disabled={disabled}>
       {!iconOnly && title && (
         <Text style={[styles.textBase, textStyle]}>{title.toUpperCase()}</Text>
       )}
@@ -61,15 +62,14 @@ const CSButton = ({
           style={[
             styles.leftIconContainer,
             iconOnly && styles.leftIconOnlyContainer,
-            iconContainerStyle
-          ]}
-        >
+            iconContainerStyle,
+          ]}>
           <FontAwesome5 style={[textStyle, iconStyle]} name={leftIcon} solid size={20} />
         </View>
       )}
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   base: {
@@ -82,10 +82,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: csstyles.vars.csBoxBorderWidth,
     position: 'relative',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   baseIconOnly: {
-    paddingHorizontal: 0
+    paddingHorizontal: 0,
   },
   leftIconContainer: {
     height: csstyles.vars.csInputHeight,
@@ -94,43 +94,43 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: csstyles.vars.csInputHeight / 3,
-    bottom: 0
+    bottom: 0,
   },
   leftIconOnlyContainer: {
-    left: 0
+    left: 0,
   },
   textBase: {
     ...csstyles.text.bold,
-    fontSize: 15
+    fontSize: 15,
   },
   primary: {
     backgroundColor: csstyles.vars.csGreen,
-    borderWidth: 0
+    borderWidth: 0,
   },
   secondary: {
     backgroundColor: csstyles.vars.csBrown,
-    borderWidth: 0
+    borderWidth: 0,
   },
   danger: {
     backgroundColor: csstyles.vars.csDanger,
-    borderWidth: 0
+    borderWidth: 0,
   },
   text_primary: {
-    color: csstyles.vars.csWhite
+    color: csstyles.vars.csWhite,
   },
   text_danger: {
-    color: csstyles.vars.csWhite
+    color: csstyles.vars.csWhite,
   },
   text_secondary: {
-    color: csstyles.vars.csWhite
+    color: csstyles.vars.csWhite,
   },
   border: {
     backgroundColor: 'transparent',
-    borderColor: csstyles.vars.csGreen
+    borderColor: csstyles.vars.csGreen,
   },
   text_border: {
-    color: csstyles.vars.csGreen
-  }
-})
+    color: csstyles.vars.csGreen,
+  },
+});
 
-export default CSButton
+export default CSButton;

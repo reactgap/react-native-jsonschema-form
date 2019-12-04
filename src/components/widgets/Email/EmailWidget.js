@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 function EmailWidget(props) {
   const { TextField } = props.registry.widgets;

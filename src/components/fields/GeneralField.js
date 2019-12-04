@@ -1,21 +1,18 @@
-import { ADDITIONAL_PROPERTY_FLAG } from "../../utils";
-import React from "react";
-import PropTypes from "prop-types";
-import { View, Text } from 'react-native';
-import styles from '../styles';
+import React from 'react';
+import UnsupportedField from './UnsupportedField';
+import { getSchemaType, deepEquals } from '../../utils';
 
 const COMPONENT_TYPES = {
-  view: "ObjectView",
-  flatList: "ObjectFlatList"
+  view: 'ObjectView',
+  flatList: 'ObjectFlatList',
 };
 
-
 function getFieldComponent(schema, uiSchema, idSchema, fields) {
-  const field = uiSchema["ui:field"];
-  if (typeof field === "function") {
+  const field = uiSchema['ui:field'];
+  if (typeof field === 'function') {
     return field;
   }
-  if (typeof field === "string" && field in fields) {
+  if (typeof field === 'string' && field in fields) {
     return fields[field];
   }
 
@@ -33,9 +30,7 @@ function getFieldComponent(schema, uiSchema, idSchema, fields) {
       };
 }
 
-function GeneralFieldRender(props) {
-
-}
+function GeneralFieldRender(props) {}
 
 class GeneralField extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -43,7 +38,7 @@ class GeneralField extends React.Component {
     // so it is not necessary to compare
     return !deepEquals(
       { ...this.props, idSchema: undefined },
-      { ...nextProps, idSchema: undefined }
+      { ...nextProps, idSchema: undefined },
     );
   }
 

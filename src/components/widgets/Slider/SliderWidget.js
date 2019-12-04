@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import range from 'lodash.range';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import currencyFormatter from 'currency-formatter';
@@ -15,7 +15,7 @@ const DEFAULT_CURRENCY_OPTIONS = {
   thousand: ',',
   precision: 0,
   format: '%v %s',
-}
+};
 
 export default class SliderWidget extends Component {
   constructor(props) {
@@ -97,12 +97,12 @@ export default class SliderWidget extends Component {
   convertDistanceToPercent = (distance, maxValue) => {
     const DISTANCE_TO_PERCENT = 100.0 / maxValue;
     return distance * DISTANCE_TO_PERCENT;
-  }
+  };
 
   convertPercentToDistance = (percent, maxValue) => {
     const PERCENT_TO_DISTANCE = maxValue / 100.0;
     return percent * PERCENT_TO_DISTANCE;
-  }
+  };
 
   renderIcon() {
     const { iconSize, iconName, iconColor } = this.props;
@@ -123,10 +123,7 @@ export default class SliderWidget extends Component {
           <View style={styles.seekBarStartPoint} />
           <View style={[{ flexGrow: progress }, styles.seekBarProgress]} />
           <View
-            style={[
-              styles.seekBarKnob,
-              this.state.isSeeking ? { transform: [{ scale: 1 }] } : {},
-            ]}
+            style={[styles.seekBarKnob, this.state.isSeeking ? { transform: [{ scale: 1 }] } : {}]}
             hitSlop={{
               top: 20,
               bottom: 20,
@@ -148,22 +145,20 @@ export default class SliderWidget extends Component {
   }
 
   renderMin() {
-    return (
-      <Text style={styles.txtZero}>{`${this.props.minValue}`}</Text>
-    );
+    return <Text style={styles.txtZero}>{`${this.props.minValue}`}</Text>;
   }
 
   renderMax() {
-    return (
-      <Text style={styles.txtMaxValue}>{`${this.props.maxValue}`}</Text>
-    );
+    return <Text style={styles.txtMaxValue}>{`${this.props.maxValue}`}</Text>;
   }
 
   renderTextValue() {
     const { progress, distance } = this.state;
     const { isCurrency, currencyOptions } = this.props;
     const mergedCurrencyOptions = { ...DEFAULT_CURRENCY_OPTIONS, ...currencyOptions };
-    const txtValue = isCurrency ?  currencyFormatter.format(distance, mergedCurrencyOptions) : `${distance}`;
+    const txtValue = isCurrency
+      ? currencyFormatter.format(distance, mergedCurrencyOptions)
+      : `${distance}`;
     return (
       <View style={styles.textBar}>
         <Text style={{ flexGrow: progress }} />
@@ -174,9 +169,8 @@ export default class SliderWidget extends Component {
               flexGrow: 100 - progress,
             },
           ]}
-          numberOfLines={1}
-        >
-            {txtValue}
+          numberOfLines={1}>
+          {txtValue}
         </Text>
       </View>
     );
@@ -224,90 +218,90 @@ SliderWidget.defaultProps = {
   iconColor: csstyles.vars.csGrey,
   iconName: 'hand-holding-usd',
   currencyOptions: DEFAULT_CURRENCY_OPTIONS,
-  isCurrency: true
+  isCurrency: true,
 };
 
 const styles = StyleSheet.create({
-    container: {
-      marginBottom: 16,
-    },
-    textBar: {
-      flexDirection: 'row',
-      marginLeft: ICON_CONTAINER_WIDTH,
-    },
-    iconContainer: {
-      width: ICON_CONTAINER_WIDTH,
-      height: ICON_CONTAINER_WIDTH,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    seekBarRow: {
-      width: '100%',
-      paddingRight: ICON_CONTAINER_WIDTH,
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    seekBar: {
-      height: 32,
-      width: '100%',
-      paddingRight: 11,
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    seekBarStartPoint: {
-      position: 'absolute',
-      left: 0,
-      width: 16,
-      height: 16,
-      borderRadius: 7,
-      backgroundColor: csstyles.vars.csWhite,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    seekBarEndPoint: {
-      position: 'absolute',
-      right: 2,
-      width: 12,
-      height: 12,
-      borderRadius: 6,
-      backgroundColor: csstyles.vars.csWhite,
-      borderWidth: 0.5,
-      borderColor: csstyles.vars.csGreen,
-    },
-    seekBarKnob: {
-      width: 24,
-      height: 24,
-      marginHorizontal: -12,
-      marginVertical: -12,
-      borderRadius: 12,
-      borderWidth: 1,
-      borderColor:csstyles.vars.csWhite,
-      backgroundColor: csstyles.vars.csGreen,
-      transform: [{ scale: 0.8 }],
-      zIndex: 1,
-    },
-    seekBarBackground: {
-      backgroundColor: '#6a6a6a80',
-      height: 1,
-    },
-    seekBarProgress: {
-      height: 1,
-      backgroundColor: csstyles.vars.csGreen,
-    },
-    txtZero: {
-      position: 'absolute',
-      color: csstyles.vars.csGrey,
-      fontSize: 12,
-      left: 0,
-    },
-    txtMaxValue: {
-      position: 'absolute',
-      color: csstyles.vars.csGrey,
-      fontSize: 12,
-      right: 0,
-    },
-    textDistance: {
-      fontSize: 12,
-      color: csstyles.vars.csGreen,
-    },
-  });
+  container: {
+    marginBottom: 16,
+  },
+  textBar: {
+    flexDirection: 'row',
+    marginLeft: ICON_CONTAINER_WIDTH,
+  },
+  iconContainer: {
+    width: ICON_CONTAINER_WIDTH,
+    height: ICON_CONTAINER_WIDTH,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  seekBarRow: {
+    width: '100%',
+    paddingRight: ICON_CONTAINER_WIDTH,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  seekBar: {
+    height: 32,
+    width: '100%',
+    paddingRight: 11,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  seekBarStartPoint: {
+    position: 'absolute',
+    left: 0,
+    width: 16,
+    height: 16,
+    borderRadius: 7,
+    backgroundColor: csstyles.vars.csWhite,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  seekBarEndPoint: {
+    position: 'absolute',
+    right: 2,
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: csstyles.vars.csWhite,
+    borderWidth: 0.5,
+    borderColor: csstyles.vars.csGreen,
+  },
+  seekBarKnob: {
+    width: 24,
+    height: 24,
+    marginHorizontal: -12,
+    marginVertical: -12,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: csstyles.vars.csWhite,
+    backgroundColor: csstyles.vars.csGreen,
+    transform: [{ scale: 0.8 }],
+    zIndex: 1,
+  },
+  seekBarBackground: {
+    backgroundColor: '#6a6a6a80',
+    height: 1,
+  },
+  seekBarProgress: {
+    height: 1,
+    backgroundColor: csstyles.vars.csGreen,
+  },
+  txtZero: {
+    position: 'absolute',
+    color: csstyles.vars.csGrey,
+    fontSize: 12,
+    left: 0,
+  },
+  txtMaxValue: {
+    position: 'absolute',
+    color: csstyles.vars.csGrey,
+    fontSize: 12,
+    right: 0,
+  },
+  textDistance: {
+    fontSize: 12,
+    color: csstyles.vars.csGreen,
+  },
+});

@@ -1,21 +1,18 @@
-import toPath from "lodash.topath";
-import Ajv from "ajv";
+import toPath from 'lodash.topath';
+import Ajv from 'ajv';
 const ajv = new Ajv({
-  errorDataPath: "property",
+  errorDataPath: 'property',
   allErrors: true,
   multipleOfPrecision: 8,
 });
 // add custom formats
+ajv.addFormat('data-url', /^data:([a-z]+\/[a-z0-9-+.]+)?;name=(.*);base64,(.*)$/);
 ajv.addFormat(
-  "data-url",
-  /^data:([a-z]+\/[a-z0-9-+.]+)?;name=(.*);base64,(.*)$/
-);
-ajv.addFormat(
-  "color",
-  /^(#?([0-9A-Fa-f]{3}){1,2}\b|aqua|black|blue|fuchsia|gray|green|lime|maroon|navy|olive|orange|purple|red|silver|teal|white|yellow|(rgb\(\s*\b([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\b\s*,\s*\b([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\b\s*,\s*\b([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\b\s*\))|(rgb\(\s*(\d?\d%|100%)+\s*,\s*(\d?\d%|100%)+\s*,\s*(\d?\d%|100%)+\s*\)))$/
+  'color',
+  /^(#?([0-9A-Fa-f]{3}){1,2}\b|aqua|black|blue|fuchsia|gray|green|lime|maroon|navy|olive|orange|purple|red|silver|teal|white|yellow|(rgb\(\s*\b([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\b\s*,\s*\b([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\b\s*,\s*\b([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])\b\s*\))|(rgb\(\s*(\d?\d%|100%)+\s*,\s*(\d?\d%|100%)+\s*,\s*(\d?\d%|100%)+\s*\)))$/,
 );
 
-import { isObject, mergeObjects } from "./utils";
+import { isObject, mergeObjects } from './utils';
 
 function toErrorSchema(errors) {
   // Transforms a ajv validation errors list:
@@ -43,7 +40,7 @@ function toErrorSchema(errors) {
 
     // If the property is at the root (.level1) then toPath creates
     // an empty array element at the first index. Remove it.
-    if (path.length > 0 && path[0] === "") {
+    if (path.length > 0 && path[0] === '') {
       path.splice(0, 1);
     }
 
@@ -65,20 +62,20 @@ function toErrorSchema(errors) {
   }, {});
 }
 
-export function toErrorList(errorSchema, fieldName = "root") {
+export function toErrorList(errorSchema, fieldName = 'root') {
   // XXX: We should transform fieldName as a full field path string.
   let errorList = [];
-  if ("__errors" in errorSchema) {
+  if ('__errors' in errorSchema) {
     errorList = errorList.concat(
       errorSchema.__errors.map(stack => {
         return {
           stack: `${fieldName}: ${stack}`,
         };
-      })
+      }),
     );
   }
   return Object.keys(errorSchema).reduce((acc, key) => {
-    if (key !== "__errors") {
+    if (key !== '__errors') {
       acc = acc.concat(toErrorList(errorSchema[key], key));
     }
     return acc;
@@ -110,9 +107,9 @@ function createErrorHandler(formData) {
 
 function unwrapErrorHandler(errorHandler) {
   return Object.keys(errorHandler).reduce((acc, key) => {
-    if (key === "addError") {
+    if (key === 'addError') {
       return acc;
-    } else if (key === "__errors") {
+    } else if (key === '__errors') {
       return { ...acc, [key]: errorHandler[key] };
     }
     return { ...acc, [key]: unwrapErrorHandler(errorHandler[key]) };
@@ -148,12 +145,7 @@ function transformAjvErrors(errors = []) {
  * function, which receives the form data and an `errorHandler` object that
  * will be used to add custom validation errors for each field.
  */
-export default function validateFormData(
-  formData,
-  schema,
-  customValidate,
-  transformErrors
-) {
+export default function validateFormData(formData, schema, customValidate, transformErrors) {
   try {
     ajv.validate(schema, formData);
   } catch (e) {
@@ -163,12 +155,12 @@ export default function validateFormData(
 
   let errors = transformAjvErrors(ajv.errors);
 
-  if (typeof transformErrors === "function") {
+  if (typeof transformErrors === 'function') {
     errors = transformErrors(errors);
   }
   const errorSchema = toErrorSchema(errors);
 
-  if (typeof customValidate !== "function") {
+  if (typeof customValidate !== 'function') {
     return { errors, errorSchema };
   }
 

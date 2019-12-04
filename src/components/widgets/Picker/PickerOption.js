@@ -1,16 +1,11 @@
 // @flow
 
-import React, { PureComponent } from 'react'
-import { Text,
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  Platform,
-  ViewStyle
-} from 'react-native'
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
-import csstyles from '../../styles'
-import Picker from './Picker'
+import React, { PureComponent } from 'react';
+import { Text, View, TouchableOpacity, StyleSheet, ViewStyle } from 'react-native';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
+import csstyles from '../../styles';
+import Picker from './Picker';
 
 type Props = {
   value: String,
@@ -26,102 +21,118 @@ type Props = {
   currentIndex: number,
   wrapStyles: ViewStyle,
   mainColor?: String,
-  textStyle?: ViewStyle, 
+  textStyle?: ViewStyle,
   themeMode: 'light' | 'dark',
-  disabled: boolean
-}
+  disabled: boolean,
+};
 
 type State = {
   showingPicker: boolean,
-  schemaIndex: number
-}
+  schemaIndex: number,
+};
 
 class PickerOption extends PureComponent<Props, State> {
-  selectedIndex = null
+  selectedIndex = null;
 
   constructor(props) {
-    super(props); 
+    super(props);
     this.state = {
-       showingPicker: false,
-       schemaIndex: props.currentIndex ? props.currentIndex : 0
+      showingPicker: false,
+      schemaIndex: props.currentIndex ? props.currentIndex : 0,
     };
   }
 
   onPress = () => {
-    const { data, schema } = this.props
-    var dataPicker = data || []
+    const { data, schema } = this.props;
+    var dataPicker = data || [];
     if (schema && schema.hasOwnProperty('data')) {
-      dataPicker = schema['data']
+      dataPicker = schema['data'];
     }
     if (dataPicker != null && dataPicker.length > 0) {
       this.setState({
-        showingPicker: true
-      })
+        showingPicker: true,
+      });
     }
-  }
+  };
 
   onChange = (value: String, index: Number) => {
-    const { schema ,onChange, type } = this.props
+    const { schema, onChange, type } = this.props;
     this.setState({
       showingPicker: false,
-    })
+    });
     if (schema) {
       this.setState({
-        schemaIndex: index
-      })
-      onChange(value)
+        schemaIndex: index,
+      });
+      onChange(value);
     } else {
-      onChange(value, index, type)
+      onChange(value, index, type);
     }
-  }
+  };
 
   onClose = () => {
     this.setState({
-      showingPicker: false
-    })
-  }
+      showingPicker: false,
+    });
+  };
 
   render() {
-    const { schemaIndex } = this.state
-    const { value, label, pickerCenter, schema, rawErrors, data, icon, iconStyle, fontSize, currentIndex, wrapStyles, themeMode, mainColor, textStyle, disabled } = this.props
-    const { showingPicker } = this.state
-    const showError = rawErrors && rawErrors.length > 0
-    var dataPicker = data || []
+    const { schemaIndex } = this.state;
+    const {
+      value,
+      label,
+      pickerCenter,
+      schema,
+      rawErrors,
+      data,
+      icon,
+      iconStyle,
+      fontSize,
+      currentIndex,
+      wrapStyles,
+      themeMode,
+      mainColor,
+      textStyle,
+      disabled,
+    } = this.props;
+    const { showingPicker } = this.state;
+    const showError = rawErrors && rawErrors.length > 0;
+    var dataPicker = data || [];
     if (schema && schema.hasOwnProperty('data')) {
-      dataPicker = schema['data']
+      dataPicker = schema['data'];
     }
 
-    var iconName = icon || 'calendar-alt'
+    var iconName = icon || 'calendar-alt';
     if (schema && schema.hasOwnProperty('icon')) {
-      iconName = schema['icon']
+      iconName = schema['icon'];
     }
 
-    var iconStyleTmp = null
+    var iconStyleTmp = null;
     if (schema && schema.hasOwnProperty('iconStyle')) {
-      iconStyleTmp = schema['iconStyle']
+      iconStyleTmp = schema['iconStyle'];
     } else if (iconStyle != null) {
-      iconStyleTmp = iconStyle
+      iconStyleTmp = iconStyle;
     }
 
-    var styleFromSchema = null 
+    var styleFromSchema = null;
     if (schema && schema.hasOwnProperty('style')) {
-      styleFromSchema = schema['style']
+      styleFromSchema = schema['style'];
     }
-    
-    const fontTextStyle = fontSize ? { fontSize: fontSize } : { fontSize: 15 }
-    const textCustomStyle = mainColor ? { color: mainColor } : null 
-    var containerStyle = styles['inputContainerLight']
-    var inputTextStyle = styles['inputTextLight']
+
+    const fontTextStyle = fontSize ? { fontSize: fontSize } : { fontSize: 15 };
+    const textCustomStyle = mainColor ? { color: mainColor } : null;
+    var containerStyle = styles['inputContainerLight'];
+    var inputTextStyle = styles['inputTextLight'];
     if (themeMode && themeMode === 'dark') {
-      containerStyle = styles['inputContainerDark']
-      inputTextStyle = styles['inputTextDark']
+      containerStyle = styles['inputContainerDark'];
+      inputTextStyle = styles['inputTextDark'];
     }
 
     return (
       <View style={styleFromSchema}>
         <Picker
           isOpen={showingPicker}
-          value={value }
+          value={value}
           selectedIndex={schema ? schemaIndex : currentIndex}
           data={dataPicker}
           onChange={this.onChange}
@@ -135,11 +146,14 @@ class PickerOption extends PureComponent<Props, State> {
             activeOpacity={0.8}
             onPress={() => this.onPress()}
             style={{
-              flex: 1
+              flex: 1,
             }}
-            disabled={disabled ? disabled : false}
-          >
-            <View style={[ wrapStyles ? wrapStyles : containerStyle, showError ? styles.inputContainerInvalid : null]}>
+            disabled={disabled ? disabled : false}>
+            <View
+              style={[
+                wrapStyles ? wrapStyles : containerStyle,
+                showError ? styles.inputContainerInvalid : null,
+              ]}>
               {icon && (
                 <View style={styles.inputIcon}>
                   <FontAwesome5 size={15} name={icon} color={'#646A64'} solid={false} />
@@ -150,13 +164,17 @@ class PickerOption extends PureComponent<Props, State> {
               </Text>
 
               <View style={[styles.inputIconLight, iconStyleTmp]}>
-                <FontAwesome5 size={15} name={'chevron-down'} color={mainColor ? mainColor : csstyles.vars.csGrey} />
+                <FontAwesome5
+                  size={15}
+                  name={'chevron-down'}
+                  color={mainColor ? mainColor : csstyles.vars.csGrey}
+                />
               </View>
             </View>
           </TouchableOpacity>
         </View>
       </View>
-    )
+    );
   }
 }
 
@@ -181,19 +199,19 @@ const styles = StyleSheet.create({
     borderColor: '#EBEBEB',
   },
   inputContainerInvalid: {
-    borderColor: csstyles.vars.csDanger
+    borderColor: csstyles.vars.csDanger,
   },
   inputTextDark: {
     color: csstyles.vars.csWhite,
     ...csstyles.text.regular,
     // padding: 5,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   inputTextLight: {
     color: csstyles.vars.csGrey,
     ...csstyles.text.regular,
     fontSize: 15,
-    paddingLeft: csstyles.vars.csInputHorizontalPadding
+    paddingLeft: csstyles.vars.csInputHorizontalPadding,
   },
   inputIcon: {
     width: csstyles.vars.csPickerHeight,
@@ -211,7 +229,7 @@ const styles = StyleSheet.create({
     ...csstyles.base.center,
     position: 'absolute',
     top: 0,
-    right: 0
+    right: 0,
   },
   inputIconLight: {
     width: csstyles.vars.csInputHeight,
@@ -220,15 +238,15 @@ const styles = StyleSheet.create({
     ...csstyles.base.center,
     position: 'absolute',
     top: 0,
-    right: 0
+    right: 0,
   },
   label: {
     paddingLeft: csstyles.vars.csInputHorizontalPadding,
     ...csstyles.text.textPrimary,
     ...csstyles.text.medium,
     fontSize: 13,
-    marginBottom: csstyles.vars.csBoxSpacingHalf
-  }
-})
+    marginBottom: csstyles.vars.csBoxSpacingHalf,
+  },
+});
 
-export default PickerOption
+export default PickerOption;
