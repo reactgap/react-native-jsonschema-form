@@ -124,7 +124,7 @@ class TextFieldPicker extends PureComponent<Props, State> {
                   <FontAwesome5 size={15} name={icon} color={'#646A64'} solid={true} />
                 </View>
               )}
-              <View style={[styles.inputContainer]}>
+              <View style={[styles.inputContainer, showError ? styles.inputContainerInvalid : null]}>
                 <Text style={styles.inputText}>
                   {value}
                 </Text>

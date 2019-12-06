@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import CSButton from './widgets/Button/CSButton/CSButton';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { default as DefaultErrorList } from "./ErrorList";
+import { default as DefaultErrorList } from './ErrorList';
 import {
   getDefaultFormState,
   retrieveSchema,
@@ -12,9 +12,9 @@ import {
   setState,
   getDefaultRegistry,
   deepEquals,
-  getTypeForm
-} from "../utils";
-import validateFormData, { toErrorList } from "../validate";
+  getTypeForm,
+} from '../utils';
+import validateFormData, { toErrorList } from '../validate';
 import styles from './styles';
 
 export default class Form extends Component {
@@ -28,15 +28,13 @@ export default class Form extends Component {
     ErrorList: DefaultErrorList,
     typeForm: 'form',
     externalSubmit: false,
+    keyboardAware: true,
   };
 
   constructor(props) {
     super(props);
     this.state = this.getStateFromProps(props);
-    if (
-      this.props.onChange &&
-      !deepEquals(this.state.formData, this.props.formData)
-    ) {
+    if (this.props.onChange && !deepEquals(this.state.formData, this.props.formData)) {
       this.props.onChange(this.state);
     }
     this.formElement = null;
@@ -56,9 +54,9 @@ export default class Form extends Component {
 
   getStateFromProps(props) {
     const state = this.state || {};
-    const schema = "schema" in props ? props.schema : this.props.schema;
-    const uiSchema = "uiSchema" in props ? props.uiSchema : this.props.uiSchema;
-    const edit = typeof props.formData !== "undefined";
+    const schema = 'schema' in props ? props.schema : this.props.schema;
+    const uiSchema = 'uiSchema' in props ? props.uiSchema : this.props.uiSchema;
+    const edit = typeof props.formData !== 'undefined';
     const liveValidate = props.liveValidate || this.props.liveValidate;
     const mustValidate = edit && !props.noValidate && liveValidate;
     const { definitions } = schema;
@@ -73,10 +71,10 @@ export default class Form extends Component {
         };
     const idSchema = toIdSchema(
       retrievedSchema,
-      uiSchema["ui:rootFieldId"],
+      uiSchema['ui:rootFieldId'],
       definitions,
       formData,
-      props.idPrefix
+      props.idPrefix,
     );
     return {
       typeForm,
@@ -98,12 +96,7 @@ export default class Form extends Component {
     const { validate, transformErrors } = this.props;
     const { definitions } = this.getRegistry();
     const resolvedSchema = retrieveSchema(schema, definitions, formData);
-    return validateFormData(
-      formData,
-      resolvedSchema,
-      validate,
-      transformErrors
-    );
+    return validateFormData(formData, resolvedSchema, validate, transformErrors);
   }
 
   renderErrors() {
@@ -170,7 +163,7 @@ export default class Form extends Component {
           if (this.props.onError) {
             this.props.onError(errors);
           } else {
-            console.log("Form validation failed", errors);
+            console.log('Form validation failed', errors);
           }
         });
         return;
@@ -179,7 +172,7 @@ export default class Form extends Component {
 
     this.setState({ errors: [], errorSchema: {} }, () => {
       if (this.props.onSubmit) {
-        this.props.onSubmit({ ...this.state, status: "submitted" });
+        this.props.onSubmit({ ...this.state, status: 'submitted' });
       }
     });
   };
@@ -201,7 +194,7 @@ export default class Form extends Component {
 
   submit() {
     if (this.formElement) {
-      this.formElement.dispatchEvent(new Event("submit", { cancelable: true }));
+      this.formElement.dispatchEvent(new Event('submit', { cancelable: true }));
     }
   }
 
@@ -213,16 +206,16 @@ export default class Form extends Component {
     } else if ((typeForm === 'form' || typeForm === 'object') && !disabled && !externalSubmit) {
       return (
         <View>
-           <CSButton
-              title={'Next'}
-              type="primary"
-              onPress={this.onSubmit}
-              style={{
-                marginTop: styles.vars.csBoxSpacing2x
-              }}
-            />
+          <CSButton
+            title={'Tiếp Tục'}
+            type="primary"
+            onPress={this.onSubmit}
+            style={{
+              marginTop: styles.vars.csBoxSpacing2x,
+            }}
+          />
         </View>
-      )
+      );
     }
     return null;
   }
@@ -251,61 +244,51 @@ export default class Form extends Component {
 
     return (
       <_SchemaField
-          schema={schema}
-          uiSchema={uiSchema}
-          errorSchema={errorSchema}
-          idSchema={idSchema}
-          idPrefix={idPrefix}
-          formData={formData}
-          onChange={this.onChange}
-          onBlur={this.onBlur}
-          onFocus={this.onFocus}
-          onAction={this.onAction}
-          registry={registry}
-          safeRenderCompletion={safeRenderCompletion}
-          disabled={disabled}
-        />
+        schema={schema}
+        uiSchema={uiSchema}
+        errorSchema={errorSchema}
+        idSchema={idSchema}
+        idPrefix={idPrefix}
+        formData={formData}
+        onChange={this.onChange}
+        onBlur={this.onBlur}
+        onFocus={this.onFocus}
+        onAction={this.onAction}
+        registry={registry}
+        safeRenderCompletion={safeRenderCompletion}
+        disabled={disabled}
+      />
     );
   }
 
   render() {
-    return (
-      <KeyboardAwareScrollView>
-      <View style={ this.props.styles == null ?  styles.base.full : this.props.styles }>
-        {/* {this.renderErrors()} */}
-        {this.renderSchemaForm()}
-        {this.renderSubmit()}
-      </View>
-      </KeyboardAwareScrollView>
-    );
+    const { keyboardAware } = this.props;
+    if (keyboardAware) {
+      return (
+        <KeyboardAwareScrollView>
+          <View style={this.props.styles == null ? styles.base.full : this.props.styles}>
+            {this.renderSchemaForm()}
+            {this.renderSubmit()}
+          </View>
+        </KeyboardAwareScrollView>
+      );
+    } else {
+      return (
+        <View style={this.props.styles == null ? styles.base.full : this.props.styles}>
+          {this.renderSchemaForm()}
+          {this.renderSubmit()}
+        </View>
+      );
+    }
   }
 }
-      // <form
-      //   className={className ? className : "rjsf"}
-      //   id={id}
-      //   name={name}
-      //   method={method}
-      //   target={target}
-      //   action={action}
-      //   autoComplete={autocomplete}
-      //   encType={enctype}
-      //   acceptCharset={acceptcharset}
-      //   noValidate={noHtml5Validate}
-      //   onSubmit={this.onSubmit}
-      //   ref={form => {
-      //     this.formElement = form;
-      //   }}>
-        
-      // </form>
 
-if (process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV !== 'production') {
   Form.propTypes = {
     schema: PropTypes.object.isRequired,
     uiSchema: PropTypes.object,
     formData: PropTypes.any,
-    widgets: PropTypes.objectOf(
-      PropTypes.oneOfType([PropTypes.func, PropTypes.object])
-    ),
+    widgets: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.func, PropTypes.object])),
     fields: PropTypes.objectOf(PropTypes.func),
     ArrayFieldTemplate: PropTypes.func,
     ObjectFieldTemplate: PropTypes.func,

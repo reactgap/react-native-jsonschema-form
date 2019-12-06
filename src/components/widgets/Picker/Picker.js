@@ -24,14 +24,14 @@ import localData from '../../../data/vietnam_provinces_districts.json'
 
 type Props =  {
   isOpen: boolean,
-  value: String,
-  onChange: (value: String, index: Number) => void,
+  value: string,
+  onChange: (value: string, index: Number) => void,
   onClose: () => void,
   center?: boolean,
   mode: 'provinces' | 'districts' | 'options',
-  province: String,
-  district: String,
-  data: Array,
+  province: string,
+  district: string,
+  data: any[],
   selectedIndex: number
 }
 
@@ -42,7 +42,7 @@ class Picker extends Component<Props> {
 
   shouldOpen = false
 
-  selected: String = null
+  selected: string = null
 
   shouldComponentUpdate(nextProps: Props) {
     const { isOpen, value, center, selectedIndex } = this.props

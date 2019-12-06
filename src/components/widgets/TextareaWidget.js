@@ -10,13 +10,11 @@ class TextareaWidget extends Component {
   };
 
   onFocusInput = (e) => {
-    console.log('onFocusInput')
     this.setState({  focus: true });
     this.props.onFocus(e);
   }
 
   onBlurInput = (e) => {
-    console.log('onBlurInput')
     this.setState({  focus: false });
     this.props.onBlur(e);
   }
@@ -40,7 +38,6 @@ class TextareaWidget extends Component {
       return onChange(value === "" ? options.emptyValue : value);
     };
     const { focus } = this.state;
-    console.log('TextareaWidget component');
     return (
       <TextInput
         value={typeof value === "undefined" ? "" : value}
@@ -57,20 +54,6 @@ class TextareaWidget extends Component {
         disabled={disabled}
         editable={!readonly}
       />
-      // <textarea
-      //   id={id}
-      //   className="form-control"
-      //   value={typeof value === "undefined" ? "" : value}
-      //   placeholder={placeholder}
-      //   required={required}
-      //   disabled={disabled}
-      //   readOnly={readonly}
-      //   autoFocus={autofocus}
-      //   rows={options.rows}
-      //   onBlur={onBlur && (event => onBlur(id, event.target.value))}
-      //   onFocus={onFocus && (event => onFocus(id, event.target.value))}
-      //   onChange={_onChange}
-      // />
     );
   }
 }

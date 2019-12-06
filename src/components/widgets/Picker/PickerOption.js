@@ -1,34 +1,35 @@
 // @flow
 
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { Text,
   View,
   TouchableOpacity,
   StyleSheet,
   Platform,
-  ViewStyle
+  ViewStyle,
 } from 'react-native'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import csstyles from '../../styles'
 import Picker from './Picker'
 
 type Props = {
-  value: String,
-  icon?: String,
+  value: string,
+  icon?: string,
   iconStyle?: ViewStyle,
-  onChange: (value: String, index: Number) => void,
+  onChange: (value: string, index: number) => void,
   label?: string,
   pickerCenter?: boolean,
   schema: Object,
-  data: String[],
+  data: string[],
   fontSize?: number,
-  type: String,
+  type: string,
   currentIndex: number,
   wrapStyles: ViewStyle,
-  mainColor?: String,
+  mainColor?: string,
   textStyle?: ViewStyle, 
   themeMode: 'light' | 'dark',
-  disabled: boolean
+  disabled: boolean,
+  placeHolder?: string,
 }
 
 type State = {
@@ -36,15 +37,31 @@ type State = {
   schemaIndex: number
 }
 
-class PickerOption extends PureComponent<Props, State> {
+const getCurrentIndex = (props: Props): number => {
+  const { value, data } = props
+  if (data && value) {
+    const findIndex = data.findIndex((item) => item.name === value)
+    return findIndex
+  }
+  return -1
+}
+
+class PickerOption extends Component<Props, State> {
   selectedIndex = null
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props); 
     this.state = {
        showingPicker: false,
-       schemaIndex: props.currentIndex ? props.currentIndex : 0
+       schemaIndex: props.currentIndex ? props.currentIndex : getCurrentIndex(props)
     };
+  }
+
+  static getDerivedStateFromProps(props: Props, state: State) {
+    return {
+      ...state,
+      schemaIndex: getCurrentIndex(props)
+    }
   }
 
   onPress = () => {
@@ -70,7 +87,7 @@ class PickerOption extends PureComponent<Props, State> {
         schemaIndex: index
       })
       onChange(value)
-    } else {
+    } else if (index !== null &&  typeof index === 'number') {
       onChange(value, index, type)
     }
   }
@@ -83,7 +100,24 @@ class PickerOption extends PureComponent<Props, State> {
 
   render() {
     const { schemaIndex } = this.state
-    const { value, label, pickerCenter, schema, rawErrors, data, icon, iconStyle, fontSize, currentIndex, wrapStyles, themeMode, mainColor, textStyle, disabled } = this.props
+    const { 
+      value,
+      label, 
+      pickerCenter, 
+      schema, 
+      rawErrors, 
+      data, 
+      icon, 
+      iconStyle, 
+      fontSize, 
+      currentIndex,
+      wrapStyles,
+      themeMode,
+      mainColor,
+      textStyle,
+      disabled,
+      placeHolder,
+    } = this.props
     const { showingPicker } = this.state
     const showError = rawErrors && rawErrors.length > 0
     var dataPicker = data || []
@@ -118,44 +152,57 @@ class PickerOption extends PureComponent<Props, State> {
     }
 
     return (
-      <View style={styleFromSchema}>
-        <Picker
-          isOpen={showingPicker}
-          value={value }
-          selectedIndex={schema ? schemaIndex : currentIndex}
-          data={dataPicker}
-          onChange={this.onChange}
-          onClose={this.onClose}
-          label={label}
-          center={pickerCenter}
-          mode={this.mode}
-        />
-        <View style={csstyles.base.rowCenterLineBetween}>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => this.onPress()}
-            style={{
-              flex: 1
-            }}
-            disabled={disabled ? disabled : false}
-          >
-            <View style={[ wrapStyles ? wrapStyles : containerStyle, showError ? styles.inputContainerInvalid : null]}>
-              {icon && (
-                <View style={styles.inputIcon}>
-                  <FontAwesome5 size={15} name={icon} color={'#646A64'} solid={false} />
-                </View>
-              )}
-              <Text style={[inputTextStyle, fontTextStyle, textCustomStyle, textStyle]}>
-                {value}
-              </Text>
+      <>
+        <View style={styleFromSchema}>
+          <Picker
+            isOpen={showingPicker}
+            value={value}
+            selectedIndex={schema ? schemaIndex : currentIndex}
+            data={dataPicker}
+            onChange={this.onChange}
+            onClose={this.onClose}
+            label={label}
+            center={pickerCenter}
+            mode={this.mode}
+          />
+          <View style={csstyles.base.rowCenterLineBetween}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => this.onPress()}
+              style={{
+                flex: 1
+              }}
+              disabled={disabled ? disabled : false}
+            >
+              <View style={[ wrapStyles ? wrapStyles : containerStyle, showError ? styles.inputContainerInvalid : null]}>
+                {icon && (
+                  <View style={styles.inputIcon}>
+                    <FontAwesome5 size={15} name={icon} color={'#646A64'} solid={false} />
+                  </View>
+                )}
+                <Text style={[inputTextStyle, fontTextStyle, textCustomStyle, textStyle]}>
+                  {value && value.length > 0 ? value : placeHolder || ''}
+                </Text>
 
-              <View style={[styles.inputIconLight, iconStyleTmp]}>
-                <FontAwesome5 size={15} name={'chevron-down'} color={mainColor ? mainColor : csstyles.vars.csGrey} />
+                <View style={[styles.inputIconLight, iconStyleTmp]}>
+                  <FontAwesome5 size={15} name={'chevron-down'} color={mainColor ? mainColor : csstyles.vars.csGrey} />
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+        <View>
+          {showError && (
+            <View style={styles.errorWrapper}>
+              {
+                rawErrors.map((error, i) => (
+                  <Text key={i} style={styles.errorText}> {error}</Text>
+                  ))
+              }
+            </View>
+          )}
+        </View>
+      </>
     )
   }
 }
@@ -205,7 +252,7 @@ const styles = StyleSheet.create({
   },
   inputIconDark: {
     width: csstyles.vars.csPickerHeight,
-    height: csstyles.vars.csPickerHeight,
+    height: csstyles.vars.csPickerHeight-2,
     borderRadius: csstyles.vars.csPickerBorderRadius,
     backgroundColor: csstyles.vars.csGrey,
     ...csstyles.base.center,
@@ -215,7 +262,7 @@ const styles = StyleSheet.create({
   },
   inputIconLight: {
     width: csstyles.vars.csInputHeight,
-    height: csstyles.vars.csInputHeight,
+    height: csstyles.vars.csInputHeight-2,
     backgroundColor: '#EBEBEB',
     ...csstyles.base.center,
     position: 'absolute',
@@ -228,6 +275,17 @@ const styles = StyleSheet.create({
     ...csstyles.text.medium,
     fontSize: 13,
     marginBottom: csstyles.vars.csBoxSpacingHalf
+  },
+  errorWrapper: {
+    marginTop: 3,
+    paddingLeft: csstyles.vars.csInputHeight,
+    marginBottom: csstyles.vars.csBoxSpacing,
+  },
+  errorText: {
+    ...csstyles.text.medium,
+    color: csstyles.vars.csDanger,
+    fontStyle: 'italic',
+    fontSize: 13
   }
 })
 
