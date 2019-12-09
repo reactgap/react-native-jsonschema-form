@@ -183,10 +183,11 @@ class PickerOption extends Component<Props, State> {
                 <Text style={[inputTextStyle, fontTextStyle, textCustomStyle, textStyle]}>
                   {value && value.length > 0 ? value : placeHolder || ''}
                 </Text>
-
-                <View style={[styles.inputIconLight, iconStyleTmp]}>
-                  <FontAwesome5 size={15} name={'chevron-down'} color={mainColor ? mainColor : csstyles.vars.csGrey} />
-                </View>
+                {!disabled && (
+                  <View style={[styles.inputIconLight, iconStyleTmp]}>
+                    <FontAwesome5 size={15} name={'chevron-down'} color={mainColor ? mainColor : csstyles.vars.csGrey} />
+                  </View>
+                )}
               </View>
             </TouchableOpacity>
           </View>

@@ -266,7 +266,8 @@ module.exports = {
       "ui:widget": "PickerOption"
     },
     gender: {
-      "ui:widget": "PickerOption"
+      "ui:widget": "PickerOption",
+      "ui:disabled": true,
     },
     money: {
       "ui:widget": "SliderWidget"
