@@ -64,6 +64,10 @@ module.exports = {
         minLength: 8,
         icon: 'phone'
       },
+      dob: {
+        type: "string",
+        title: "Ngày sinh",
+      },
       idNumber: {
         type: "string",
         title: "Number",
@@ -269,6 +273,9 @@ module.exports = {
     },
     fee: {
       "ui:widget": "MoneyField"
-    }
+    },
+    dob: {
+      "ui:widget": "datetime",
+    },
   },
 };

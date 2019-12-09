@@ -5,7 +5,6 @@ import BaseInput from './BaseInput';
 // import CheckboxesWidget from "./CheckboxesWidget";
 // import ColorWidget from "./ColorWidget";
 // import DateWidget from "./DateWidget";
-// import DateTimeWidget from "./DateTimeWidget";
 import EmailWidget from "./Email/EmailWidget";
 // import FileWidget from "./FileWidget";
 // import HiddenWidget from "./HiddenWidget";
@@ -24,6 +23,7 @@ import PickerOption from './Picker/PickerOption'
 import RadioWidget from './RadioWidget/RadioWidget'
 import SliderWidget from './Slider/SliderWidget';
 import MoneyField from './Money/MoneyField';
+import DateTimeWidget from "./DateTime/DateTimeWidget";
 
 export default {
   BaseInput,
@@ -34,7 +34,7 @@ export default {
   TextField,
   TextWidget,
   // DateWidget,
-  // DateTimeWidget,
+  DateTimeWidget,
   // AltDateWidget,
   // AltDateTimeWidget,
   EmailWidget,
