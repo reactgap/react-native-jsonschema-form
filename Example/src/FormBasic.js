@@ -39,27 +39,69 @@ class FormBasic extends PureComponent<Props> {
         }
       } else if (error.name === 'pattern') {
         error.message = 'Vui lòng chỉ nhập số';
+      } else if (error.name === 'minimum') {
+        const minimum = error.params.limit;
+        error.message = `Vui lòng nhập giá trị tối thiểu là ${minimum}`;
+      } else if (error.name === 'maximum') {
+        const maximum = error.params.limit;
+        error.message = `Vui lòng nhập giá trị tối đa là ${maximum}`;
       }
+
       return error;
     });
+  };
+
+  getCustomKeywords = () => {
+    return [
+      {
+        keyword: 'checkboxList',
+        config: {
+          type: 'array',
+          validate: function(_schema, results) {
+            for (let i = 0; i < results.length; i++) {
+              const data = results[i];
+              if (!data.hasOwnProperty('value') || !data.hasOwnProperty('selected')) {
+                return false;
+              }
+
+              if (typeof data.value !== 'number') {
+                return false;
+              }
+
+              if (data.selected && !data.value) {
+                return false;
+              }
+            }
+
+            return true;
+          },
+          errors: true,
+        },
+      },
+    ];
   };
 
   validate = (formData, errors) => {
     return errors;
   };
 
-  onchange = formState => {};
+  onchange = formState => {
+    // console.log(formState);
+  };
 
   render() {
     const schema = FormBasicSchema.schema;
     const uiSchema = FormBasicSchema.uiSchema;
     const formData = null;
+
+    const keywords = this.getCustomKeywords();
     return (
       <Form
         schema={schema}
         externalSubmit={false}
         formData={formData}
         validate={this.validate}
+        customKeywords={keywords}
         transformErrors={this.transformErrors}
         styles={styles.form}
         uiSchema={uiSchema}

@@ -8,6 +8,34 @@ module.exports = {
         title: 'radio',
         maxLength: 50,
       },
+      multipleChoicesList: {
+        checkboxList: true,
+        type: 'array',
+        title: 'Danh sách tuỳ chọn',
+        description: 'Yêu cầu nhập số tiền nếu chọn',
+        uniqueItems: true,
+        items: {
+          type: 'object',
+          required: ['id', 'selected', 'value'],
+          properties: {
+            value: { type: 'number', minimum: 1000000, maximum: 6000000 },
+          },
+          listItem: [
+            {
+              id: 'ENUM_1',
+              label: 'Nhãn enum 1',
+            },
+            {
+              id: 'ENUM_2',
+              label: 'Nhãn enum 2',
+            },
+            {
+              id: 'ENUM_3',
+              label: 'Nhãn enum 3',
+            },
+          ],
+        },
+      },
       lastName: {
         type: 'string',
         title: 'First Name',
