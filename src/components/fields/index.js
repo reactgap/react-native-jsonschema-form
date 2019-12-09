@@ -21,5 +21,5 @@ export default {
   TitleField,
   ObjectFlatList,
   UnsupportedField,
-  ObjectView
+  ObjectView,
 };

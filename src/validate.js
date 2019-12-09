@@ -140,17 +140,50 @@ function transformAjvErrors(errors = []) {
   });
 }
 
+function registerKeywords(items) {
+  if (items && items.length) {
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      const { keyword, config } = item;
+      if (typeof keyword === 'string' && config && typeof config.validate === 'function') {
+        ajv.addKeyword(keyword, config);
+      }
+    }
+  }
+}
+
+function unregisterKeywords(items) {
+  if (items && items.length) {
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      const { keyword, config } = item;
+      if (typeof keyword === 'string' && config && typeof config.validate === 'function') {
+        ajv.removeKeyword(keyword);
+      }
+    }
+  }
+}
+
 /**
  * This function processes the formData with a user `validate` contributed
  * function, which receives the form data and an `errorHandler` object that
  * will be used to add custom validation errors for each field.
  */
-export default function validateFormData(formData, schema, customValidate, transformErrors) {
+export default function validateFormData(
+  formData,
+  schema,
+  customValidate,
+  transformErrors,
+  customKeywords = [],
+) {
   try {
+    registerKeywords(customKeywords);
+
     ajv.validate(schema, formData);
   } catch (e) {
     // swallow errors thrown in ajv due to invalid schemas, these
     // still get displayed
+    // console.log('errors', e);
   }
 
   let errors = transformAjvErrors(ajv.errors);
@@ -171,6 +204,8 @@ export default function validateFormData(formData, schema, customValidate, trans
   // exposed by the jsonschema lib, which contains full field paths and other
   // properties.
   const newErrors = toErrorList(newErrorSchema);
+
+  unregisterKeywords(customKeywords);
 
   return { errors: newErrors, errorSchema: newErrorSchema };
 }

@@ -38,6 +38,7 @@ type Props = {
   keyboardAppearance: Proptypes.string,
   icon?: Proptypes.string,
   currencyOptions: Proptypes.object,
+  currencySymbolVisible: Proptypes.bool,
 };
 
 type State = {
@@ -53,6 +54,18 @@ class MoneyField extends PureComponent<Props, State> {
     stringValue: '',
   };
 
+  constructor(props) {
+    super(props);
+    const mergedCurrencyOptions = { ...DEFAULT_CURRENCY_OPTIONS, ...props.currencyOptions };
+    const stringValue = currencyFormatter.format(props.value, mergedCurrencyOptions);
+
+    this.state = {
+      numberValue: props.value,
+      stringValue: stringValue,
+      touched: false,
+    };
+  }
+
   inputRef: TextInput | null = null;
 
   onBlur = () => {
@@ -63,12 +76,14 @@ class MoneyField extends PureComponent<Props, State> {
         touchede: true,
       });
     }
-    this.props.onBlur();
+    const { onBlur } = this.props;
+    onBlur && this.onBlur();
   };
 
   focus = () => {
     this.inputRef && this.inputRef.focus();
-    this.props.onFocus();
+    const { onFocus } = this.props;
+    onFocus && onFocus();
   };
 
   blur = () => {
@@ -76,20 +91,8 @@ class MoneyField extends PureComponent<Props, State> {
     this.props.onBlur();
   };
 
-  formatCurrencyToNumber = strValue => {
-    if (strValue) {
-      const numberValue = strValue.replace(new RegExp('\\' + ',', 'g'), '');
-      try {
-        const res = parseFloat(numberValue);
-      } catch (err) {
-        return strValue;
-      }
-    }
-    return strValue;
-  };
-
   _onChange = value => {
-    const { options, currencyOptions } = this.props;
+    const { currencyOptions } = this.props;
     if (value !== '') {
       const mergedCurrencyOptions = { ...DEFAULT_CURRENCY_OPTIONS, ...currencyOptions };
       const numberValue = currencyFormatter.unformat(value, mergedCurrencyOptions);
@@ -100,11 +103,15 @@ class MoneyField extends PureComponent<Props, State> {
       return;
     }
 
-    this.props.onChange(options.emptyValue);
+    this.props.onChange(0);
   };
 
   renderCurrencySymbol() {
-    const { currencyOptions, currencySymbolStyle } = this.props;
+    const { currencyOptions, currencySymbolStyle, currencySymbolVisible } = this.props;
+    if (!currencySymbolVisible) {
+      return null;
+    }
+
     const mergedCurrencyOptions = { ...DEFAULT_CURRENCY_OPTIONS, ...currencyOptions };
     const { symbol } = mergedCurrencyOptions;
     return (
@@ -116,7 +123,6 @@ class MoneyField extends PureComponent<Props, State> {
 
   render() {
     const {
-      icon,
       schema,
       placeholder,
       autoCapitalize,
@@ -124,23 +130,14 @@ class MoneyField extends PureComponent<Props, State> {
       wrapperStyle,
       inputStyle,
       value,
-      onChange,
       multiline,
-      invalid,
-      invalidMessage,
       blurOnSubmit,
       returnKeyType,
-      formContext,
-      onBlur,
-      onFocus,
-      options,
       disabled,
       rawErrors,
       keyboardType,
-      type,
       keyboardAppearance,
     } = this.props;
-    const { touched } = this.state;
     const showError = rawErrors && rawErrors.length > 0;
     let keyboardTypeUse = keyboardType ? keyboardType : 'default';
     let placeholderUse = placeholder;
@@ -160,6 +157,7 @@ class MoneyField extends PureComponent<Props, State> {
         <View style={[styles.wrapper, wrapperStyle]}>
           <TextInput
             placeholder={placeholderUse}
+            placeholderTextColor={csstyles.vars.csPlaceHolder}
             keyboardType={keyboardTypeUse}
             value={value ? this.state.stringValue : ''}
             onChangeText={this._onChange}
@@ -170,7 +168,6 @@ class MoneyField extends PureComponent<Props, State> {
               inputStyle,
               showError ? styles.textInputInvalid : null,
             ]}
-            placeholderTextColor={csstyles.vars.csPlaceHolder}
             onBlur={this.onBlur}
             autoCapitalize={autoCapitalize ? autoCapitalize : 'none'}
             underlineColorAndroid="transparent"
@@ -211,6 +208,7 @@ MoneyField.defaultProps = {
   multiline: false,
   currencyOptions: DEFAULT_CURRENCY_OPTIONS,
   currencySymbolStyle: {},
+  currencySymbolVisible: true,
 };
 
 const styles = StyleSheet.create({
@@ -221,17 +219,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  inputIcon: {
-    width: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#EBEBEB',
-  },
   textInput: {
     flex: 1,
     height: csstyles.vars.csInputHeight,
-    // borderRadius: csstyles.vars.csInputBorderRaius,
     paddingLeft: csstyles.vars.csInputHorizontalPadding,
     paddingRight: csstyles.vars.csInputHorizontalPadding,
     overflow: 'visible',
@@ -239,7 +229,6 @@ const styles = StyleSheet.create({
     color: csstyles.vars.csGrey,
     ...csstyles.text.regular,
     fontSize: 15,
-    // ...csstyles.base.shadow
   },
   currencySymbol: {
     justifyContent: 'center',

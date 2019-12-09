@@ -321,6 +321,9 @@ export function isSelect(_schema, definitions = {}) {
   if (Array.isArray(schema.enum)) {
     return true;
   }
+  if (Array.isArray(schema.listItem)) {
+    return true;
+  }
   if (Array.isArray(altSchemas)) {
     return altSchemas.every(altSchemas => isConstant(altSchemas));
   }
@@ -367,10 +370,16 @@ export function optionsList(schema) {
       return { label, value };
     });
   }
+  if (schema.listItem) {
+    return schema.listItem.map((value, i) => {
+      const label = (schema.enumNames && schema.enumNames[i]) || String(value);
+      return { label, value };
+    });
+  }
   const altSchemas = schema.oneOf || schema.anyOf;
-  return altSchemas.map((schema, i) => {
-    const value = toConstant(schema);
-    const label = schema.title || String(value);
+  return altSchemas.map((_schema, i) => {
+    const value = toConstant(_schema);
+    const label = _schema.title || String(value);
     return { label, value };
   });
 }
