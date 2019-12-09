@@ -6,7 +6,7 @@ export const ADDITIONAL_PROPERTY_FLAG = '__additional_property';
 
 const widgetMap = {
   boolean: {
-    checkbox: 'CheckboxWidget',
+    // checkbox: 'CheckboxWidget',
     radio: 'RadioWidget',
     select: 'SelectWidget',
     hidden: 'HiddenWidget',
@@ -23,9 +23,9 @@ const widgetMap = {
     radio: 'RadioWidget',
     select: 'PickerOption',
     textarea: 'TextareaWidget',
+    datetime: 'DateTimeWidget',
     // hidden: 'HiddenWidget',
     // date: 'DateWidget',
-    // datetime: 'DateTimeWidget',
     // 'date-time': 'DateTimeWidget',
     // 'alt-date': 'AltDateWidget',
     // 'alt-datetime': 'AltDateTimeWidget',
@@ -54,7 +54,7 @@ const widgetMap = {
   },
   array: {
     select: 'SelectWidget',
-    checkboxes: 'CheckboxesWidget',
+    // checkboxes: 'CheckboxesWidget',
     files: 'FileWidget',
   },
 };

@@ -3,7 +3,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { Text, View, TextInput, StyleSheet, type ViewStyle } from 'react-native';
 import currencyFormatter from 'currency-formatter';
-import Proptypes from 'prop-types';
 
 import csstyles from '../../styles';
 
@@ -16,35 +15,34 @@ const DEFAULT_CURRENCY_OPTIONS = {
 };
 
 type Props = {
-  placeholder: Proptypes.string,
+  placeholder: string,
   autoCapitalize?: 'none' | 'words',
   fieldType: null,
-  onChange?: (text: Proptypes.string) => void,
-  value?: Proptypes.string,
+  onChange?: (text: string) => void,
+  value?: string,
   keyboardType?: 'number-pad' | 'default',
-  multiline?: PropTypes.bool,
-  password?: PropTypes.bool,
+  multiline?: boolean,
+  password?: boolean,
   wrapperStyle?: ViewStyle,
   inputStyle?: ViewStyle,
   currencySymbolStyle?: ViewStyle,
-  invalid?: PropTypes.bool,
-  invalidMessage?: Proptypes.string,
-  blurOnSubmit?: PropTypes.bool,
-  disabled?: PropTypes.bool,
+  invalid?: boolean,
+  invalidMessage?: string,
+  blurOnSubmit?: boolean,
+  disabled?: boolean,
   returnKeyType?: 'default',
   onBlur: () => void,
   onFocus: () => void,
-  rawErrors: PropTypes.array,
-  keyboardAppearance: Proptypes.string,
-  icon?: Proptypes.string,
-  currencyOptions: Proptypes.object,
-  currencySymbolVisible: Proptypes.bool,
+  rawErrors: array,
+  keyboardAppearance: string,
+  icon?: string,
+  currencyOptions: object,
 };
 
 type State = {
-  touched: PropTypes.bool,
-  numberValue: Proptypes.number,
-  stringValue: Proptypes.string,
+  touched: boolean,
+  numberValue: number,
+  stringValue: string,
 };
 
 class MoneyField extends PureComponent<Props, State> {

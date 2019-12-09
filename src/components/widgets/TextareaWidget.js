@@ -52,20 +52,6 @@ class TextareaWidget extends Component {
         disabled={disabled}
         editable={!readonly}
       />
-      // <textarea
-      //   id={id}
-      //   className="form-control"
-      //   value={typeof value === "undefined" ? "" : value}
-      //   placeholder={placeholder}
-      //   required={required}
-      //   disabled={disabled}
-      //   readOnly={readonly}
-      //   autoFocus={autofocus}
-      //   rows={options.rows}
-      //   onBlur={onBlur && (event => onBlur(id, event.target.value))}
-      //   onFocus={onFocus && (event => onFocus(id, event.target.value))}
-      //   onChange={_onChange}
-      // />
     );
   }
 }

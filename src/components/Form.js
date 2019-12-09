@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View } from 'react-native';
+
+import { View, Text, Button, StyleSheet } from 'react-native';
 import CSButton from './widgets/Button/CSButton/CSButton';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-
 import { default as DefaultErrorList } from './ErrorList';
 import {
   getDefaultFormState,
@@ -29,6 +29,7 @@ export default class Form extends Component {
     ErrorList: DefaultErrorList,
     typeForm: 'form',
     externalSubmit: false,
+    keyboardAware: true,
   };
 
   constructor(props) {
@@ -207,7 +208,7 @@ export default class Form extends Component {
       return (
         <View>
           <CSButton
-            title={'Next'}
+            title={'Tiếp Tục'}
             type="primary"
             onPress={this.onSubmit}
             style={{
@@ -247,34 +248,26 @@ export default class Form extends Component {
   }
 
   render() {
-    return (
-      <KeyboardAwareScrollView>
+    const { keyboardAware } = this.props;
+    if (keyboardAware) {
+      return (
+        <KeyboardAwareScrollView>
+          <View style={this.props.styles == null ? styles.base.full : this.props.styles}>
+            {this.renderSchemaForm()}
+            {this.renderSubmit()}
+          </View>
+        </KeyboardAwareScrollView>
+      );
+    } else {
+      return (
         <View style={this.props.styles == null ? styles.base.full : this.props.styles}>
-          {/* {this.renderErrors()} */}
           {this.renderSchemaForm()}
           {this.renderSubmit()}
         </View>
-      </KeyboardAwareScrollView>
-    );
+      );
+    }
   }
 }
-// <form
-//   className={className ? className : "rjsf"}
-//   id={id}
-//   name={name}
-//   method={method}
-//   target={target}
-//   action={action}
-//   autoComplete={autocomplete}
-//   encType={enctype}
-//   acceptCharset={acceptcharset}
-//   noValidate={noHtml5Validate}
-//   onSubmit={this.onSubmit}
-//   ref={form => {
-//     this.formElement = form;
-//   }}>
-
-// </form>
 
 if (process.env.NODE_ENV !== 'production') {
   Form.propTypes = {

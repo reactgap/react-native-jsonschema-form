@@ -20,12 +20,13 @@ type Props = {
   invalidMessage?: string,
   blurOnSubmit?: boolean,
   disabled?: boolean,
+  editedField?: boolean,
   returnKeyType?: 'default' | 'send',
   onBlur: () => void,
   onFocus: () => void,
-  rawErrors: Array,
-  keyboardAppearance: string,
-  icon?: String,
+  rawErrors: any[],
+  keyboardAppearance: 'light' | 'dark' | 'default',
+  icon?: string,
 };
 
 type State = {
@@ -96,6 +97,7 @@ class TextField extends PureComponent<Props, State> {
       rawErrors,
       keyboardType,
       type,
+      editedField,
       keyboardAppearance,
     } = this.props;
     const { touched } = this.state;
@@ -112,7 +114,7 @@ class TextField extends PureComponent<Props, State> {
     if (schema && schema.hasOwnProperty('maxLength')) {
       maxLength = parseInt(schema.maxLength);
     }
-
+    const editable = !disabled && (editedField ? editedField : true);
     return (
       <Fragment>
         <View style={[styles.wrapper, wrapperStyle]}>
@@ -126,7 +128,7 @@ class TextField extends PureComponent<Props, State> {
             keyboardType={keyboardTypeUse}
             value={value ? `${value}` : ''}
             onChangeText={this._onChange}
-            secureTextEntry={password || false}
+            secureTextEntry={type != null && type === 'password' ? true : false}
             style={[
               styles.textInput,
               multiline ? styles.textInputMultiLine : null,
@@ -145,7 +147,7 @@ class TextField extends PureComponent<Props, State> {
             maxLength={maxLength ? maxLength : null}
             blurOnSubmit={blurOnSubmit ? blurOnSubmit : true}
             returnKeyType={returnKeyType}
-            editable={!disabled}
+            editable={editable}
           />
         </View>
         <View>

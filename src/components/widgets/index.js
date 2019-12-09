@@ -12,12 +12,14 @@ import MoneyField from './Money/MoneyField';
 import CheckBoxWidget from './CheckBox/CheckBoxWidget';
 import CheckBoxesWidget from './CheckBoxes/CheckBoxesWidget';
 import SelectWidget from './SelectWidget/SelectWidget';
+import DateTimeWidget from './DateTime/DateTimeWidget';
 
 export default {
   BaseInput,
   RadioWidget,
   TextField,
   TextWidget,
+  DateTimeWidget,
   EmailWidget,
   TextareaWidget,
   Avatar,

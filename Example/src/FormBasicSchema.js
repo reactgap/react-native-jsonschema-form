@@ -84,6 +84,10 @@ module.exports = {
         minLength: 8,
         icon: 'phone',
       },
+      dob: {
+        type: 'string',
+        title: 'Ngày sinh',
+      },
       idNumber: {
         type: 'string',
         title: 'Number',
@@ -271,12 +275,16 @@ module.exports = {
     },
     gender: {
       'ui:widget': 'PickerOption',
+      'ui:disabled': true,
     },
     money: {
       'ui:widget': 'SliderWidget',
     },
     fee: {
       'ui:widget': 'MoneyField',
+    },
+    dob: {
+      'ui:widget': 'datetime',
     },
   },
 };
