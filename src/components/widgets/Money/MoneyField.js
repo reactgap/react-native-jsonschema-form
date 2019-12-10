@@ -40,19 +40,17 @@ type Props = {
 };
 
 type State = {
-  touched: boolean,
   numberValue: number,
   stringValue: string,
 };
 
 class MoneyField extends PureComponent<Props, State> {
   state: State = {
-    touched: false,
     numberValue: 0,
     stringValue: '',
   };
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     const mergedCurrencyOptions = { ...DEFAULT_CURRENCY_OPTIONS, ...props.currencyOptions };
     const stringValue = currencyFormatter.format(props.value, mergedCurrencyOptions);
@@ -60,23 +58,10 @@ class MoneyField extends PureComponent<Props, State> {
     this.state = {
       numberValue: props.value,
       stringValue: stringValue,
-      touched: false,
     };
   }
 
   inputRef: TextInput | null = null;
-
-  onBlur = () => {
-    const { touched } = this.state;
-
-    if (!touched) {
-      this.setState({
-        touchede: true,
-      });
-    }
-    const { onBlur } = this.props;
-    onBlur && this.onBlur();
-  };
 
   focus = () => {
     this.inputRef && this.inputRef.focus();
@@ -166,7 +151,6 @@ class MoneyField extends PureComponent<Props, State> {
               inputStyle,
               showError ? styles.textInputInvalid : null,
             ]}
-            onBlur={this.onBlur}
             autoCapitalize={autoCapitalize ? autoCapitalize : 'none'}
             underlineColorAndroid="transparent"
             multiline={multiline}
