@@ -1,13 +1,13 @@
 // @flow
 
-import React, { PureComponent } from 'react'
-import { Text, View, TextInput, StyleSheet, type ViewStyle } from 'react-native'
-import csstyles from '../styles'
+import React, { PureComponent } from 'react';
+import { Text, View, TextInput, StyleSheet, type ViewStyle } from 'react-native';
+import csstyles from '../styles';
 
 type Props = {
   placeholder: string,
   autoCapitalize?: 'none' | 'words',
-  type: "email" | null,
+  type: 'email' | null,
   onChange?: (text: string) => void,
   value?: string,
   keyboardType?: 'email-address' | 'number-pad' | 'default',
@@ -24,52 +24,50 @@ type Props = {
   onFocus: () => void,
   rawErrors: Array,
   keyboardAppearance: string,
-
-}
+};
 
 type State = {
-  touched: boolean
-}
+  touched: boolean,
+};
 
 class BaseInput extends PureComponent<Props, State> {
   static defaultProps = {
     password: false,
     keyboardType: 'default',
-    multiline: false
-  }
+    multiline: false,
+  };
 
   state: State = {
-    touched: false
-  }
+    touched: false,
+  };
 
-  inputRef: TextInput | null = null
+  inputRef: TextInput | null = null;
 
   onBlur = () => {
-    const { touched } = this.state
+    const { touched } = this.state;
 
     if (!touched) {
       this.setState({
-        touched: true
-      })
+        touched: true,
+      });
     }
     this.props.onBlur();
-  }
+  };
 
   focus = () => {
-    this.inputRef && this.inputRef.focus()
+    this.inputRef && this.inputRef.focus();
     this.props.onFocus();
-  }
+  };
 
   blur = () => {
-    this.inputRef && this.inputRef.blur()
+    this.inputRef && this.inputRef.blur();
     this.props.onBlur();
-  }
+  };
 
-
-  _onChange = (value) => {
-    const { options } = this.props
-    this.props.onChange(value === '' ? options.emptyValue : value)
-  }
+  _onChange = value => {
+    const { options } = this.props;
+    this.props.onChange(value === '' ? options.emptyValue : value);
+  };
 
   render() {
     const {
@@ -94,21 +92,21 @@ class BaseInput extends PureComponent<Props, State> {
       rawErrors,
       keyboardType,
       type,
-      keyboardAppearance
-    } = this.props
-    const { touched } = this.state
-    const showError = rawErrors && rawErrors.length > 0
-    let keyboardTypeUse = keyboardType ? keyboardType : 'default'
-    let placeHoderUse = placeholder
+      keyboardAppearance,
+    } = this.props;
+    const { touched } = this.state;
+    const showError = rawErrors && rawErrors.length > 0;
+    let keyboardTypeUse = keyboardType ? keyboardType : 'default';
+    let placeHoderUse = placeholder;
     if (schema && schema.hasOwnProperty('keyboardType')) {
-      keyboardTypeUse = schema['keyboardType']
+      keyboardTypeUse = schema['keyboardType'];
     }
     if (schema && schema.hasOwnProperty('placeholder')) {
-      placeHoderUse = schema['placeholder']
+      placeHoderUse = schema['placeholder'];
     }
-    let maxLength = null
+    let maxLength = null;
     if (schema && schema.hasOwnProperty('maxLength')) {
-      maxLength = parseInt(schema.maxLength)
+      maxLength = parseInt(schema.maxLength);
     }
     // let formatMoney = false
     // if (schema && schema.hasOwnProperty('mask')) {
@@ -127,7 +125,7 @@ class BaseInput extends PureComponent<Props, State> {
             styles.textInput,
             multiline ? styles.textInputMultiLine : null,
             inputStyle,
-            showError ? styles.textInputInvalid : null
+            showError ? styles.textInputInvalid : null,
           ]}
           // spellCheck={false}
           // showSoftInputOnFocus={false}
@@ -136,32 +134,33 @@ class BaseInput extends PureComponent<Props, State> {
           autoCapitalize={autoCapitalize ? autoCapitalize : 'none'}
           underlineColorAndroid="transparent"
           multiline={multiline}
-          keyboardAppearance={keyboardAppearance ? keyboardAppearance : "light"}
-          ref={(ref) => {
-            this.inputRef = ref
+          keyboardAppearance={keyboardAppearance ? keyboardAppearance : 'light'}
+          ref={ref => {
+            this.inputRef = ref;
           }}
-          maxLength={ maxLength ? maxLength : null }
+          maxLength={maxLength ? maxLength : null}
           blurOnSubmit={blurOnSubmit ? blurOnSubmit : true}
           returnKeyType={returnKeyType}
           editable={!disabled}
         />
         {showError && (
           <View style={styles.errorWrapper}>
-            {
-               rawErrors.map((error, i) => (
-                <Text key={i} style={styles.errorText}> {error}</Text>
-                ))
-            }
+            {rawErrors.map((error, i) => (
+              <Text key={i} style={styles.errorText}>
+                {' '}
+                {error}
+              </Text>
+            ))}
           </View>
         )}
       </View>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginBottom: csstyles.vars.csBoxSpacing
+    marginBottom: csstyles.vars.csBoxSpacing,
   },
   textInput: {
     height: csstyles.vars.csInputHeight,
@@ -172,7 +171,7 @@ const styles = StyleSheet.create({
     color: csstyles.vars.csGrey,
     ...csstyles.text.regular,
     fontSize: 15,
-    ...csstyles.base.shadow
+    ...csstyles.base.shadow,
   },
   formatMoney: {
     color: csstyles.vars.csGreen,
@@ -186,21 +185,21 @@ const styles = StyleSheet.create({
     minHeight: csstyles.vars.csInputHeight * 3,
     paddingTop: csstyles.vars.csInputHeight - 16 * 2,
     paddingBottom: csstyles.vars.csInputHeight - 16 * 2,
-    textAlignVertical: 'top'
+    textAlignVertical: 'top',
   },
   textInputInvalid: {
-    borderColor: csstyles.vars.csDanger
+    borderColor: csstyles.vars.csDanger,
   },
   errorWrapper: {
     marginTop: 3,
-    paddingHorizontal: csstyles.vars.csInputHorizontalPadding
+    paddingHorizontal: csstyles.vars.csInputHorizontalPadding,
   },
   errorText: {
     ...csstyles.text.medium,
     color: csstyles.vars.csDanger,
     fontStyle: 'italic',
-    fontSize: 13
-  }
-})
+    fontSize: 13,
+  },
+});
 
-export default BaseInput
+export default BaseInput;

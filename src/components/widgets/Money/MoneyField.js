@@ -1,8 +1,7 @@
 // @flow
 
-import React, { PureComponent, Fragment } from 'react'
+import React, { PureComponent, Fragment } from 'react';
 import { Text, View, TextInput, StyleSheet, type ViewStyle } from 'react-native';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import currencyFormatter from 'currency-formatter';
 
 import csstyles from '../../styles';
@@ -13,7 +12,7 @@ const DEFAULT_CURRENCY_OPTIONS = {
   thousand: ',',
   precision: 0,
   format: '%v',
-}
+};
 
 type Props = {
   placeholder: string,
@@ -38,58 +37,60 @@ type Props = {
   keyboardAppearance: string,
   icon?: string,
   currencyOptions: object,
-}
+};
 
 type State = {
   touched: boolean,
   numberValue: number,
   stringValue: string,
-}
+};
 
 class MoneyField extends PureComponent<Props, State> {
   state: State = {
     touched: false,
     numberValue: 0,
-    stringValue: ''
+    stringValue: '',
+  };
+
+  constructor(props) {
+    super(props);
+    const mergedCurrencyOptions = { ...DEFAULT_CURRENCY_OPTIONS, ...props.currencyOptions };
+    const stringValue = currencyFormatter.format(props.value, mergedCurrencyOptions);
+
+    this.state = {
+      numberValue: props.value,
+      stringValue: stringValue,
+      touched: false,
+    };
   }
 
-  inputRef: TextInput | null = null
+  inputRef: TextInput | null = null;
 
   onBlur = () => {
-    const { touched } = this.state
+    const { touched } = this.state;
 
     if (!touched) {
       this.setState({
-        touchede: true
-      })
+        touchede: true,
+      });
     }
-    this.props.onBlur();
-  }
+    const { onBlur } = this.props;
+    onBlur && this.onBlur();
+  };
 
   focus = () => {
-    this.inputRef && this.inputRef.focus()
-    this.props.onFocus();
-  }
+    this.inputRef && this.inputRef.focus();
+    const { onFocus } = this.props;
+    onFocus && onFocus();
+  };
 
   blur = () => {
-    this.inputRef && this.inputRef.blur()
+    this.inputRef && this.inputRef.blur();
     this.props.onBlur();
-  }
+  };
 
-  formatCurrencyToNumber = (strValue) => {
-    if (strValue) {
-      const numberValue =  strValue.replace(new RegExp('\\' + ',', 'g'), '');
-      try {
-        const res = parseFloat(numberValue);
-      } catch (err) {
-        return strValue;
-      }
-    }
-    return strValue;
-  }
-
-  _onChange = (value) => {
-    const { options, currencyOptions } = this.props;
+  _onChange = value => {
+    const { currencyOptions } = this.props;
     if (value !== '') {
       const mergedCurrencyOptions = { ...DEFAULT_CURRENCY_OPTIONS, ...currencyOptions };
       const numberValue = currencyFormatter.unformat(value, mergedCurrencyOptions);
@@ -100,11 +101,15 @@ class MoneyField extends PureComponent<Props, State> {
       return;
     }
 
-    this.props.onChange(options.emptyValue);
-  }
+    this.props.onChange(0);
+  };
 
   renderCurrencySymbol() {
-    const { currencyOptions, currencySymbolStyle } = this.props;
+    const { currencyOptions, currencySymbolStyle, currencySymbolVisible } = this.props;
+    if (!currencySymbolVisible) {
+      return null;
+    }
+
     const mergedCurrencyOptions = { ...DEFAULT_CURRENCY_OPTIONS, ...currencyOptions };
     const { symbol } = mergedCurrencyOptions;
     return (
@@ -116,7 +121,6 @@ class MoneyField extends PureComponent<Props, State> {
 
   render() {
     const {
-      icon,
       schema,
       placeholder,
       autoCapitalize,
@@ -124,35 +128,26 @@ class MoneyField extends PureComponent<Props, State> {
       wrapperStyle,
       inputStyle,
       value,
-      onChange,
       multiline,
-      invalid,
-      invalidMessage,
       blurOnSubmit,
       returnKeyType,
-      formContext,
-      onBlur,
-      onFocus,
-      options,
       disabled,
       rawErrors,
       keyboardType,
-      type,
       keyboardAppearance,
-    } = this.props
-    const { touched } = this.state
-    const showError = rawErrors && rawErrors.length > 0
-    let keyboardTypeUse = keyboardType ? keyboardType : 'default'
-    let placeholderUse = placeholder
+    } = this.props;
+    const showError = rawErrors && rawErrors.length > 0;
+    let keyboardTypeUse = keyboardType ? keyboardType : 'default';
+    let placeholderUse = placeholder;
     if (schema && schema.hasOwnProperty('keyboardType')) {
-      keyboardTypeUse = schema['keyboardType']
+      keyboardTypeUse = schema['keyboardType'];
     }
     if (schema && schema.hasOwnProperty('placeholder')) {
-      placeholderUse = schema['placeholder']
+      placeholderUse = schema['placeholder'];
     }
-    let maxLength = null
+    let maxLength = null;
     if (schema && schema.hasOwnProperty('maxLength')) {
-      maxLength = parseInt(schema.maxLength)
+      maxLength = parseInt(schema.maxLength);
     }
 
     return (
@@ -160,6 +155,7 @@ class MoneyField extends PureComponent<Props, State> {
         <View style={[styles.wrapper, wrapperStyle]}>
           <TextInput
             placeholder={placeholderUse}
+            placeholderTextColor={csstyles.vars.csPlaceHolder}
             keyboardType={keyboardTypeUse}
             value={value ? this.state.stringValue : ''}
             onChangeText={this._onChange}
@@ -168,18 +164,17 @@ class MoneyField extends PureComponent<Props, State> {
               styles.textInput,
               multiline ? styles.textInputMultiLine : null,
               inputStyle,
-              showError ? styles.textInputInvalid : null
+              showError ? styles.textInputInvalid : null,
             ]}
-            placeholderTextColor={csstyles.vars.csPlaceHolder}
             onBlur={this.onBlur}
             autoCapitalize={autoCapitalize ? autoCapitalize : 'none'}
             underlineColorAndroid="transparent"
             multiline={multiline}
-            keyboardAppearance={keyboardAppearance ? keyboardAppearance : "light"}
-            ref={(ref) => {
-              this.inputRef = ref
+            keyboardAppearance={keyboardAppearance ? keyboardAppearance : 'light'}
+            ref={ref => {
+              this.inputRef = ref;
             }}
-            maxLength={ maxLength ? maxLength : null }
+            maxLength={maxLength ? maxLength : null}
             blurOnSubmit={blurOnSubmit ? blurOnSubmit : true}
             returnKeyType={returnKeyType}
             editable={!disabled}
@@ -190,8 +185,11 @@ class MoneyField extends PureComponent<Props, State> {
           {showError && (
             <View style={styles.errorWrapper}>
               {rawErrors.map((error, i) => (
-                <Text key={i} style={styles.errorText}> {error}</Text>
-                ))}
+                <Text key={i} style={styles.errorText}>
+                  {' '}
+                  {error}
+                </Text>
+              ))}
             </View>
           )}
         </View>
@@ -208,6 +206,7 @@ MoneyField.defaultProps = {
   multiline: false,
   currencyOptions: DEFAULT_CURRENCY_OPTIONS,
   currencySymbolStyle: {},
+  currencySymbolVisible: true,
 };
 
 const styles = StyleSheet.create({
@@ -218,17 +217,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  inputIcon:{
-    width: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#EBEBEB',
-  },
   textInput: {
     flex: 1,
     height: csstyles.vars.csInputHeight,
-    // borderRadius: csstyles.vars.csInputBorderRaius,
     paddingLeft: csstyles.vars.csInputHorizontalPadding,
     paddingRight: csstyles.vars.csInputHorizontalPadding,
     overflow: 'visible',
@@ -236,7 +227,6 @@ const styles = StyleSheet.create({
     color: csstyles.vars.csGrey,
     ...csstyles.text.regular,
     fontSize: 15,
-    // ...csstyles.base.shadow
   },
   currencySymbol: {
     justifyContent: 'center',
@@ -254,10 +244,10 @@ const styles = StyleSheet.create({
     minHeight: csstyles.vars.csInputHeight * 3,
     paddingTop: csstyles.vars.csInputHeight - 16 * 2,
     paddingBottom: csstyles.vars.csInputHeight - 16 * 2,
-    textAlignVertical: 'top'
+    textAlignVertical: 'top',
   },
   textInputInvalid: {
-    borderColor: csstyles.vars.csDanger
+    borderColor: csstyles.vars.csDanger,
   },
   errorWrapper: {
     marginTop: 3,
@@ -268,6 +258,6 @@ const styles = StyleSheet.create({
     ...csstyles.text.medium,
     color: csstyles.vars.csDanger,
     fontStyle: 'italic',
-    fontSize: 13
+    fontSize: 13,
   },
 });

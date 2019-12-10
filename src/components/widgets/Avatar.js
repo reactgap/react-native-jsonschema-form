@@ -1,55 +1,55 @@
 // @flow
 
-import React, { PureComponent } from 'react'
-import { TouchableOpacity, StyleSheet, Image, View } from 'react-native'
-import ImageCropPicker from 'react-native-image-crop-picker'
-import csstyles from '../styles'
-import Photo from './Photo/Photo'
-import ActionSheet, { type ActionSheetConfig } from './ActionSheet/ActionSheet'
+import React, { PureComponent } from 'react';
+import { TouchableOpacity, StyleSheet, Image, View } from 'react-native';
+import ImageCropPicker from 'react-native-image-crop-picker';
+import csstyles from '../styles';
+import Photo from './Photo/Photo';
+import ActionSheet, { type ActionSheetConfig } from './ActionSheet/ActionSheet';
 
-type Props = { 
-  photoURL?: string, 
-  onUploading?: () => any, 
+type Props = {
+  photoURL?: string,
+  onUploading?: () => any,
   onUploaded?: () => void,
   onChange?: (dataBase64: string, image: Image) => void,
-  accessToken?: string
-}
+  accessToken?: string,
+};
 
 type State = {
   profilePhotoSelecting: boolean,
   pickerMode: 'library' | 'camera' | null,
   photoURL: String,
   imageLocal: String,
-  onUploading: boolean
-}
+  onUploading: boolean,
+};
 
-const widthAvatar = 100
+const widthAvatar = 100;
 
 class Avatar extends PureComponent<Props, State> {
   state: State = {
     profilePhotoSelecting: false,
     pickerMode: null,
-    photoURL: null
-  }
+    photoURL: null,
+  };
 
   onProfilePhotoPress = () => {
     this.setState({
-      profilePhotoSelecting: true
-    })
-  }
+      profilePhotoSelecting: true,
+    });
+  };
 
   onProfilePhotoSelected = (image?: Image) => {
     if (image) {
-      const { onUploaded, onUploading, onChange, accessToken } = this.props
-      const { data, mime } = image
+      const { onUploaded, onUploading, onChange, accessToken } = this.props;
+      const { data, mime } = image;
       if (onChange) {
-        onChange(`data:${mime};base64,${data}`, image)
+        onChange(`data:${mime};base64,${data}`, image);
       }
     }
-  }
+  };
 
   getActionSheetConfig = (): ActionSheetConfig => {
-    const { profilePhotoSelecting } = this.state
+    const { profilePhotoSelecting } = this.state;
 
     if (profilePhotoSelecting) {
       return {
@@ -64,9 +64,9 @@ class Avatar extends PureComponent<Props, State> {
             onPress: () => {
               this.setState({
                 profilePhotoSelecting: false,
-                pickerMode: 'camera'
-              })
-            }
+                pickerMode: 'camera',
+              });
+            },
           },
           {
             key: 'library',
@@ -76,18 +76,18 @@ class Avatar extends PureComponent<Props, State> {
             onPress: () => {
               this.setState({
                 profilePhotoSelecting: false,
-                pickerMode: 'library'
-              })
-            }
-          }
+                pickerMode: 'library',
+              });
+            },
+          },
         ],
         onClose: () => {
           this.setState({
             profilePhotoSelecting: false,
-            pickerMode: null
-          })
-        }
-      }
+            pickerMode: null,
+          });
+        },
+      };
     }
 
     return {
@@ -102,44 +102,42 @@ class Avatar extends PureComponent<Props, State> {
           cropperTintColor: csstyles.vars.csGrey,
           cropperToolbarTitle: 'Choose A Photo',
           cropperChooseText: 'Done',
-          cropperCancelText: 'Cancel'
-        }
+          cropperCancelText: 'Cancel',
+        };
 
         // debugger
 
-        const { pickerMode } = this.state
+        const { pickerMode } = this.state;
 
         switch (pickerMode) {
-        case 'library':
-          ImageCropPicker.openPicker(imgCropConfig)
-            .then(this.onProfilePhotoSelected)
-            .catch(() => {
-              this.onProfilePhotoSelected()
-            })
-          break
-        case 'camera':
-          ImageCropPicker.openCamera(imgCropConfig)
-            .then(this.onProfilePhotoSelected)
-            .catch(() => {
-              this.onProfilePhotoSelected()
-            })
-          break
-        default:
-          break
+          case 'library':
+            ImageCropPicker.openPicker(imgCropConfig)
+              .then(this.onProfilePhotoSelected)
+              .catch(() => {
+                this.onProfilePhotoSelected();
+              });
+            break;
+          case 'camera':
+            ImageCropPicker.openCamera(imgCropConfig)
+              .then(this.onProfilePhotoSelected)
+              .catch(() => {
+                this.onProfilePhotoSelected();
+              });
+            break;
+          default:
+            break;
         }
-      }
-    }
-  }
+      },
+    };
+  };
 
   render() {
-    const { photoURL, schema, value, disabled, accessToken } = this.props
-    const { imageLocal } = this.state
-    const actionSheetConfig = this.getActionSheetConfig()
-    let url = photoURL ? photoURL : ''
+    const { photoURL, schema, value, disabled, accessToken } = this.props;
+    const actionSheetConfig = this.getActionSheetConfig();
+    let url = photoURL ? photoURL : '';
     if (schema && value) {
-      url = value
+      url = value;
     }
-    console.log('render avatar', url)
 
     return (
       <View style={[styles.basicInfo]}>
@@ -148,23 +146,21 @@ class Avatar extends PureComponent<Props, State> {
           activeOpacity={0.8}
           onPress={this.onProfilePhotoPress}
           style={[styles.avatarWrapper, styles.borderAvatar]}
-          disabled={disabled ? disabled : false}
-        >
+          disabled={disabled ? disabled : false}>
           <Photo
             url={url || ''}
             accessToken={accessToken}
             photoStyle={csstyles.base.full}
             wrapStyle={styles.avatarWrapper}
-            bottomIconName={disabled === true ? null : "camera"}
+            bottomIconName={disabled === true ? null : 'camera'}
             profilePlaceHolder
             placeholderTextStyle={{
-              fontSize: 30
+              fontSize: 30,
             }}
           />
-
         </TouchableOpacity>
       </View>
-    )
+    );
   }
 }
 
@@ -172,24 +168,24 @@ const styles = StyleSheet.create({
   avatarWrapper: {
     width: widthAvatar,
     height: widthAvatar,
-    borderRadius: widthAvatar/2.0,
+    borderRadius: widthAvatar / 2.0,
     marginBottom: csstyles.vars.csBoxSpacing,
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   borderAvatar: {
     borderWidth: 0.5,
-    borderColor: csstyles.vars.csGrey
+    borderColor: csstyles.vars.csGrey,
   },
   wrapStyle: {
     position: 'relative',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   basicInfo: {
     position: 'relative',
     paddingHorizontal: csstyles.vars.csBoxSpacing2x,
     marginBottom: csstyles.vars.csBoxSpacing2x,
-    ...csstyles.base.fullCenter
-  }
-})
+    ...csstyles.base.fullCenter,
+  },
+});
 
-export default Avatar
+export default Avatar;

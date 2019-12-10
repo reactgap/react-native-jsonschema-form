@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+
 import { View, Text, Button, StyleSheet } from 'react-native';
 import CSButton from './widgets/Button/CSButton/CSButton';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -93,10 +94,10 @@ export default class Form extends Component {
   }
 
   validate(formData, schema = this.props.schema) {
-    const { validate, transformErrors } = this.props;
+    const { validate, transformErrors, customKeywords } = this.props;
     const { definitions } = this.getRegistry();
     const resolvedSchema = retrieveSchema(schema, definitions, formData);
-    return validateFormData(formData, resolvedSchema, validate, transformErrors);
+    return validateFormData(formData, resolvedSchema, validate, transformErrors, customKeywords);
   }
 
   renderErrors() {
@@ -221,24 +222,9 @@ export default class Form extends Component {
   }
 
   renderSchemaForm() {
-    const {
-      children,
-      safeRenderCompletion,
-      id,
-      idPrefix,
-      className,
-      name,
-      method,
-      target,
-      action,
-      autocomplete,
-      enctype,
-      acceptcharset,
-      noHtml5Validate,
-      disabled,
-    } = this.props;
+    const { safeRenderCompletion, idPrefix, disabled } = this.props;
 
-    const { typeForm, schema, uiSchema, formData, errorSchema, idSchema } = this.state;
+    const { schema, uiSchema, formData, errorSchema, idSchema } = this.state;
     const registry = this.getRegistry();
     const _SchemaField = registry.fields.SchemaField;
 
@@ -312,6 +298,7 @@ if (process.env.NODE_ENV !== 'production') {
     liveValidate: PropTypes.bool,
     validate: PropTypes.func,
     transformErrors: PropTypes.func,
+    customKeywords: PropTypes.array,
     safeRenderCompletion: PropTypes.bool,
     formContext: PropTypes.object,
   };

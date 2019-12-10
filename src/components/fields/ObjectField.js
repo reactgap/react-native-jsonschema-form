@@ -1,14 +1,9 @@
-import AddButton from "../AddButton";
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import AddButton from '../AddButton';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { View, Text } from 'react-native';
 
-import {
-  orderProperties,
-  retrieveSchema,
-  getDefaultRegistry,
-  getUiOptions,
-} from "../../utils";
+import { orderProperties, retrieveSchema, getDefaultRegistry, getUiOptions } from '../../utils';
 
 function DefaultObjectFieldTemplate(props) {
   const canExpand = function canExpand() {
@@ -31,10 +26,10 @@ function DefaultObjectFieldTemplate(props) {
   const { TitleField, DescriptionField } = props;
   return (
     <View>
-      {(props.uiSchema["ui:title"] || props.title) && (
+      {(props.uiSchema['ui:title'] || props.title) && (
         <TitleField
           id={`${props.idSchema.$id}__title`}
-          title={props.title || props.uiSchema["ui:title"]}
+          title={props.title || props.uiSchema['ui:title']}
           required={props.required}
           formContext={props.formContext}
         />
@@ -75,9 +70,7 @@ class ObjectField extends Component {
 
   isRequired(name) {
     const schema = this.props.schema;
-    return (
-      Array.isArray(schema.required) && schema.required.indexOf(name) !== -1
-    );
+    return Array.isArray(schema.required) && schema.required.indexOf(name) !== -1;
   }
 
   onPropertyChange = name => {
@@ -89,7 +82,7 @@ class ObjectField extends Component {
           this.props.errorSchema && {
             ...this.props.errorSchema,
             [name]: errorSchema,
-          }
+          },
       );
     };
   };
@@ -122,13 +115,13 @@ class ObjectField extends Component {
           this.props.errorSchema && {
             ...this.props.errorSchema,
             [value]: errorSchema,
-          }
+          },
       );
     };
   };
 
   onReferPropertyChange = (name, value) => {
-    const errorSchema = value ? {} : { "__errors": ["is a require property"] }
+    const errorSchema = value ? {} : { __errors: ['is a require property'] };
     const newFormData = { ...this.props.formData, [name]: value };
     this.props.onChange(
       newFormData,
@@ -136,36 +129,34 @@ class ObjectField extends Component {
         this.props.errorSchema && {
           ...this.props.errorSchema,
           [name]: errorSchema,
-        }
+        },
     );
-  }
+  };
 
   getDefaultValue(type) {
     switch (type) {
-      case "string":
-        return "New Value";
-      case "array":
+      case 'string':
+        return 'New Value';
+      case 'array':
         return [];
-      case "boolean":
+      case 'boolean':
         return false;
-      case "null":
+      case 'null':
         return null;
-      case "number":
+      case 'number':
         return 0;
-      case "object":
+      case 'object':
         return {};
       default:
         // We don't have a datatype for some reason (perhaps additionalProperties was true)
-        return "New Value";
+        return 'New Value';
     }
   }
 
   handleAddClick = schema => () => {
     const type = schema.additionalProperties.type;
     const newFormData = { ...this.props.formData };
-    newFormData[
-      this.getAvailableKey("newKey", newFormData)
-    ] = this.getDefaultValue(type);
+    newFormData[this.getAvailableKey('newKey', newFormData)] = this.getDefaultValue(type);
     this.props.onChange(newFormData);
   };
 
@@ -188,32 +179,30 @@ class ObjectField extends Component {
     const { SchemaField, TitleField, DescriptionField } = fields;
     const schema = retrieveSchema(this.props.schema, definitions, formData);
     const title = schema.title === undefined ? null : schema.title;
-    const description = uiSchema["ui:description"] || schema.description;
+    const description = uiSchema['ui:description'] || schema.description;
     let orderedProperties;
 
     try {
       const properties = Object.keys(schema.properties);
-      orderedProperties = orderProperties(properties, uiSchema["ui:order"]);
+      orderedProperties = orderProperties(properties, uiSchema['ui:order']);
     } catch (err) {
       return (
         <View>
-          <Text style={{ color: "red" }}>
-            Invalid {name || "root"} object field configuration:
-          </Text>
+          <Text style={{ color: 'red' }}>Invalid {name || 'root'} object field configuration:</Text>
           <Text> {err.message}</Text>
           <Text>{JSON.stringify(schema)}</Text>
         </View>
       );
     }
     const Template = registry.ObjectFieldTemplate || DefaultObjectFieldTemplate;
-    const styleObject = uiSchema["ui:style"] ? uiSchema["ui:style"] : null;
+    const styleObject = uiSchema['ui:style'] ? uiSchema['ui:style'] : null;
     const templateProps = {
-      title: uiSchema["ui:title"] || title,
+      title: uiSchema['ui:title'] || title,
       description,
       TitleField,
       DescriptionField,
       properties: orderedProperties.map(name => {
-        const schemaField = schema.properties[name]
+        const schemaField = schema.properties[name];
         const referName = schemaField.referKey ? schemaField.referKey : null;
         return {
           content: (
@@ -227,9 +216,9 @@ class ObjectField extends Component {
               idSchema={idSchema[name]}
               idPrefix={idPrefix}
               formData={formData[name]}
-              referValue={referName?  formData[referName] : ""}
+              referValue={referName ? formData[referName] : ''}
               onKeyChange={this.onKeyChange(name)}
-              onChangeReferKey={ (name, value) =>  this.onReferPropertyChange(name, value)}
+              onChangeReferKey={(name, value) => this.onReferPropertyChange(name, value)}
               onChange={this.onPropertyChange(name)}
               onBlur={onBlur}
               onFocus={onFocus}
@@ -255,11 +244,11 @@ class ObjectField extends Component {
       <View style={styleObject}>
         <Template {...templateProps} onAddClick={this.handleAddClick} />
       </View>
-    )
+    );
   }
 }
 
-if (process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV !== 'production') {
   ObjectField.propTypes = {
     schema: PropTypes.object.isRequired,
     uiSchema: PropTypes.object,
@@ -271,9 +260,8 @@ if (process.env.NODE_ENV !== "production") {
     disabled: PropTypes.bool,
     readonly: PropTypes.bool,
     registry: PropTypes.shape({
-      widgets: PropTypes.objectOf(
-        PropTypes.oneOfType([PropTypes.func, PropTypes.object])
-      ).isRequired,
+      widgets: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.func, PropTypes.object]))
+        .isRequired,
       fields: PropTypes.objectOf(PropTypes.func).isRequired,
       definitions: PropTypes.object.isRequired,
       formContext: PropTypes.object.isRequired,

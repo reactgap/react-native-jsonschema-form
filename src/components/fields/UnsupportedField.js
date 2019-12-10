@@ -1,6 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { View, Text } from "react-native";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { View, Text } from 'react-native';
 
 function UnsupportedField({ schema, idSchema, reason }) {
   return (
@@ -22,7 +22,7 @@ function UnsupportedField({ schema, idSchema, reason }) {
   );
 }
 
-if (process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV !== 'production') {
   UnsupportedField.propTypes = {
     schema: PropTypes.object.isRequired,
     idSchema: PropTypes.object,

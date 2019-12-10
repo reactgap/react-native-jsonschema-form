@@ -1,11 +1,11 @@
 // @flow
 // @format
 
-import React, { PureComponent } from 'react'
-import { type ViewStyle, View, StyleSheet, Text, type TextStyle } from 'react-native'
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
-import FastImage from 'react-native-fast-image'
-import csstyles from '../../styles'
+import React, { PureComponent } from 'react';
+import { type ViewStyle, View, StyleSheet, Text, type TextStyle } from 'react-native';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import FastImage from 'react-native-fast-image';
+import csstyles from '../../styles';
 
 type Props = {
   url: string,
@@ -15,29 +15,29 @@ type Props = {
   placeholderTextStyle?: TextStyle,
   bottomIconName?: string,
   profilePlaceHolder?: boolean,
-  accessToken?: string
-}
+  accessToken?: string,
+};
 
 type State = {
-  loadState: 'progress' | 'success' | 'error'
-}
+  loadState: 'progress' | 'success' | 'error',
+};
 
 class Photo extends PureComponent<Props, State> {
   state: State = {
-    loadState: 'progress'
-  }
+    loadState: 'progress',
+  };
 
   onLoad = () => {
     this.setState({
-      loadState: 'success'
-    })
-  }
+      loadState: 'success',
+    });
+  };
 
   onError = () => {
     this.setState({
-      loadState: 'error'
-    })
-  }
+      loadState: 'error',
+    });
+  };
 
   render() {
     const {
@@ -48,17 +48,16 @@ class Photo extends PureComponent<Props, State> {
       placeholderStyle,
       profilePlaceHolder,
       placeholderTextStyle,
-      accessToken
-    } = this.props
-    const { loadState } = this.state
-    console.log('Photo url', url)
-    console.log('Photo url accessToken', accessToken)
+      accessToken,
+    } = this.props;
+    const { loadState } = this.state;
+
     return (
       <View style={[styles.wrapStyle, wrapStyle]}>
         <FastImage
           source={{
             uri: url || '',
-            headers: { 'X-Access-Token': accessToken || ''  }
+            headers: { 'X-Access-Token': accessToken || '' },
           }}
           style={[csstyles.base.full, photoStyle]}
           resizeMode="contain"
@@ -86,26 +85,26 @@ class Photo extends PureComponent<Props, State> {
           </View>
         )}
       </View>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
   wrapStyle: {
     position: 'relative',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   placeholder: {
     ...csstyles.base.absoluteFull,
     backgroundColor: csstyles.vars.csGreen,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   placeholderText: {
     ...csstyles.text.medium,
     fontSize: 13,
     color: csstyles.vars.csLight,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   bottomIconContainer: {
     ...csstyles.base.center,
@@ -114,8 +113,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: '25%',
-    backgroundColor: csstyles.mixin.csBlackOpacity(0.8)
-  }
-})
+    backgroundColor: csstyles.mixin.csBlackOpacity(0.8),
+  },
+});
 
-export default Photo
+export default Photo;

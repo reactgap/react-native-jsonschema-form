@@ -1,7 +1,8 @@
 // @flow
 
-import React, { Component } from 'react'
-import { View,
+import React, { Component } from 'react';
+import {
+  View,
   Modal,
   Animated,
   Easing,
@@ -9,116 +10,120 @@ import { View,
   Text,
   TouchableOpacity,
   Platform,
-  type LayoutChangeEvent } from 'react-native'
-import csstyles from '../../styles'
-import { DEVICE_BOTTOM_SAFE } from '../../../deviceHelper'
-import CSButton from '../Button/CSButton/CSButton'
-import CSBackButton from '../Button/CSBackButton/CSBackButton'
+  type LayoutChangeEvent,
+} from 'react-native';
+import csstyles from '../../styles';
+import { DEVICE_BOTTOM_SAFE } from '../../../deviceHelper';
+import CSButton from '../Button/CSButton/CSButton';
+import CSBackButton from '../Button/CSBackButton/CSBackButton';
 
-type Props = ActionSheetConfig
+type Props = ActionSheetConfig;
 
 export type ActionSheetConfig = {
   isOpen: boolean,
   onClose?: () => any,
   onDismiss?: () => any,
   title?: string,
-  actions?: ActionSheetAction[]
-}
+  actions?: ActionSheetAction[],
+};
 
 export type ActionSheetAction = {
   key: string,
   title: string,
   icon?: string,
   type: 'primary' | 'secondary' | 'danger',
-  onPress?: () => void
-}
+  onPress?: () => void,
+};
 
 class ActionSheet extends Component<Props> {
-  animateValue: Animated.Value = new Animated.Value(-999)
+  animateValue: Animated.Value = new Animated.Value(-999);
 
-  contentHeight: number = 0
+  contentHeight: number = 0;
 
-  shouldOpen = false
+  shouldOpen = false;
 
   shouldComponentUpdate(nextProps: Props) {
-    const { isOpen } = this.props
+    const { isOpen } = this.props;
 
     if (!isOpen && nextProps.isOpen) {
       if (this.contentHeight !== 0) {
-        this.toggleUp()
+        this.toggleUp();
       } else {
-        this.shouldOpen = true
+        this.shouldOpen = true;
       }
     } else if (isOpen && !nextProps.isOpen) {
-      this.toggleDown()
+      this.toggleDown();
 
-      return false
+      return false;
     }
 
-    return isOpen !== nextProps.isOpen
+    return isOpen !== nextProps.isOpen;
   }
 
   componentDidUpdate(prevProps: Props) {
-    const { isOpen, onDismiss } = this.props
+    const { isOpen, onDismiss } = this.props;
 
     if (Platform.OS === 'android' && !isOpen && isOpen === prevProps.isOpen && onDismiss) {
-      onDismiss()
+      onDismiss();
     }
   }
 
-  onContentLayout = ({ nativeEvent: { layout: { height } } }: LayoutChangeEvent) => {
-    const heightPlusBottom = height + DEVICE_BOTTOM_SAFE + csstyles.vars.csBoxSpacing
+  onContentLayout = ({
+    nativeEvent: {
+      layout: { height },
+    },
+  }: LayoutChangeEvent) => {
+    const heightPlusBottom = height + DEVICE_BOTTOM_SAFE + csstyles.vars.csBoxSpacing;
 
     if (this.contentHeight === 0) {
-      this.animateValue.setValue(-heightPlusBottom)
+      this.animateValue.setValue(-heightPlusBottom);
     }
 
-    this.contentHeight = heightPlusBottom
+    this.contentHeight = heightPlusBottom;
 
     if (this.shouldOpen) {
-      this.toggleUp()
+      this.toggleUp();
     }
-  }
+  };
 
   toggleUp = () => {
     Animated.spring(this.animateValue, {
-      toValue: 0
+      toValue: 0,
     }).start(() => {
-      this.shouldOpen = false
-    })
-  }
+      this.shouldOpen = false;
+    });
+  };
 
   toggleDown = () => {
     Animated.timing(this.animateValue, {
       duration: 250,
       toValue: -this.contentHeight,
-      easing: Easing.inOut(Easing.ease)
+      easing: Easing.inOut(Easing.ease),
     }).start(() => {
-      this.forceUpdate()
-    })
-  }
+      this.forceUpdate();
+    });
+  };
 
   onClose = () => {
-    const { onClose } = this.props
+    const { onClose } = this.props;
 
-    onClose && onClose()
-  }
+    onClose && onClose();
+  };
 
   renderContent = () => {
-    const { actions, title } = this.props
+    const { actions, title } = this.props;
 
-    if (!actions) return null
+    if (!actions) return null;
 
     return (
       <View
         style={[
           styles.contentContainer,
           {
-            marginHorizontal: 0
-          }
+            marginHorizontal: 0,
+          },
         ]}
-        onLayout={this.onContentLayout}
-      >
+        onLayout={this.onContentLayout}>
         <View style={styles.contentWrapper}>
           <CSBackButton
             forceCloseIcon
@@ -142,14 +147,14 @@ class ActionSheet extends Component<Props> {
           </View>
         </View>
       </View>
-    )
-  }
+    );
+  };
 
   renderBgTouchable = () => (
     <TouchableOpacity style={csstyles.base.absoluteFull} activeOpacity={1} onPress={this.onClose}>
       <View />
     </TouchableOpacity>
-  )
+  );
 
   renderAnimationContent = () => (
     <>
@@ -158,17 +163,16 @@ class ActionSheet extends Component<Props> {
         style={[
           styles.animationView,
           {
-            bottom: this.animateValue
-          }
-        ]}
-      >
+            bottom: this.animateValue,
+          },
+        ]}>
         {this.renderContent()}
       </Animated.View>
     </>
-  )
+  );
 
   render() {
-    const { isOpen, onDismiss } = this.props
+    const { isOpen, onDismiss } = this.props;
 
     return (
       <Modal
@@ -176,11 +180,10 @@ class ActionSheet extends Component<Props> {
         animationType="none"
         onRequestClose={this.onClose}
         transparent
-        onDismiss={onDismiss}
-      >
+        onDismiss={onDismiss}>
         <View style={styles.modalWrapper}>{this.renderAnimationContent()}</View>
       </Modal>
-    )
+    );
   }
 }
 
@@ -188,7 +191,7 @@ const styles = StyleSheet.create({
   modalWrapper: {
     flex: 1,
     position: 'relative',
-    backgroundColor: csstyles.mixin.csBlackOpacity(0.5)
+    backgroundColor: csstyles.mixin.csBlackOpacity(0.5),
   },
   contentContainer: {
     marginHorizontal: 0,
@@ -202,36 +205,36 @@ const styles = StyleSheet.create({
     shadowRadius: 5 * StyleSheet.hairlineWidth,
     shadowOffset: {
       width: 0,
-      height: -5 * StyleSheet.hairlineWidth
+      height: -5 * StyleSheet.hairlineWidth,
     },
-    shadowOpacity: 0.8
+    shadowOpacity: 0.8,
   },
   contentWrapper: {
     ...csstyles.base.fullCenter,
     position: 'relative',
     marginTop: csstyles.vars.csBoxSpacing,
-    marginBottom: csstyles.vars.csBoxSpacing
+    marginBottom: csstyles.vars.csBoxSpacing,
   },
   animationView: {
     position: 'absolute',
     left: csstyles.vars.csBoxSpacing2x,
-    right: csstyles.vars.csBoxSpacing2x
+    right: csstyles.vars.csBoxSpacing2x,
   },
   actionsBtn: {
-    marginBottom: csstyles.vars.csBoxSpacing
+    marginBottom: csstyles.vars.csBoxSpacing,
   },
   textContainer: {
     paddingHorizontal: csstyles.vars.csInputHeight,
     minHeight: csstyles.vars.csInputHeight,
     ...csstyles.base.rowCenterLine,
-    marginBottom: csstyles.vars.csBoxSpacing2x
+    marginBottom: csstyles.vars.csBoxSpacing2x,
   },
   desc: {
     ...csstyles.text.medium,
     color: csstyles.vars.csWhite,
     textAlign: 'center',
-    fontSize: 15
-  }
-})
+    fontSize: 15,
+  },
+});
 
-export default ActionSheet
+export default ActionSheet;

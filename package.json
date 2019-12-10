@@ -23,7 +23,7 @@
     "react-native": ">=0.49"
   },
   "dependencies": {
-    "ajv": "^5.2.3",
+    "ajv": "6.10.2",
     "babel-runtime": "^6.26.0",
     "core-js": "^2.5.7",
     "currency-formatter": "^1.5.5",

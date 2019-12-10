@@ -1,33 +1,33 @@
 // @flow
 
-import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
-import csstyles from '../../styles'
+import React, { Component } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import csstyles from '../../styles';
 
 type Props = {
   onPress: (id: string) => void,
   id: string,
   leftTitle: string,
   rightTitle: string,
-  selected: boolean
-}
+  selected: boolean,
+};
 
 class ListGroupSelectableItem extends Component<Props> {
   shouldComponentUpdate(nextProps: Props) {
-    const { selected } = this.props
+    const { selected } = this.props;
 
-    return nextProps.selected !== selected
+    return nextProps.selected !== selected;
   }
 
   onPress = () => {
-    const { id, onPress } = this.props
+    const { id, onPress } = this.props;
 
-    onPress(id)
-  }
+    onPress(id);
+  };
 
   render() {
-    const { leftTitle, rightTitle, selected } = this.props
+    const { leftTitle, rightTitle, selected } = this.props;
 
     return (
       <TouchableOpacity activeOpacity={0.8} onPress={this.onPress} style={styles.wrapper}>
@@ -41,7 +41,7 @@ class ListGroupSelectableItem extends Component<Props> {
           </View>
         </View>
       </TouchableOpacity>
-    )
+    );
   }
 }
 
@@ -52,27 +52,27 @@ const styles = StyleSheet.create({
     marginHorizontal: csstyles.vars.csBoxSpacing2x,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: csstyles.vars.csGreen,
-    height: csstyles.vars.csInputHeight
+    height: csstyles.vars.csInputHeight,
   },
   contentWrapper: {
     ...csstyles.base.rowCenterLine,
     justifyContent: 'space-between',
-    ...csstyles.base.full
+    ...csstyles.base.full,
   },
   iconContainer: {
     width: csstyles.vars.csInputHeight,
-    alignItems: 'flex-end'
+    alignItems: 'flex-end',
   },
   leftTitle: {
     ...csstyles.text.textMain,
     ...csstyles.text.medium,
-    fontSize: 14
+    fontSize: 14,
   },
   rightTitle: {
     ...csstyles.text.textMain,
     ...csstyles.text.regular,
-    fontSize: 14
-  }
-})
+    fontSize: 14,
+  },
+});
 
-export default ListGroupSelectableItem
+export default ListGroupSelectableItem;

@@ -1,9 +1,6 @@
 import { StyleSheet, Platform } from 'react-native';
-import { DEVICE_BOTTOM_SAFE,
-  DEVICE_TOP_SAFE,
-  IS_DEVICE_SHORT_HEIGHT,
-  IS_DEVICE_VERY_LONG_WIDTH } from '../deviceHelper'
-  
+import { IS_DEVICE_SHORT_HEIGHT, IS_DEVICE_VERY_LONG_WIDTH } from '../deviceHelper';
+
 const vars = {
   csBlue: '#0088FF',
   csGrey: '#515151',
@@ -31,140 +28,140 @@ const vars = {
 
 const mixin = {
   csBlackOpacity: (opacity: number) => `rgba(0, 0, 0, ${opacity.toFixed(2)})`,
-  csGreyOpacity: (opacity: number) => `rgba(34, 34, 34, ${opacity.toFixed(2)})`
-}
+  csGreyOpacity: (opacity: number) => `rgba(34, 34, 34, ${opacity.toFixed(2)})`,
+};
 
 const text = StyleSheet.create({
   regular: {
-    fontFamily: 'SFProDisplay-Regular'
+    fontFamily: 'SFProDisplay-Regular',
   },
   medium: {
-    fontFamily: 'SFProDisplay-Medium'
+    fontFamily: 'SFProDisplay-Medium',
   },
   bold: {
-    fontFamily: 'SFProDisplay-Bold'
+    fontFamily: 'SFProDisplay-Bold',
   },
   textPrimary: {
-    color: vars.csGreen
+    color: vars.csGreen,
   },
   textCenter: {
-    textAlign: 'center'
+    textAlign: 'center',
   },
   textWhite: {
-    color: vars.csWhite
+    color: vars.csWhite,
   },
   textDanger: {
-    color: vars.csDanger
+    color: vars.csDanger,
   },
   textSecondary: {
-    color: vars.csBrown
+    color: vars.csBrown,
   },
   textLight: {
-    color: vars.csLight
+    color: vars.csLight,
   },
   textMain: {
-    color: vars.csTextGrey
+    color: vars.csTextGrey,
   },
-})
+});
 
 const component = StyleSheet.create({
   textInputStyle: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     paddingLeft: 12,
     paddingRight: 12,
     paddingTop: 6,
     paddingBottom: 6,
-    color: "#495057",
+    color: '#495057',
     fontSize: 15,
-    borderColor: "#ced4da",
+    borderColor: '#ced4da',
     borderWidth: 1,
     borderRadius: 4,
-    marginBottom: 5
+    marginBottom: 5,
   },
   textInputFocus: {
-    borderColor: "#80bdff"
+    borderColor: '#80bdff',
   },
   titleInputStyle: {
     marginLeft: 0,
     ...text.regular,
     color: vars.csTextGrey,
     marginBottom: 8,
-    fontSize: 14
+    fontSize: 14,
   },
 });
 
 const base = StyleSheet.create({
   full: {
-    flex: 1
+    flex: 1,
   },
   w100: {
-    width: '100%'
+    width: '100%',
   },
   center: {
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   fullCenter: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   rowCenter: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   rowCenterLine: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   rowCenterLineBetween: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   row: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   relative: {
-    position: 'relative'
+    position: 'relative',
   },
   rowWrap: {
     flexDirection: 'row',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   rowReverse: {
-    flexDirection: 'row-reverse'
+    flexDirection: 'row-reverse',
   },
   absoluteFull: {
     position: 'absolute',
     top: 0,
     bottom: 0,
     left: 0,
-    right: 0
+    right: 0,
   },
   absoluteTopLeft: {
     position: 'absolute',
     top: 0,
-    left: 0
+    left: 0,
   },
   absoluteBottomLeftRight: {
     position: 'absolute',
     bottom: 0,
     left: 0,
-    right: 0
+    right: 0,
   },
   absoluteTopBottomLeft: {
     position: 'absolute',
     top: 0,
     bottom: 0,
-    left: 0
+    left: 0,
   },
   absoluteTopBottomRight: {
     position: 'absolute',
     top: 0,
     bottom: 0,
-    right: 0
+    right: 0,
   },
   cardPrimary: {
     backgroundColor: vars.csWhite,
@@ -173,36 +170,36 @@ const base = StyleSheet.create({
     borderRadius: vars.csBoxBorderRadius,
     padding: vars.csBoxSpacing,
     marginBottom: vars.csBoxSpacing,
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   cardSecondary: {
     backgroundColor: vars.csGrey,
     borderRadius: vars.csBoxBorderRadius,
     padding: vars.csBoxSpacing,
     marginBottom: vars.csBoxSpacing,
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   linePrimary: {
     height: 1,
     backgroundColor: vars.csGreen,
     marginTop: 3,
-    marginBottom: 2
+    marginBottom: 2,
   },
   shadow: {
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { 
-          width: 0, 
-          height: 2
+        shadowOffset: {
+          width: 0,
+          height: 2,
         },
         shadowOpacity: 0.2,
       },
       android: {
         elevation: 3,
-      }
-    })
-  }
+      },
+    }),
+  },
 });
 
 export default {
@@ -210,5 +207,5 @@ export default {
   mixin,
   base,
   text,
-  component
+  component,
 };

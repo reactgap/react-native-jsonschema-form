@@ -1,12 +1,14 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Text, View } from 'react-native';
+import { Text } from 'react-native';
 
 const REQUIRED_FIELD_SYMBOL = '*';
 
 function TitleField(props) {
-  const { id, title, required } = props;
-  if (!title || title.length === 0) return <Fragment />;
+  const { title, required } = props;
+  if (!title || title.length === 0) {
+    return <Fragment />;
+  }
   const textValue = required ? title + REQUIRED_FIELD_SYMBOL : title;
   return <Text>{textValue}</Text>;
 }

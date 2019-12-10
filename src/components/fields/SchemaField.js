@@ -1,6 +1,6 @@
-import { ADDITIONAL_PROPERTY_FLAG } from "../../utils";
-import React from "react";
-import PropTypes from "prop-types";
+import { ADDITIONAL_PROPERTY_FLAG } from '../../utils';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { View, Text, TextInput } from 'react-native';
 import styles from '../styles';
 
@@ -14,27 +14,27 @@ import {
   isFilesArray,
   deepEquals,
   getSchemaType,
-} from "../../utils";
-import UnsupportedField from "./UnsupportedField";
+} from '../../utils';
+import UnsupportedField from './UnsupportedField';
 
-const REQUIRED_FIELD_SYMBOL = "*";
+const REQUIRED_FIELD_SYMBOL = '*';
 const COMPONENT_TYPES = {
-  array: "ArrayField",
-  boolean: "BooleanField",
-  integer: "NumberField",
-  number: "NumberField",
-  object: "ObjectField",
-  string: "StringField",
-  flatList: "ObjectFlatList",
-  view: "ObjectView"
+  array: 'ArrayField',
+  boolean: 'BooleanField',
+  integer: 'NumberField',
+  number: 'NumberField',
+  object: 'ObjectField',
+  string: 'StringField',
+  flatList: 'ObjectFlatList',
+  view: 'ObjectView',
 };
 
 function getFieldComponent(schema, uiSchema, idSchema, fields) {
-  const field = uiSchema["ui:field"];
-  if (typeof field === "function") {
+  const field = uiSchema['ui:field'];
+  if (typeof field === 'function') {
     return field;
   }
-  if (typeof field === "string" && field in fields) {
+  if (typeof field === 'string' && field in fields) {
     return fields[field];
   }
 
@@ -65,21 +65,19 @@ function Label(props) {
     return null;
   }
   const labelValue = required ? label + REQUIRED_FIELD_SYMBOL : label;
-  return (
-    <Text style={styles.component.titleInputStyle}>{labelValue}</Text>
-  );
+  return <Text style={styles.component.titleInputStyle}>{labelValue}</Text>;
 }
 
 function LabelInput(props) {
   const { id, label, onChange } = props;
   return (
     <TextInput
-    defaultValue={label}
-    keyboardAppearance="light"
-    autoCorrect={false}
-    style={{ marginLeft: 10 }}
-    // onBlur={onBlur && (event => onBlur(inputProps.id, event.target.value))}
-  />
+      defaultValue={label}
+      keyboardAppearance="light"
+      autoCorrect={false}
+      style={{ marginLeft: 10 }}
+      // onBlur={onBlur && (event => onBlur(inputProps.id, event.target.value))}
+    />
     // <input
     //   className="form-control"
     //   type="text"
@@ -96,7 +94,7 @@ function Help(props) {
     // See #312: Ensure compatibility with old versions of React.
     return <View />;
   }
-  if (typeof help === "string") {
+  if (typeof help === 'string') {
     return <Text>{help}</Text>;
   }
   return <View>{help}</View>;
@@ -109,13 +107,11 @@ function ErrorList(props) {
   }
   return (
     <View>
-    <Text>Error</Text>
-    {
-      errors.map((error, index) => (
-      <Text key={index}> {error}</Text>
-      ))
-    }
-  </View>
+      <Text>Error</Text>
+      {errors.map((error, index) => (
+        <Text key={index}> {error}</Text>
+      ))}
+    </View>
   );
 }
 
@@ -144,12 +140,7 @@ function DefaultTemplate(props) {
       {additional && (
         <View>
           <Label label={keyLabel} required={required} id={`${id}-key`} />
-          <LabelInput
-            label={label}
-            required={required}
-            id={`${id}-key`}
-            onChange={onKeyChange}
-          />
+          <LabelInput label={label} required={required} id={`${id}-key`} onChange={onKeyChange} />
         </View>
       )}
       {displayLabel && <Label label={label} required={required} id={id} />}
@@ -161,7 +152,7 @@ function DefaultTemplate(props) {
   );
 }
 
-if (process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV !== 'production') {
   DefaultTemplate.propTypes = {
     id: PropTypes.string,
     classNames: PropTypes.string,
@@ -201,23 +192,15 @@ function SchemaFieldRender(props) {
     onChangeReferKey,
     registry = getDefaultRegistry(),
   } = props;
-  const {
-    definitions,
-    fields,
-    formContext,
-    FieldTemplate = DefaultTemplate,
-  } = registry;
+  const { definitions, fields, formContext, FieldTemplate = DefaultTemplate } = registry;
   let idSchema = props.idSchema;
   const schema = retrieveSchema(props.schema, definitions, formData);
-  idSchema = mergeObjects(
-    toIdSchema(schema, null, definitions, formData, idPrefix),
-    idSchema
-  );
+  idSchema = mergeObjects(toIdSchema(schema, null, definitions, formData, idPrefix), idSchema);
   const FieldComponent = getFieldComponent(schema, uiSchema, idSchema, fields);
   const { DescriptionField } = fields;
-  const disabled = Boolean(props.disabled || uiSchema["ui:disabled"]);
-  const readonly = Boolean(props.readonly || uiSchema["ui:readonly"]);
-  const autofocus = Boolean(props.autofocus || uiSchema["ui:autofocus"]);
+  const disabled = Boolean(props.disabled || uiSchema['ui:disabled']);
+  const readonly = Boolean(props.readonly || uiSchema['ui:readonly']);
+  const autofocus = Boolean(props.autofocus || uiSchema['ui:autofocus']);
 
   if (Object.keys(schema).length === 0) {
     // See #312: Ensure compatibility with old versions of React.
@@ -226,31 +209,30 @@ function SchemaFieldRender(props) {
 
   const uiOptions = getUiOptions(uiSchema);
   let { label: displayLabel = true } = uiOptions;
-  if (schema.type === "array") {
+  if (schema.type === 'array') {
     displayLabel =
-      isMultiSelect(schema, definitions) ||
-      isFilesArray(schema, uiSchema, definitions);
+      isMultiSelect(schema, definitions) || isFilesArray(schema, uiSchema, definitions);
   }
-  if (schema.type === "object") {
+  if (schema.type === 'object') {
     displayLabel = false;
   }
-  if (schema.type === "flatList") {
+  if (schema.type === 'flatList') {
     displayLabel = false;
   }
-  if (schema.type === "boolean" && !uiSchema["ui:widget"]) {
+  if (schema.type === 'boolean' && !uiSchema['ui:widget']) {
     displayLabel = false;
   }
-  if (uiSchema["ui:field"]) {
+  if (uiSchema['ui:field']) {
     displayLabel = false;
   }
-  if (uiSchema["ui:widget"] === 'avatar') {
+  if (uiSchema['ui:widget'] === 'avatar') {
     displayLabel = false;
   }
 
-  let currentIndex = 0
-  if (uiSchema["ui:widget"] === "PickerOption") {
+  let currentIndex = 0;
+  if (uiSchema['ui:widget'] === 'PickerOption') {
     if (schema && schema.hasOwnProperty('currentIndex')) {
-      currentIndex = schema['currentIndex']
+      currentIndex = schema['currentIndex'];
     }
   }
 
@@ -276,36 +258,32 @@ function SchemaFieldRender(props) {
 
   const { type } = schema;
   const id = idSchema.$id;
-  const label =
-    uiSchema["ui:title"] || props.schema.title || schema.title || name;
-  const description =
-    uiSchema["ui:description"] ||
-    props.schema.description ||
-    schema.description;
+  const label = uiSchema['ui:title'] || props.schema.title || schema.title || name;
+  const description = uiSchema['ui:description'] || props.schema.description || schema.description;
   const errors = __errors;
-  const help = uiSchema["ui:help"];
-  const hidden = uiSchema["ui:widget"] === "hidden";
+  const help = uiSchema['ui:help'];
+  const hidden = uiSchema['ui:widget'] === 'hidden';
   const classNames = [
-    "form-group",
-    "field",
+    'form-group',
+    'field',
     `field-${type}`,
-    errors && errors.length > 0 ? "field-error has-error has-danger" : "",
+    errors && errors.length > 0 ? 'field-error has-error has-danger' : '',
     uiSchema.classNames,
   ]
-    .join(" ")
+    .join(' ')
     .trim();
 
   const fieldProps = {
     description: (
       <DescriptionField
-        id={id + "__description"}
+        id={id + '__description'}
         description={description}
         formContext={formContext}
       />
     ),
     rawDescription: description,
     help: <Help help={help} />,
-    rawHelp: typeof help === "string" ? help : undefined,
+    rawHelp: typeof help === 'string' ? help : undefined,
     errors: <ErrorList errors={errors} />,
     rawErrors: errors,
     id,
@@ -332,7 +310,7 @@ class SchemaField extends React.Component {
     // so it is not necessary to compare
     return !deepEquals(
       { ...this.props, idSchema: undefined },
-      { ...nextProps, idSchema: undefined }
+      { ...nextProps, idSchema: undefined },
     );
   }
 
@@ -350,7 +328,7 @@ SchemaField.defaultProps = {
   autofocus: false,
 };
 
-if (process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV !== 'production') {
   SchemaField.propTypes = {
     schema: PropTypes.object.isRequired,
     uiSchema: PropTypes.object,
@@ -358,9 +336,8 @@ if (process.env.NODE_ENV !== "production") {
     formData: PropTypes.any,
     errorSchema: PropTypes.object,
     registry: PropTypes.shape({
-      widgets: PropTypes.objectOf(
-        PropTypes.oneOfType([PropTypes.func, PropTypes.object])
-      ).isRequired,
+      widgets: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.func, PropTypes.object]))
+        .isRequired,
       fields: PropTypes.objectOf(PropTypes.func).isRequired,
       definitions: PropTypes.object.isRequired,
       ArrayFieldTemplate: PropTypes.func,
