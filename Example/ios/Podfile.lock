@@ -98,7 +98,7 @@ PODS:
     - React-Core
     - React-RCTImage
     - RSKImageCropper
-  - RNVectorIcons (5.0.0):
+  - RNVectorIcons (6.6.0):
     - React
   - RSKImageCropper (2.2.3)
   - SDWebImage (5.4.0):
@@ -220,7 +220,7 @@ SPEC CHECKSUMS:
   React-RCTWebSocket: cd932a16b7214898b6b7f788c8bddb3637246ac4
   RNFastImage: 9b0c22643872bb7494c8d87bbbb66cc4c0d9e7a2
   RNImageCropPicker: bfb3ea9c8622f290532e2fe63f369e0d5a52f597
-  RNVectorIcons: f066f73bf4f25564d7ee7b1bb150e3b431f3a194
+  RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   RSKImageCropper: a446db0e8444a036b34f3c43db01b2373baa4b2a
   SDWebImage: 5bf6aec6481ae2a062bdc59f9d6c1d1e552090e0
   SDWebImageWebPCoder: 947093edd1349d820c40afbd9f42acb6cdecd987
