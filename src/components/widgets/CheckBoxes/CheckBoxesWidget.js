@@ -61,8 +61,6 @@ function deselectValue(deslectedItem, currentSelectedItems) {
 function CheckboxesWidget(props) {
   const { options, onChange, value, schema, errorSchema } = props;
   const { enumOptions } = options;
-  console.log('enumOptions', enumOptions);
-  console.log('value', value);
   const required = schemaRequiresTrueValue(schema);
   return (
     <View>
