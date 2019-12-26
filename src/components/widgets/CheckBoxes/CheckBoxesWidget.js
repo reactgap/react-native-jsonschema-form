@@ -59,7 +59,7 @@ function deselectValue(deslectedItem, currentSelectedItems) {
 }
 
 function CheckboxesWidget(props) {
-  const { options, onChange, value, schema, errorSchema } = props;
+  const { options, onChange, value, schema, errorSchema, disabled } = props;
   const { enumOptions } = options;
   const required = schemaRequiresTrueValue(schema);
   return (
@@ -92,6 +92,7 @@ function CheckboxesWidget(props) {
             required={required}
             label={option.value.label}
             value={selectedValue}
+            disabled={disabled}
             selected={isSelected}
             rawErrors={checkboxRawErrors}
             onChange={item => {
