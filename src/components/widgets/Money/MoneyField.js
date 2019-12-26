@@ -104,6 +104,26 @@ class MoneyField extends PureComponent<Props, State> {
     );
   }
 
+  getPlaceHolder = () => {
+    const { min, max, placeHolder, currencyOptions } = this.props;
+    if (!min && !max) {
+      return placeHolder;
+    }
+    const mergedCurrencyOptions = { ...DEFAULT_CURRENCY_OPTIONS, ...currencyOptions };
+    const { symbol } = mergedCurrencyOptions;
+    if (min && max) {
+      const minValueFormat = currencyFormatter.format(min, mergedCurrencyOptions);
+      const maxValueFormat = currencyFormatter.format(max, mergedCurrencyOptions);
+      return `${minValueFormat} - ${maxValueFormat} (${symbol})`;
+    } else if (min) {
+      const minValueFormat = currencyFormatter.format(min, mergedCurrencyOptions);
+      return `Min: ${minValueFormat}`;
+    } else {
+      const maxValueFormat = currencyFormatter.format(max, mergedCurrencyOptions);
+      return `Max: ${maxValueFormat}`;
+    }
+  };
+
   render() {
     const {
       schema,
@@ -123,13 +143,14 @@ class MoneyField extends PureComponent<Props, State> {
     } = this.props;
     const showError = rawErrors && rawErrors.length > 0;
     let keyboardTypeUse = keyboardType ? keyboardType : 'default';
-    let placeholderUse = placeholder;
+    let placeholderUse = this.getPlaceHolder();
     if (schema && schema.hasOwnProperty('keyboardType')) {
       keyboardTypeUse = schema['keyboardType'];
     }
     if (schema && schema.hasOwnProperty('placeholder')) {
       placeholderUse = schema['placeholder'];
     }
+
     let maxLength = null;
     if (schema && schema.hasOwnProperty('maxLength')) {
       maxLength = parseInt(schema.maxLength);
@@ -191,6 +212,8 @@ MoneyField.defaultProps = {
   currencyOptions: DEFAULT_CURRENCY_OPTIONS,
   currencySymbolStyle: {},
   currencySymbolVisible: true,
+  min: null,
+  max: null,
 };
 
 const styles = StyleSheet.create({
