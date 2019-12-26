@@ -66,7 +66,7 @@ export default class CheckBoxField extends React.Component {
   }
 
   renderExtend() {
-    const { placeholder, disabled } = this.props;
+    const { placeholder, disabled, min, max } = this.props;
     if (this.state.moneyVisible) {
       return (
         <Animated.View>
@@ -74,6 +74,8 @@ export default class CheckBoxField extends React.Component {
             ref={_ref => {
               this.moneyRef = _ref;
             }}
+            min={min}
+            max={max}
             disabled={disabled}
             wrapperStyle={styles.moneyContainer}
             inputStyle={styles.moneyInput}

@@ -94,6 +94,8 @@ function CheckboxesWidget(props) {
             value={selectedValue}
             disabled={disabled}
             selected={isSelected}
+            min={option.value.min}
+            max={option.value.max}
             rawErrors={checkboxRawErrors}
             onChange={item => {
               const all = enumOptions.map(o => o.value);
