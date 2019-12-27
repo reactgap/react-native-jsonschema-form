@@ -124,6 +124,28 @@ class MoneyField extends PureComponent<Props, State> {
     }
   };
 
+  renderError = () => {
+    const { min, max, value, currencyOptions } = this.props;
+    let msgError = '';
+    if (value) {
+      const rangeMinMax = this.getPlaceHolder();
+      if ((min && value < min) || (max && value > max)) {
+        msgError = `Vui lòng nhập số tiền trong khoảng ${rangeMinMax}`;
+      }
+    }
+
+    if (msgError && msgError.length > 0) {
+      return (
+        <View>
+          <View style={styles.errorWrapper}>
+            <Text style={styles.errorText}>{msgError}</Text>
+          </View>
+        </View>
+      );
+    }
+    return null;
+  };
+
   render() {
     const {
       schema,
@@ -186,18 +208,7 @@ class MoneyField extends PureComponent<Props, State> {
           />
           {this.renderCurrencySymbol()}
         </View>
-        <View>
-          {showError && (
-            <View style={styles.errorWrapper}>
-              {rawErrors.map((error, i) => (
-                <Text key={i} style={styles.errorText}>
-                  {' '}
-                  {error}
-                </Text>
-              ))}
-            </View>
-          )}
-        </View>
+        {this.renderError()}
       </Fragment>
     );
   }
