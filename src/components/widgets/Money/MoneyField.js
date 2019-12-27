@@ -164,11 +164,8 @@ class MoneyField extends PureComponent<Props, State> {
       keyboardAppearance,
     } = this.props;
     const showError = rawErrors && rawErrors.length > 0;
-    let keyboardTypeUse = keyboardType ? keyboardType : 'default';
+    let keyboardTypeUse = keyboardType ? keyboardType : 'number-pad';
     let placeholderUse = this.getPlaceHolder();
-    if (schema && schema.hasOwnProperty('keyboardType')) {
-      keyboardTypeUse = schema['keyboardType'];
-    }
     if (schema && schema.hasOwnProperty('placeholder')) {
       placeholderUse = schema['placeholder'];
     }
