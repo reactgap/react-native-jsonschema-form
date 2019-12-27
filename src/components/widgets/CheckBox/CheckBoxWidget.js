@@ -78,7 +78,6 @@ export default class CheckBoxField extends React.Component {
             max={max}
             disabled={disabled}
             wrapperStyle={styles.moneyContainer}
-            inputStyle={styles.moneyInput}
             onChange={this.onTextInputChange}
             currencySymbolVisible={false}
             placeholder={placeholder}
@@ -139,10 +138,6 @@ const styles = StyleSheet.create({
   },
   moneyContainer: {
     marginLeft: 44,
-    height: 28,
-  },
-  moneyInput: {
-    maxHeight: 24,
   },
   errorText: {
     ...csstyles.text.medium,
