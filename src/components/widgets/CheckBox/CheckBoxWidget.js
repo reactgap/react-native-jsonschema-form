@@ -1,5 +1,13 @@
 import React from 'react';
-import { Animated, LayoutAnimation, View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import {
+  Animated,
+  LayoutAnimation,
+  View,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  Alert,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import MoneyField from '../Money/MoneyField';
@@ -18,44 +26,47 @@ export default class CheckBoxField extends React.Component {
 
   onPressField = () => {
     const { selected, moneyVisible } = this.state;
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring,
-    () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring, () => {
       this.moneyRef && this.moneyRef.focus();
     });
-    this.setState({
-      selected: !selected,
-      moneyVisible: !moneyVisible,
-    }, () => {
+    this.setState(
+      {
+        selected: !selected,
+        moneyVisible: !moneyVisible,
+      },
+      () => {
         this.props.onChange({
           selected: this.state.selected,
           value: this.state.money,
         });
-    });
-  }
+      },
+    );
+  };
 
-  onTextInputChange = (numberValue) => {
+  onTextInputChange = numberValue => {
     this.setState({ money: numberValue }, () => {
       this.props.onChange({
         selected: this.state.selected,
         value: this.state.money,
       });
     });
-  }
+  };
 
   renderCheckBox() {
-    const { tintColor, iconSize, checkedIcon, uncheckedIcon, label } = this.props;
+    const { tintColor, iconSize, checkedIcon, uncheckedIcon, label, disabled } = this.props;
+
     const iconName = this.state.selected ? checkedIcon : uncheckedIcon;
     return (
-        <TouchableOpacity style={styles.row} onPress={this.onPressField}>
-          <Icon name={iconName} color={tintColor} size={iconSize} />
-          <Text style={styles.text}>{label}</Text>
-          <Icon name="caret-down" color={csstyles.vars.csGrey} size={24} />
-        </TouchableOpacity>
+      <TouchableOpacity disabled={disabled} style={styles.row} onPress={this.onPressField}>
+        <Icon name={iconName} color={tintColor} size={iconSize} />
+        <Text style={styles.text}>{label}</Text>
+        <Icon name="caret-down" color={csstyles.vars.csGrey} size={24} />
+      </TouchableOpacity>
     );
   }
 
   renderExtend() {
-    const { placeholder } = this.props;
+    const { placeholder, disabled, min, max } = this.props;
     if (this.state.moneyVisible) {
       return (
         <Animated.View>
@@ -63,8 +74,10 @@ export default class CheckBoxField extends React.Component {
             ref={_ref => {
               this.moneyRef = _ref;
             }}
+            min={min}
+            max={max}
+            disabled={disabled}
             wrapperStyle={styles.moneyContainer}
-            inputStyle={styles.moneyInput}
             onChange={this.onTextInputChange}
             currencySymbolVisible={false}
             placeholder={placeholder}
@@ -125,10 +138,6 @@ const styles = StyleSheet.create({
   },
   moneyContainer: {
     marginLeft: 44,
-    height: 28,
-  },
-  moneyInput: {
-    maxHeight: 24,
   },
   errorText: {
     ...csstyles.text.medium,

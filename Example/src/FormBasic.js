@@ -92,7 +92,16 @@ class FormBasic extends PureComponent<Props> {
   render() {
     const schema = FormBasicSchema.schema;
     const uiSchema = FormBasicSchema.uiSchema;
-    const formData = null;
+    const formData = {
+      multipleChoicesList: [
+        {
+          id: 'ENUM_1',
+          label: 'Nhãn enum 1',
+          selected: true,
+          value: 123456,
+        },
+      ],
+    };
 
     const keywords = this.getCustomKeywords();
     return (

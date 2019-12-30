@@ -19,7 +19,7 @@ const vars = {
   csBoxSpacingHalf: IS_DEVICE_VERY_LONG_WIDTH ? 6 : 4,
   csBoxSpacing: IS_DEVICE_VERY_LONG_WIDTH ? 12 : 8,
   csBoxSpacing2x: IS_DEVICE_VERY_LONG_WIDTH ? 24 : 16,
-  csInputHeight: IS_DEVICE_SHORT_HEIGHT ? 30 : 44,
+  csInputHeight: IS_DEVICE_SHORT_HEIGHT ? 40 : 44,
   csPickerHeight: 44,
   csPickerBorderRadius: 20,
   csInputBorderRaius: IS_DEVICE_SHORT_HEIGHT ? 15 : 22,

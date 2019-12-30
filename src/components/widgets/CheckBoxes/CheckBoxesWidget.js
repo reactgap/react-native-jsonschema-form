@@ -59,13 +59,21 @@ function deselectValue(deslectedItem, currentSelectedItems) {
 }
 
 function CheckboxesWidget(props) {
-  const { options, onChange, value, schema, errorSchema } = props;
+  const { options, onChange, value, schema, errorSchema, disabled } = props;
   const { enumOptions } = options;
-
   const required = schemaRequiresTrueValue(schema);
   return (
     <View>
       {enumOptions.map((option, index) => {
+        const indexSelected = value ? value.findIndex(x => x.id === option.value.id) : -1;
+        let isSelected = false;
+        let selectedValue = undefined;
+        if (indexSelected !== -1) {
+          isSelected = true;
+          const objectValue = value[indexSelected];
+          selectedValue = objectValue.value;
+        }
+
         const itemIndexSchema = errorSchema && errorSchema[index];
         const itemGeneralErrors = itemIndexSchema && itemIndexSchema.__errors;
         const itemValueErrors =
@@ -84,8 +92,11 @@ function CheckboxesWidget(props) {
             key={checkBoxKey}
             required={required}
             label={option.value.label}
-            value={option.value.value}
-            selected={option.value.selected}
+            value={selectedValue}
+            disabled={disabled}
+            selected={isSelected}
+            min={option.value.min}
+            max={option.value.max}
             rawErrors={checkboxRawErrors}
             onChange={item => {
               const all = enumOptions.map(o => o.value);

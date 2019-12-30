@@ -47,7 +47,7 @@ function getValue(result, multiple) {
 }
 
 function SelectWidget(props) {
-  const { schema, options, multiple, value, onChange, required, id, errorSchema } = props;
+  const { schema, options, multiple, value, onChange, required, id, errorSchema, disabled } = props;
   return (
     <View>
       {multiple && (
@@ -56,6 +56,7 @@ function SelectWidget(props) {
           required={required}
           value={value}
           schema={schema}
+          disabled={disabled}
           options={options}
           onChange={result => {
             const newValue = getValue(result, multiple);

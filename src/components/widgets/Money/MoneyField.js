@@ -40,19 +40,17 @@ type Props = {
 };
 
 type State = {
-  touched: boolean,
   numberValue: number,
   stringValue: string,
 };
 
 class MoneyField extends PureComponent<Props, State> {
   state: State = {
-    touched: false,
     numberValue: 0,
     stringValue: '',
   };
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     const mergedCurrencyOptions = { ...DEFAULT_CURRENCY_OPTIONS, ...props.currencyOptions };
     const stringValue = currencyFormatter.format(props.value, mergedCurrencyOptions);
@@ -60,23 +58,10 @@ class MoneyField extends PureComponent<Props, State> {
     this.state = {
       numberValue: props.value,
       stringValue: stringValue,
-      touched: false,
     };
   }
 
   inputRef: TextInput | null = null;
-
-  onBlur = () => {
-    const { touched } = this.state;
-
-    if (!touched) {
-      this.setState({
-        touchede: true,
-      });
-    }
-    const { onBlur } = this.props;
-    onBlur && this.onBlur();
-  };
 
   focus = () => {
     this.inputRef && this.inputRef.focus();
@@ -119,6 +104,48 @@ class MoneyField extends PureComponent<Props, State> {
     );
   }
 
+  getPlaceHolder = () => {
+    const { min, max, placeHolder, currencyOptions } = this.props;
+    if (!min && !max) {
+      return placeHolder;
+    }
+    const mergedCurrencyOptions = { ...DEFAULT_CURRENCY_OPTIONS, ...currencyOptions };
+    const { symbol } = mergedCurrencyOptions;
+    if (min && max) {
+      const minValueFormat = currencyFormatter.format(min, mergedCurrencyOptions);
+      const maxValueFormat = currencyFormatter.format(max, mergedCurrencyOptions);
+      return `${minValueFormat} - ${maxValueFormat} (${symbol})`;
+    } else if (min) {
+      const minValueFormat = currencyFormatter.format(min, mergedCurrencyOptions);
+      return `Min: ${minValueFormat}`;
+    } else {
+      const maxValueFormat = currencyFormatter.format(max, mergedCurrencyOptions);
+      return `Max: ${maxValueFormat}`;
+    }
+  };
+
+  renderError = () => {
+    const { min, max, value, currencyOptions } = this.props;
+    let msgError = '';
+    if (value) {
+      const rangeMinMax = this.getPlaceHolder();
+      if ((min && value < min) || (max && value > max)) {
+        msgError = `Vui lòng nhập số tiền trong khoảng ${rangeMinMax}`;
+      }
+    }
+
+    if (msgError && msgError.length > 0) {
+      return (
+        <View>
+          <View style={styles.errorWrapper}>
+            <Text style={styles.errorText}>{msgError}</Text>
+          </View>
+        </View>
+      );
+    }
+    return null;
+  };
+
   render() {
     const {
       schema,
@@ -137,14 +164,12 @@ class MoneyField extends PureComponent<Props, State> {
       keyboardAppearance,
     } = this.props;
     const showError = rawErrors && rawErrors.length > 0;
-    let keyboardTypeUse = keyboardType ? keyboardType : 'default';
-    let placeholderUse = placeholder;
-    if (schema && schema.hasOwnProperty('keyboardType')) {
-      keyboardTypeUse = schema['keyboardType'];
-    }
+    let keyboardTypeUse = keyboardType ? keyboardType : 'number-pad';
+    let placeholderUse = this.getPlaceHolder();
     if (schema && schema.hasOwnProperty('placeholder')) {
       placeholderUse = schema['placeholder'];
     }
+
     let maxLength = null;
     if (schema && schema.hasOwnProperty('maxLength')) {
       maxLength = parseInt(schema.maxLength);
@@ -166,7 +191,6 @@ class MoneyField extends PureComponent<Props, State> {
               inputStyle,
               showError ? styles.textInputInvalid : null,
             ]}
-            onBlur={this.onBlur}
             autoCapitalize={autoCapitalize ? autoCapitalize : 'none'}
             underlineColorAndroid="transparent"
             multiline={multiline}
@@ -181,18 +205,7 @@ class MoneyField extends PureComponent<Props, State> {
           />
           {this.renderCurrencySymbol()}
         </View>
-        <View>
-          {showError && (
-            <View style={styles.errorWrapper}>
-              {rawErrors.map((error, i) => (
-                <Text key={i} style={styles.errorText}>
-                  {' '}
-                  {error}
-                </Text>
-              ))}
-            </View>
-          )}
-        </View>
+        {this.renderError()}
       </Fragment>
     );
   }
@@ -207,6 +220,8 @@ MoneyField.defaultProps = {
   currencyOptions: DEFAULT_CURRENCY_OPTIONS,
   currencySymbolStyle: {},
   currencySymbolVisible: true,
+  min: null,
+  max: null,
 };
 
 const styles = StyleSheet.create({
