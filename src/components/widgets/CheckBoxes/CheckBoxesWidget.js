@@ -1,10 +1,9 @@
-import React from "react";
+import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 import CheckboxWidget from '../CheckBox/CheckBoxWidget';
 import csstyles from '../../styles';
-
 
 function schemaRequiresTrueValue(schema) {
   // Check if const is a truthy value
@@ -32,7 +31,6 @@ function schemaRequiresTrueValue(schema) {
   if (schema.allOf) {
     return schema.allOf.some(schemaRequiresTrueValue);
   }
-
 }
 
 function selectValue(newSelectedItem, currentSelectedItems, all) {
@@ -70,33 +68,35 @@ function CheckboxesWidget(props) {
       {enumOptions.map((option, index) => {
         const itemIndexSchema = errorSchema && errorSchema[index];
         const itemGeneralErrors = itemIndexSchema && itemIndexSchema.__errors;
-        const itemValueErrors = itemIndexSchema && itemIndexSchema.value && itemIndexSchema.value.__errors;
+        const itemValueErrors =
+          itemIndexSchema && itemIndexSchema.value && itemIndexSchema.value.__errors;
         let checkboxRawErrors = [];
         if (itemGeneralErrors && itemGeneralErrors.length) {
           checkboxRawErrors = itemGeneralErrors;
         }
-        if (itemValueErrors && itemValueErrors.length)  {
+        if (itemValueErrors && itemValueErrors.length) {
           checkboxRawErrors = itemValueErrors;
         }
 
+        const checkBoxKey = `checkboxes${(option.value && option.value.id) || index}`;
         return (
-            <CheckboxWidget
-              key={`checkboxes${index}`}
-              required={required}
-              label={option.value.label}
-              value={option.value.value}
-              selected={option.value.selected}
-              rawErrors={checkboxRawErrors}
-              onChange={(item) => {
-                const all = enumOptions.map(o =>o.value);
-                if (item.selected) {
-                  onChange(selectValue({ ...option.value, ...item }, value, all));
-                } else {
-                  onChange(deselectValue(option.value, value));
-                }
-              }}
-            />
-          );
+          <CheckboxWidget
+            key={checkBoxKey}
+            required={required}
+            label={option.value.label}
+            value={option.value.value}
+            selected={option.value.selected}
+            rawErrors={checkboxRawErrors}
+            onChange={item => {
+              const all = enumOptions.map(o => o.value);
+              if (item.selected) {
+                onChange(selectValue({ ...option.value, ...item }, value, all));
+              } else {
+                onChange(deselectValue(option.value, value));
+              }
+            }}
+          />
+        );
       })}
     </View>
   );
@@ -107,7 +107,7 @@ CheckboxesWidget.defaultProps = {
   options: {},
 };
 
-if (process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV !== 'production') {
   CheckboxesWidget.propTypes = {
     schema: PropTypes.object.isRequired,
     id: PropTypes.string.isRequired,
