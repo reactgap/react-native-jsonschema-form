@@ -86,9 +86,10 @@ function CheckboxesWidget(props) {
           checkboxRawErrors = itemValueErrors;
         }
 
+        const checkBoxKey = `checkboxes${(option.value && option.value.id) || index}`;
         return (
           <CheckboxWidget
-            key={`checkboxes${index}`}
+            key={checkBoxKey}
             required={required}
             label={option.value.label}
             value={selectedValue}
