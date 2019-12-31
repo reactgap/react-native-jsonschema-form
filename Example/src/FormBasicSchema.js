@@ -1,7 +1,7 @@
 module.exports = {
   schema: {
     type: 'object',
-    required: ['lastName', 'firstName', 'gender', 'idNumber', 'phoneNumber'],
+    required: ['lastName', 'firstName', 'gender', 'idNumber', 'phoneNumber', 'money', 'fee'],
     properties: {
       radio: {
         type: 'string',
