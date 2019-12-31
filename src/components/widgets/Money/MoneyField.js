@@ -125,7 +125,7 @@ class MoneyField extends PureComponent<Props, State> {
   };
 
   renderError = () => {
-    const { min, max, value, currencyOptions } = this.props;
+    const { min, max, value, currencyOptions, rawErrors } = this.props;
     let msgError = '';
     if (value) {
       const rangeMinMax = this.getPlaceHolder();
@@ -134,11 +134,16 @@ class MoneyField extends PureComponent<Props, State> {
       }
     }
 
-    if (msgError && msgError.length > 0) {
+    if ((msgError && msgError.length > 0) || (rawErrors && rawErrors.length > 0)) {
       return (
         <View>
           <View style={styles.errorWrapper}>
             <Text style={styles.errorText}>{msgError}</Text>
+            {(rawErrors || []).map((error, i) => (
+              <Text key={i} style={styles.errorText}>
+                {error}
+              </Text>
+            ))}
           </View>
         </View>
       );
