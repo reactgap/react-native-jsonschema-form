@@ -27,7 +27,7 @@ export default class CheckBoxField extends React.Component {
   onPressField = () => {
     const { selected, moneyVisible } = this.state;
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring, () => {
-      this.moneyRef && this.moneyRef.focus();
+      // this may not have callback, bug
     });
     this.setState(
       {
@@ -35,6 +35,7 @@ export default class CheckBoxField extends React.Component {
         moneyVisible: !moneyVisible,
       },
       () => {
+        this.inputRef && this.inputRef.focus();
         this.props.onChange({
           selected: this.state.selected,
           value: this.state.money,
@@ -71,8 +72,8 @@ export default class CheckBoxField extends React.Component {
       return (
         <Animated.View>
           <MoneyField
-            ref={_ref => {
-              this.moneyRef = _ref;
+            inputRef={_ref => {
+              this.inputRef = _ref;
             }}
             min={min}
             max={max}
@@ -103,11 +104,11 @@ export default class CheckBoxField extends React.Component {
 
   render() {
     return (
-      <View style={styles.container} onPress={this.onPressField}>
+      <TouchableOpacity activeOpacity={1} style={styles.container} onPress={this.onPressField}>
         {this.renderCheckBox()}
         {this.renderExtend()}
         {this.renderError()}
-      </View>
+      </TouchableOpacity>
     );
   }
 }
