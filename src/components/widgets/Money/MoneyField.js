@@ -200,8 +200,13 @@ class MoneyField extends PureComponent<Props, State> {
             underlineColorAndroid="transparent"
             multiline={multiline}
             keyboardAppearance={keyboardAppearance ? keyboardAppearance : 'light'}
-            ref={ref => {
-              this.inputRef = ref;
+            ref={_ref => {
+              this.inputRef = _ref;
+              const { inputRef } = this.props;
+              if (inputRef) {
+                console.log('onRef', inputRef)
+                inputRef(_ref);
+              }
             }}
             maxLength={maxLength ? maxLength : null}
             blurOnSubmit={blurOnSubmit ? blurOnSubmit : true}
@@ -220,7 +225,7 @@ export default MoneyField;
 
 MoneyField.defaultProps = {
   password: false,
-  keyboardType: 'default',
+  keyboardType: 'number-pad',
   multiline: false,
   currencyOptions: DEFAULT_CURRENCY_OPTIONS,
   currencySymbolStyle: {},
