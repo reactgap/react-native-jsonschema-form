@@ -48,21 +48,23 @@ function selectValue(newSelectedItem, currentSelectedItems, all) {
   }
 
   return newItems.sort((a, b) => {
-    const indexOfA = all.findIndex(item => item.id === a.id);
-    const indexOfB = all.findIndex(item => item.id === b.id);
-    const valueA = a && a.value;
-    const valueB = b && b.value;
-    if ((valueA === undefined || valueA === null) && (valueB === undefined || valueB === null)) {
+    // const indexOfA = all.findIndex(item => item.id === a.id);
+    // const indexOfB = all.findIndex(item => item.id === b.id);
+    const valueA = a && a.value && a.value.length;
+    const valueB = b && b.value && b.value.length;
+
+    if (valueA && valueB) {
       return 0;
     }
-    if (valueA == undefined || valueA === null) {
+    if (valueA) {
       return 1;
     }
-    if (valueB == undefined || valueB === null) {
+    if (valueB) {
       return -1;
     }
 
-    return indexOfA > indexOfB;
+    // return indexOfA > indexOfB;
+    return 0;
   });
 }
 
