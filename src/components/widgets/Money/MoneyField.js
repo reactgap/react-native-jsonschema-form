@@ -204,7 +204,6 @@ class MoneyField extends PureComponent<Props, State> {
               this.inputRef = _ref;
               const { inputRef } = this.props;
               if (inputRef) {
-                console.log('onRef', inputRef)
                 inputRef(_ref);
               }
             }}
