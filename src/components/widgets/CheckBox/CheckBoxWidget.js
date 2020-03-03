@@ -25,6 +25,10 @@ export default class CheckBoxField extends React.Component {
   }
 
   onPressField = () => {
+    if (this.props.disabled) {
+      return;
+    }
+
     const { selected, moneyVisible } = this.state;
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring, () => {
       // this may not have callback, bug
