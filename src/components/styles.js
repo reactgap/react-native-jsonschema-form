@@ -5,7 +5,7 @@ const vars = {
   csBlue: '#0088FF',
   csGrey: '#515151',
   csLightGrey: '#8E8E93',
-  csGreen: '#2A593F',
+  csGreen: '#09a505',
   csDanger: '#DC3545',
   csBrown: '#5F5F5F',
   csLight: '#D8D8D8',
