@@ -85,7 +85,7 @@ function CheckboxesWidget(props) {
         if (indexSelected !== -1) {
           isSelected = true;
           const objectValue = value[indexSelected];
-          selectedValue = objectValue.value;
+          selectedValue = objectValue;
         }
 
         const itemIndexSchema = errorSchema && errorSchema[index];
@@ -109,8 +109,7 @@ function CheckboxesWidget(props) {
             value={selectedValue}
             disabled={disabled}
             selected={isSelected}
-            min={option.value.min}
-            max={option.value.max}
+            itemOption={option.value}
             rawErrors={checkboxRawErrors}
             onChange={item => {
               const all = enumOptions.map(o => o.value);

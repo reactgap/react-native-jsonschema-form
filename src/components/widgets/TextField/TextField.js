@@ -54,7 +54,10 @@ class TextField extends PureComponent<Props, State> {
         touched: true,
       });
     }
-    this.props.onBlur();
+
+    if (this.props.onBlur) {
+      this.props.onBlur();
+    }
   };
 
   focus = () => {
@@ -70,7 +73,7 @@ class TextField extends PureComponent<Props, State> {
   _onChange = value => {
     const { options } = this.props;
 
-    this.props.onChange(value === '' ? options.emptyValue : value);
+    this.props.onChange(value === '' ? options?.emptyValue : value);
   };
 
   render() {

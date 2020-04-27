@@ -37,6 +37,8 @@ type Props = {
   keyboardAppearance: string,
   icon?: string,
   currencyOptions: object,
+  hideError: Boolean,
+  onError: func
 };
 
 type State = {
@@ -125,13 +127,17 @@ class MoneyField extends PureComponent<Props, State> {
   };
 
   renderError = () => {
-    const { min, max, value, currencyOptions, rawErrors } = this.props;
+    const { min, max, value, rawErrors, hideError } = this.props;
     let msgError = '';
     if (value) {
       const rangeMinMax = this.getPlaceHolder();
       if ((min && value < min) || (max && value > max)) {
         msgError = `Vui lòng nhập số tiền trong khoảng ${rangeMinMax}`;
       }
+    }
+
+    if (hideError) {
+      return null;
     }
 
     if ((msgError && msgError.length > 0) || (rawErrors && rawErrors.length > 0)) {
@@ -154,7 +160,6 @@ class MoneyField extends PureComponent<Props, State> {
   render() {
     const {
       schema,
-      placeholder,
       autoCapitalize,
       password,
       wrapperStyle,
@@ -231,6 +236,8 @@ MoneyField.defaultProps = {
   currencySymbolVisible: true,
   min: null,
   max: null,
+  hideError: false,
+  onError: () => {}
 };
 
 const styles = StyleSheet.create({

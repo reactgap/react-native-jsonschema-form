@@ -11,6 +11,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import MoneyField from '../Money/MoneyField';
+import TextField from '../TextField/TextField';
 import csstyles from '../../styles';
 
 export default class CheckBoxField extends React.Component {
@@ -18,9 +19,11 @@ export default class CheckBoxField extends React.Component {
     super(props);
     this.state = {
       selected: !!props.selected,
-      money: props.value,
-      moneyVisible: !!props.selected,
+      cost: props.value?.cost?.value,
+      frequencyFee: props.value?.frequencyFee?.value,
+      expanding: !!props.selected,
       fadeAnim: new Animated.Value(0),
+      expandInputError: null,
     };
   }
 
@@ -29,33 +32,93 @@ export default class CheckBoxField extends React.Component {
       return;
     }
 
-    const { selected, moneyVisible } = this.state;
+    const { selected, expanding } = this.state;
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring, () => {
       // this may not have callback, bug
     });
     this.setState(
       {
         selected: !selected,
-        moneyVisible: !moneyVisible,
+        expanding: !expanding,
       },
       () => {
-        this.inputRef && this.inputRef.focus();
+        this.moneyRef && this.moneyRef.focus();
         this.props.onChange({
           selected: this.state.selected,
-          value: this.state.money,
+          cost: {
+            ...(this.props.itemOption?.cost || {}),
+            value: this.state.cost
+          },
+          frequencyFee: {
+            ...(this.props.itemOption?.frequencyFee || {}),
+            value: this.state.frequencyFee
+          }
         });
       },
     );
   };
 
-  onTextInputChange = numberValue => {
-    this.setState({ money: numberValue }, () => {
+  onMoneyTextChange = numberValue => {
+    this.setState({ cost: numberValue }, () => {
       this.props.onChange({
         selected: this.state.selected,
-        value: this.state.money,
+        cost: {
+          ...(this.props.itemOption?.cost || {}),
+          value: this.state.cost
+        },
+        frequencyFee: {
+          ...(this.props.itemOption?.frequencyFee || {}),
+          value: this.state.frequencyFee
+        }
       });
     });
   };
+
+  onFrequencyTextChange = strFrequencyFee => {
+    const iFrequencyFee = this.convertFrequencyFee(strFrequencyFee);
+
+    this.setState({ frequencyFee: iFrequencyFee }, () => {
+      this.props.onChange({
+        selected: this.state.selected,
+        cost: {
+          ...(this.props.itemOption?.cost || {}),
+          value: this.state.cost
+        },
+        frequencyFee: {
+          ...(this.props.itemOption?.frequencyFee || {}),
+          value: iFrequencyFee
+        }
+      });
+    });
+  };
+
+  getFrequencyFeePlaceHolder = (min, max) => {
+    const {frequencyPlaceholder } = this.props;
+    if (!min && !max) {
+      return frequencyPlaceholder;
+    }
+    if (typeof min === 'number' && typeof max === 'number') {
+      return `${min} - ${max} tháng`;
+    } else if (typeof min === 'number') {
+      return `Min: ${min} tháng`;
+    } else if (typeof max === 'number') {
+      return `Max: ${max} tháng`;
+    }
+    return frequencyPlaceholder;
+  };
+
+  convertFrequencyFee = (strFrequencyFee) => {
+    let iFrequencyFee;
+    try {
+      if (strFrequencyFee && strFrequencyFee.length) {
+        iFrequencyFee = parseInt(strFrequencyFee);
+      }
+    } catch (err) {
+      //
+    }
+    return iFrequencyFee;
+  }
+
 
   renderCheckBox() {
     const { tintColor, iconSize, checkedIcon, uncheckedIcon, label, disabled } = this.props;
@@ -70,24 +133,52 @@ export default class CheckBoxField extends React.Component {
     );
   }
 
+  renderMoneyField() {
+    const { itemOption, moneyPlaceholder, disabled } = this.props;
+    const { min, max, required, placeholder } = itemOption?.cost || {};
+    return (
+      <MoneyField
+        inputRef={_ref => {
+          this.moneyRef = _ref;
+        }}
+        min={min}
+        max={max}
+        disabled={disabled}
+        wrapperStyle={styles.moneyContainer}
+        inputStyle={styles.txtMoney}
+        onChange={this.onMoneyTextChange}
+        currencySymbolVisible={false}
+        placeholder={placeholder || moneyPlaceholder}
+        value={this.state.cost}
+      />
+    )
+  }
+
+  renderFrequencyFee() {
+    const { itemOption, disabled } = this.props;
+    const { min, max, required } = itemOption?.frequencyFee || {}
+    let placeholder = this.getFrequencyFeePlaceHolder(min, max);
+
+    return (
+      <View style={styles.frequencyContainer}>
+        <TextField
+          disabled={disabled}
+          placeholder={placeholder}
+          inputStyle={styles.txtFrequency}
+          value={this.state.frequencyFee || ''}
+          onChange={this.onFrequencyTextChange}
+          keyboardType="number-pad"
+        />
+      </View>
+    )
+  }
+
   renderExtend() {
-    const { placeholder, disabled, min, max } = this.props;
-    if (this.state.moneyVisible) {
+    if (this.state.expanding) {
       return (
-        <Animated.View>
-          <MoneyField
-            inputRef={_ref => {
-              this.inputRef = _ref;
-            }}
-            min={min}
-            max={max}
-            disabled={disabled}
-            wrapperStyle={styles.moneyContainer}
-            onChange={this.onTextInputChange}
-            currencySymbolVisible={false}
-            placeholder={placeholder}
-            value={this.state.money}
-          />
+        <Animated.View style={styles.expandContainer}>
+          {this.renderMoneyField()}
+          {this.renderFrequencyFee()}
         </Animated.View>
       );
     }
@@ -122,7 +213,8 @@ CheckBoxField.defaultProps = {
   iconSize: 24,
   checkedIcon: 'check-square',
   uncheckedIcon: 'square',
-  placeholder: 'Nhập số tiền',
+  moneyPlaceholder: 'Nhập mệnh giá',
+  frequencyPlaceholder: 'Nhập kì hạn',
   label: '',
 };
 
@@ -141,8 +233,22 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     textAlign: 'left',
   },
+  expandContainer: {
+    flex: 1,
+    marginHorizontal: 34,
+    justifyContent: 'space-between'
+  },
   moneyContainer: {
-    marginLeft: 44,
+  },
+  frequencyContainer: {
+  },
+  txtMoney: {
+    fontSize: 13,
+    lineHeight: 16,
+  },
+  txtFrequency: {
+    fontSize: 13,
+    lineHeight: 16,
   },
   errorText: {
     ...csstyles.text.medium,
