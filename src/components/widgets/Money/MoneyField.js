@@ -38,7 +38,7 @@ type Props = {
   icon?: string,
   currencyOptions: object,
   hideError: Boolean,
-  onError: func
+  onError: func,
 };
 
 type State = {
@@ -76,7 +76,7 @@ class MoneyField extends PureComponent<Props, State> {
     this.props.onBlur();
   };
 
-  _onChange = value => {
+  _onChange = (value) => {
     const { currencyOptions } = this.props;
     if (value !== '') {
       const mergedCurrencyOptions = { ...DEFAULT_CURRENCY_OPTIONS, ...currencyOptions };
@@ -205,7 +205,7 @@ class MoneyField extends PureComponent<Props, State> {
             underlineColorAndroid="transparent"
             multiline={multiline}
             keyboardAppearance={keyboardAppearance ? keyboardAppearance : 'light'}
-            ref={_ref => {
+            ref={(_ref) => {
               this.inputRef = _ref;
               const { inputRef } = this.props;
               if (inputRef) {
@@ -237,7 +237,7 @@ MoneyField.defaultProps = {
   min: null,
   max: null,
   hideError: false,
-  onError: () => {}
+  onError: () => {},
 };
 
 const styles = StyleSheet.create({

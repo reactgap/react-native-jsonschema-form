@@ -23,7 +23,6 @@ export default class CheckBoxField extends React.Component {
       frequencyFee: props.value?.frequencyFee?.value,
       expanding: !!props.selected,
       fadeAnim: new Animated.Value(0),
-      expandInputError: null,
     };
   }
 
@@ -47,34 +46,34 @@ export default class CheckBoxField extends React.Component {
           selected: this.state.selected,
           cost: {
             ...(this.props.itemOption?.cost || {}),
-            value: this.state.cost
+            value: this.state.cost,
           },
           frequencyFee: {
             ...(this.props.itemOption?.frequencyFee || {}),
-            value: this.state.frequencyFee
-          }
+            value: this.state.frequencyFee,
+          },
         });
       },
     );
   };
 
-  onMoneyTextChange = numberValue => {
+  onMoneyTextChange = (numberValue) => {
     this.setState({ cost: numberValue }, () => {
       this.props.onChange({
         selected: this.state.selected,
         cost: {
           ...(this.props.itemOption?.cost || {}),
-          value: this.state.cost
+          value: this.state.cost,
         },
         frequencyFee: {
           ...(this.props.itemOption?.frequencyFee || {}),
-          value: this.state.frequencyFee
-        }
+          value: this.state.frequencyFee,
+        },
       });
     });
   };
 
-  onFrequencyTextChange = strFrequencyFee => {
+  onFrequencyTextChange = (strFrequencyFee) => {
     const iFrequencyFee = this.convertFrequencyFee(strFrequencyFee);
 
     this.setState({ frequencyFee: iFrequencyFee }, () => {
@@ -82,18 +81,18 @@ export default class CheckBoxField extends React.Component {
         selected: this.state.selected,
         cost: {
           ...(this.props.itemOption?.cost || {}),
-          value: this.state.cost
+          value: this.state.cost,
         },
         frequencyFee: {
           ...(this.props.itemOption?.frequencyFee || {}),
-          value: iFrequencyFee
-        }
+          value: iFrequencyFee,
+        },
       });
     });
   };
 
   getFrequencyFeePlaceHolder = (min, max) => {
-    const {frequencyPlaceholder } = this.props;
+    const { frequencyPlaceholder } = this.props;
     if (!min && !max) {
       return frequencyPlaceholder;
     }
@@ -117,8 +116,18 @@ export default class CheckBoxField extends React.Component {
       //
     }
     return iFrequencyFee;
-  }
+  };
 
+  checkFrequencyFeeError = (frequencyFee) => {
+    const { min, max, required } = this.props.itemOption?.frequencyFee || {};
+    const rangeMinMax = this.getFrequencyFeePlaceHolder(min, max);
+    if ((min && frequencyFee < min) || (max && frequencyFee > max)) {
+      let msgError = `Vui lòng nhập kỳ hạn trong khoảng\n${rangeMinMax}`;
+      return msgError;
+    }
+
+    return null;
+  };
 
   renderCheckBox() {
     const { tintColor, iconSize, checkedIcon, uncheckedIcon, label, disabled } = this.props;
@@ -138,7 +147,7 @@ export default class CheckBoxField extends React.Component {
     const { min, max, required, placeholder } = itemOption?.cost || {};
     return (
       <MoneyField
-        inputRef={_ref => {
+        inputRef={(_ref) => {
           this.moneyRef = _ref;
         }}
         min={min}
@@ -151,12 +160,23 @@ export default class CheckBoxField extends React.Component {
         placeholder={placeholder || moneyPlaceholder}
         value={this.state.cost}
       />
-    )
+    );
+  }
+
+  renderFrequencyFeeError() {
+    const frequencyFeeError = this.checkFrequencyFeeError(this.state.frequencyFee);
+    if (frequencyFeeError) {
+      return (
+        <View style={styles.errorWrapper}>
+          <Text style={styles.errorText}>{frequencyFeeError}</Text>
+        </View>
+      );
+    }
   }
 
   renderFrequencyFee() {
     const { itemOption, disabled } = this.props;
-    const { min, max, required } = itemOption?.frequencyFee || {}
+    const { min, max, required } = itemOption?.frequencyFee || {};
     let placeholder = this.getFrequencyFeePlaceHolder(min, max);
 
     return (
@@ -169,8 +189,9 @@ export default class CheckBoxField extends React.Component {
           onChange={this.onFrequencyTextChange}
           keyboardType="number-pad"
         />
+        {this.renderFrequencyFeeError()}
       </View>
-    )
+    );
   }
 
   renderExtend() {
@@ -236,12 +257,10 @@ const styles = StyleSheet.create({
   expandContainer: {
     flex: 1,
     marginHorizontal: 34,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
-  moneyContainer: {
-  },
-  frequencyContainer: {
-  },
+  moneyContainer: {},
+  frequencyContainer: {},
   txtMoney: {
     fontSize: 13,
     lineHeight: 16,

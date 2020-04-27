@@ -34,12 +34,12 @@ function schemaRequiresTrueValue(schema) {
 }
 
 function selectValue(newSelectedItem, currentSelectedItems, all) {
-  const at = (currentSelectedItems || []).findIndex(item => item.id === newSelectedItem.id);
+  const at = (currentSelectedItems || []).findIndex((item) => item.id === newSelectedItem.id);
   let newItems = [...currentSelectedItems];
   if (at === -1) {
     newItems.push(newSelectedItem);
   } else {
-    newItems = newItems.map(e => {
+    newItems = newItems.map((e) => {
       if (e.id === newSelectedItem.id) {
         return newSelectedItem;
       }
@@ -69,7 +69,7 @@ function selectValue(newSelectedItem, currentSelectedItems, all) {
 }
 
 function deselectValue(deslectedItem, currentSelectedItems) {
-  return currentSelectedItems.filter(v => v.id !== deslectedItem.id);
+  return currentSelectedItems.filter((v) => v.id !== deslectedItem.id);
 }
 
 function CheckboxesWidget(props) {
@@ -79,7 +79,7 @@ function CheckboxesWidget(props) {
   return (
     <View>
       {enumOptions.map((option, index) => {
-        const indexSelected = value ? value.findIndex(x => x.id === option.value.id) : -1;
+        const indexSelected = value ? value.findIndex((x) => x.id === option.value.id) : -1;
         let isSelected = false;
         let selectedValue = undefined;
         if (indexSelected !== -1) {
@@ -111,8 +111,8 @@ function CheckboxesWidget(props) {
             selected={isSelected}
             itemOption={option.value}
             rawErrors={checkboxRawErrors}
-            onChange={item => {
-              const all = enumOptions.map(o => o.value);
+            onChange={(item) => {
+              const all = enumOptions.map((o) => o.value);
               if (item.selected) {
                 onChange(selectValue({ ...option.value, ...item }, value, all));
               } else {
