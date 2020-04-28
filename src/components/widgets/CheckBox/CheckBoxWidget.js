@@ -91,17 +91,18 @@ export default class CheckBoxField extends React.Component {
     });
   };
 
-  getFrequencyFeePlaceHolder = (min, max) => {
+  getFrequencyFeePlaceHolder = (min, max, inputRate) => {
     const { frequencyPlaceholder } = this.props;
     if (!min && !max) {
       return frequencyPlaceholder;
     }
+
     if (typeof min === 'number' && typeof max === 'number') {
-      return `${min} - ${max} tháng`;
+      return `${min} - ${max} ${inputRate}`;
     } else if (typeof min === 'number') {
-      return `Min: ${min} tháng`;
+      return `Min: ${min} ${inputRate}`;
     } else if (typeof max === 'number') {
-      return `Max: ${max} tháng`;
+      return `Max: ${max} ${inputRate}`;
     }
     return frequencyPlaceholder;
   };
@@ -119,8 +120,8 @@ export default class CheckBoxField extends React.Component {
   };
 
   checkFrequencyFeeError = (frequencyFee) => {
-    const { min, max, required } = this.props.itemOption?.frequencyFee || {};
-    const rangeMinMax = this.getFrequencyFeePlaceHolder(min, max);
+    const { min, max, required, inputRateLabel } = this.props.itemOption?.frequencyFee || {};
+    const rangeMinMax = this.getFrequencyFeePlaceHolder(min, max, inputRateLabel);
     if ((min && frequencyFee < min) || (max && frequencyFee > max)) {
       let msgError = `Vui lòng nhập kỳ hạn trong khoảng\n${rangeMinMax}`;
       return msgError;
@@ -176,8 +177,8 @@ export default class CheckBoxField extends React.Component {
 
   renderFrequencyFee() {
     const { itemOption, disabled } = this.props;
-    const { min, max, required } = itemOption?.frequencyFee || {};
-    let placeholder = this.getFrequencyFeePlaceHolder(min, max);
+    const { min, max, required, inputRateLabel } = itemOption?.frequencyFee || {};
+    let placeholder = this.getFrequencyFeePlaceHolder(min, max, inputRateLabel);
 
     return (
       <View style={styles.frequencyContainer}>
