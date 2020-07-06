@@ -28,9 +28,9 @@ function processValue(schema, value) {
   // If type is undefined, but an enum is present, try and infer the type from
   // the enum values
   if (schema.enum) {
-    if (schema.enum.every(x => guessType(x) === 'number')) {
+    if (schema.enum.every((x) => guessType(x) === 'number')) {
       return asNumber(value);
-    } else if (schema.enum.every(x => guessType(x) === 'boolean')) {
+    } else if (schema.enum.every((x) => guessType(x) === 'boolean')) {
       return value === 'true';
     }
   }
@@ -40,7 +40,7 @@ function processValue(schema, value) {
 
 function getValue(result, multiple) {
   if (multiple) {
-    return [].slice.call(result).filter(o => o.selected);
+    return [].slice.call(result).filter((o) => o.selected);
   } else {
     return result;
   }
@@ -58,7 +58,7 @@ function SelectWidget(props) {
           schema={schema}
           disabled={disabled}
           options={options}
-          onChange={result => {
+          onChange={(result) => {
             const newValue = getValue(result, multiple);
             onChange(processValue(schema, newValue));
           }}
