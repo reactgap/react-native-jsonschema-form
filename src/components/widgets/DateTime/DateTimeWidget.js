@@ -92,6 +92,10 @@ class DateTimeWidget extends PureComponent<Props, State> {
     });
   };
 
+  onPressClear = () => {
+    this.props.onChange(undefined);
+  };
+
   render() {
     const { value, label, pickerCenter, schema, rawErrors, disabled, icon, mode } = this.props;
     const { showingPicker } = this.state;
@@ -128,6 +132,12 @@ class DateTimeWidget extends PureComponent<Props, State> {
                 )}
                 <View style={[styles.inputContainer]}>
                   <Text style={styles.inputText}>{value}</Text>
+                  {date && (
+                    <TouchableOpacity style={styles.clearIcon} onPress={this.onPressClear}>
+                      <FontAwesome5 size={20} name="times-circle" color={csstyles.vars.csGrey} />
+                    </TouchableOpacity>
+                  )}
+
                   <View style={styles.pickerIcon}>
                     <FontAwesome5 size={15} name="chevron-down" color={csstyles.vars.csGrey} />
                   </View>
@@ -186,6 +196,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     right: 0,
+  },
+  clearIcon: {
+    width: csstyles.vars.csInputHeight,
+    height: csstyles.vars.csInputHeight - 2,
+    ...csstyles.base.center,
+    position: 'absolute',
+    top: 0,
+    right: 44,
   },
   label: {
     paddingLeft: csstyles.vars.csInputHorizontalPadding,

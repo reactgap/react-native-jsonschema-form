@@ -54,6 +54,14 @@ module.exports = {
         autoCapitalize: 'words',
         icon: 'user',
       },
+      province: {
+        type: 'string',
+        title: 'Địa chỉ',
+        icon: 'warehouse',
+        mode: 'city',
+        referKey: 'district',
+        districtRequired: false,
+      },
       email: {
         type: 'string',
         title: 'Email',
@@ -285,6 +293,9 @@ module.exports = {
     },
     dob: {
       'ui:widget': 'datetime',
+    },
+    province: {
+      'ui:widget': 'textFieldPicker',
     },
   },
 };
