@@ -24,6 +24,29 @@ function DefaultObjectFieldTemplate(props) {
     return true;
   };
 
+  const groupProperties = function groupProperties() {
+    let groups = {};
+    const arrProperties = props.properties;
+    for (let i = 0; i < arrProperties.length; i++) {
+      let groupName = arrProperties[i].groupName;
+      if (!groupName) {
+        groups[`group${i}`] = [arrProperties[i].content];
+        continue;
+      }
+      if (!groups[groupName]) {
+        groups[groupName] = [];
+      }
+      groups[groupName].push(arrProperties[i].content);
+    }
+    let groupProperties = [];
+    for (let groupName in groups) {
+      groupProperties.push({ group: groupName, contents: groups[groupName] });
+    }
+    return groupProperties;
+  };
+
+  const arrGroupProperties = groupProperties();
+
   const { TitleField, DescriptionField } = props;
   return (
     <View>
@@ -42,7 +65,13 @@ function DefaultObjectFieldTemplate(props) {
           formContext={props.formContext}
         />
       )}
-      {props.properties.map((prop) => prop.content)}
+      {arrGroupProperties.map((prop) => {
+        const contents = prop.contents;
+        if (contents.length > 0) {
+          return <Row style={{ flex: 1 }}>{contents.map((content) => content)}</Row>;
+        }
+        return contents[0];
+      })}
       {canExpand() && (
         <AddButton
           className="object-property-expand"
@@ -205,7 +234,7 @@ class ObjectField extends Component {
       properties: orderedProperties.map((name) => {
         const schemaField = schema.properties[name];
         const referName = schemaField.referKey ? schemaField.referKey : null;
-        const Wrapper = schemaField.layout === 'row' ? Row : View;
+        const groupName = schemaField.groupName;
         return {
           content: (
             <Wrapper>
@@ -235,6 +264,7 @@ class ObjectField extends Component {
           readonly,
           disabled,
           required,
+          groupName,
         };
       }),
       required,
