@@ -44,6 +44,7 @@ module.exports = {
         maxLength: 50,
         autoCapitalize: 'words',
         icon: 'user',
+        groupName: 'row1',
         // textFieldType: 'Outlined',
       },
       firstName: {
@@ -59,6 +60,7 @@ module.exports = {
         containerStyle: {
           marginBottom: 8,
         },
+        groupName: 'row1',
       },
       province: {
         type: 'string',
