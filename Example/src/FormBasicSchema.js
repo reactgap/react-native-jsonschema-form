@@ -44,6 +44,7 @@ module.exports = {
         maxLength: 50,
         autoCapitalize: 'words',
         icon: 'user',
+        // textFieldType: 'Outlined',
       },
       firstName: {
         type: 'string',
@@ -51,8 +52,13 @@ module.exports = {
         placeholder: 'A',
         keyboardAppearance: 'light',
         maxLength: 50,
+        characterRestriction: 50,
         autoCapitalize: 'words',
         icon: 'user',
+        // textFieldType: 'Outlined',
+        containerStyle: {
+          marginBottom: 8,
+        },
       },
       province: {
         type: 'string',
@@ -243,11 +249,11 @@ module.exports = {
       'ui:widget': 'avatar',
     },
     lastName: {
-      'ui:widget': 'TextField',
+      'ui:widget': 'TextFieldMaterial',
       'ui:autofocus': true,
     },
     firstName: {
-      'ui:widget': 'TextField',
+      'ui:widget': 'TextFieldMaterial',
     },
     password: {
       'ui:widget': 'TextField',
