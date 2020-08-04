@@ -20,7 +20,13 @@
   "license": "MIT",
   "peerDependencies": {
     "react": ">=15",
-    "react-native": ">=0.49"
+    "react-native": ">=0.49",
+    "react-native-material-textfield": ">=0.16.0",
+    "react-native-fast-image": ">=7.0.2",
+    "react-native-image-crop-picker": ">=0.25.3",
+    "react-native-vector-icons": "6.6.0",
+    "moment": ">=2.24.0",
+    "react-native-easy-grid": ">=0.2.2"
   },
   "dependencies": {
     "ajv": "6.10.2",
@@ -30,17 +36,14 @@
     "lodash.range": "^3.2.0",
     "lodash.topath": "^4.5.2",
     "prop-types": "^15.5.8",
-    "react-native-fast-image": "^7.0.2",
-    "react-native-image-crop-picker": "^0.25.3",
     "react-native-keyboard-aware-scroll-view": "0.9.1",
-    "react-native-vector-icons": "^6.6.0",
-    "url": "^0.11.0",
-    "moment": "2.24.0"
+    "url": "^0.11.0"
   },
   "devDependencies": {
     "@react-native-community/eslint-config": "^0.0.5",
     "babel-eslint": "^10.0.1",
     "babel-preset-flow": "^6.23.0",
-    "eslint": "^6.3.0"
+    "eslint": "^6.3.0",
+    "react-native-material-textfield": "^0.16.1"
   }
 }

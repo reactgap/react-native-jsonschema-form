@@ -13,9 +13,15 @@
     "ios": "react-native run-ios"
   },
   "dependencies": {
+    "moment": "^2.27.0",
     "react": "16.8.6",
     "react-native": "0.61.5",
-    "react-native-jsonschema-form": "../"
+    "react-native-easy-grid": "^0.2.2",
+    "react-native-fast-image": "7.0.2",
+    "react-native-image-crop-picker": "^0.32.2",
+    "react-native-jsonschema-form": "../",
+    "react-native-material-textfield": "^0.16.1",
+    "react-native-vector-icons": "6.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",

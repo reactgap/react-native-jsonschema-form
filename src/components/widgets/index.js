@@ -13,6 +13,7 @@ import CheckBoxWidget from './CheckBox/CheckBoxWidget';
 import CheckBoxesWidget from './CheckBoxes/CheckBoxesWidget';
 import SelectWidget from './SelectWidget/SelectWidget';
 import DateTimeWidget from './DateTime/DateTimeWidget';
+import TextFieldMaterial from './TextFieldMaterial';
 
 export default {
   BaseInput,
@@ -30,4 +31,5 @@ export default {
   CheckBoxWidget,
   CheckBoxesWidget,
   SelectWidget,
+  TextFieldMaterial,
 };

@@ -2,6 +2,7 @@ import AddButton from '../AddButton';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View, Text } from 'react-native';
+import { Col, Row, Grid } from 'react-native-easy-grid';
 
 import { orderProperties, retrieveSchema, getDefaultRegistry, getUiOptions } from '../../utils';
 
@@ -41,7 +42,7 @@ function DefaultObjectFieldTemplate(props) {
           formContext={props.formContext}
         />
       )}
-      {props.properties.map(prop => prop.content)}
+      {props.properties.map((prop) => prop.content)}
       {canExpand() && (
         <AddButton
           className="object-property-expand"
@@ -73,7 +74,7 @@ class ObjectField extends Component {
     return Array.isArray(schema.required) && schema.required.indexOf(name) !== -1;
   }
 
-  onPropertyChange = name => {
+  onPropertyChange = (name) => {
     return (value, errorSchema) => {
       const newFormData = { ...this.props.formData, [name]: value };
       this.props.onChange(
@@ -96,7 +97,7 @@ class ObjectField extends Component {
     return newKey;
   };
 
-  onKeyChange = oldValue => {
+  onKeyChange = (oldValue) => {
     return (value, errorSchema) => {
       if (oldValue === value) {
         return;
@@ -104,7 +105,7 @@ class ObjectField extends Component {
       value = this.getAvailableKey(value, this.props.formData);
       const newFormData = { ...this.props.formData };
       const newKeys = { [oldValue]: value };
-      const keyValues = Object.keys(newFormData).map(key => {
+      const keyValues = Object.keys(newFormData).map((key) => {
         const newKey = newKeys[key] || key;
         return { [newKey]: newFormData[key] };
       });
@@ -153,7 +154,7 @@ class ObjectField extends Component {
     }
   }
 
-  handleAddClick = schema => () => {
+  handleAddClick = (schema) => () => {
     const type = schema.additionalProperties.type;
     const newFormData = { ...this.props.formData };
     newFormData[this.getAvailableKey('newKey', newFormData)] = this.getDefaultValue(type);
@@ -201,31 +202,34 @@ class ObjectField extends Component {
       description,
       TitleField,
       DescriptionField,
-      properties: orderedProperties.map(name => {
+      properties: orderedProperties.map((name) => {
         const schemaField = schema.properties[name];
         const referName = schemaField.referKey ? schemaField.referKey : null;
+        const Wrapper = schemaField.layout === 'row' ? Row : View;
         return {
           content: (
-            <SchemaField
-              key={name}
-              name={name}
-              required={this.isRequired(name)}
-              schema={schema.properties[name]}
-              uiSchema={uiSchema[name]}
-              errorSchema={errorSchema[name]}
-              idSchema={idSchema[name]}
-              idPrefix={idPrefix}
-              formData={formData[name]}
-              referValue={referName ? formData[referName] : ''}
-              onKeyChange={this.onKeyChange(name)}
-              onChangeReferKey={(name, value) => this.onReferPropertyChange(name, value)}
-              onChange={this.onPropertyChange(name)}
-              onBlur={onBlur}
-              onFocus={onFocus}
-              registry={registry}
-              disabled={disabled}
-              readonly={readonly}
-            />
+            <Wrapper>
+              <SchemaField
+                key={name}
+                name={name}
+                required={this.isRequired(name)}
+                schema={schema.properties[name]}
+                uiSchema={uiSchema[name]}
+                errorSchema={errorSchema[name]}
+                idSchema={idSchema[name]}
+                idPrefix={idPrefix}
+                formData={formData[name]}
+                referValue={referName ? formData[referName] : ''}
+                onKeyChange={this.onKeyChange(name)}
+                onChangeReferKey={(name, value) => this.onReferPropertyChange(name, value)}
+                onChange={this.onPropertyChange(name)}
+                onBlur={onBlur}
+                onFocus={onFocus}
+                registry={registry}
+                disabled={disabled}
+                readonly={readonly}
+              />
+            </Wrapper>
           ),
           name,
           readonly,

@@ -229,6 +229,10 @@ function SchemaFieldRender(props) {
     displayLabel = false;
   }
 
+  if (uiSchema['ui:widget'] === 'TextFieldMaterial') {
+    displayLabel = false;
+  }
+
   let currentIndex = 0;
   if (uiSchema['ui:widget'] === 'PickerOption') {
     if (schema && schema.hasOwnProperty('currentIndex')) {

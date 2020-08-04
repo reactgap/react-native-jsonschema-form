@@ -93,6 +93,7 @@ class TextFieldPicker extends PureComponent<Props, State> {
       hiddenDistrict,
       districtRequired,
     } = this.props;
+    console.log('districtRequired', districtRequired);
     const { showingPicker } = this.state;
     const showError = rawErrors && rawErrors.length > 0;
     const showErrorDistrict = referValue == null || (referValue && referValue.length == 0);
