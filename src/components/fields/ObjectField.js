@@ -237,28 +237,26 @@ class ObjectField extends Component {
         const groupName = schemaField.groupName;
         return {
           content: (
-            <Wrapper>
-              <SchemaField
-                key={name}
-                name={name}
-                required={this.isRequired(name)}
-                schema={schema.properties[name]}
-                uiSchema={uiSchema[name]}
-                errorSchema={errorSchema[name]}
-                idSchema={idSchema[name]}
-                idPrefix={idPrefix}
-                formData={formData[name]}
-                referValue={referName ? formData[referName] : ''}
-                onKeyChange={this.onKeyChange(name)}
-                onChangeReferKey={(name, value) => this.onReferPropertyChange(name, value)}
-                onChange={this.onPropertyChange(name)}
-                onBlur={onBlur}
-                onFocus={onFocus}
-                registry={registry}
-                disabled={disabled}
-                readonly={readonly}
-              />
-            </Wrapper>
+            <SchemaField
+              key={name}
+              name={name}
+              required={this.isRequired(name)}
+              schema={schema.properties[name]}
+              uiSchema={uiSchema[name]}
+              errorSchema={errorSchema[name]}
+              idSchema={idSchema[name]}
+              idPrefix={idPrefix}
+              formData={formData[name]}
+              referValue={referName ? formData[referName] : ''}
+              onKeyChange={this.onKeyChange(name)}
+              onChangeReferKey={(name, value) => this.onReferPropertyChange(name, value)}
+              onChange={this.onPropertyChange(name)}
+              onBlur={onBlur}
+              onFocus={onFocus}
+              registry={registry}
+              disabled={disabled}
+              readonly={readonly}
+            />
           ),
           name,
           readonly,
