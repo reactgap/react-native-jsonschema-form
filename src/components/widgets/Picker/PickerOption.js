@@ -114,6 +114,7 @@ class PickerOption extends Component<Props, State> {
       fontSize,
       icon,
       iconStyle,
+      placeHolder,
     } = this.props;
     switch (uiMode) {
       case 'material':
@@ -198,7 +199,6 @@ class PickerOption extends Component<Props, State> {
       currentIndex,
       themeMode,
       disabled,
-      placeHolder,
       uiMode,
     } = this.props;
     const { showingPicker } = this.state;
