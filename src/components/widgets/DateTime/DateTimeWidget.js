@@ -8,8 +8,11 @@ import {
   StyleSheet,
   Platform,
   DatePickerAndroid,
+  Keyboard,
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { TextField, FilledTextField, OutlinedTextField } from 'react-native-material-textfield';
+
 import { convertDateToString, parserStringToDate } from './DatetimeFormat';
 import csstyles from '../../styles';
 import DatePicker from './DatePicker';
@@ -33,9 +36,11 @@ type State = {
 class DateTimeWidget extends PureComponent<Props, State> {
   state: State = {
     showingPicker: false,
+    value: null,
   };
   data = null;
   selectedIndex = null;
+  inputRef: TextInput | null = null;
 
   onPress = async () => {
     if (Platform.OS === 'ios') {
@@ -83,6 +88,9 @@ class DateTimeWidget extends PureComponent<Props, State> {
     if (value) {
       const dateValue = convertDateToString(value, null);
       onChange(dateValue);
+      if (this.inputRef) {
+        this.inputRef.setValue(dateValue);
+      }
     }
   };
 
@@ -92,16 +100,116 @@ class DateTimeWidget extends PureComponent<Props, State> {
     });
   };
 
+  onFocus = () => {
+    // Keyboard.dismiss();
+    this.setState(
+      {
+        showingPicker: true,
+      },
+      () => {},
+    );
+  };
+
   onPressClear = () => {
     this.props.onChange(undefined);
+    if (this.inputRef) {
+      this.inputRef.setValue('');
+    }
+  };
+
+  renderFormUIMode = (date) => {
+    const {
+      value,
+      label,
+      schema,
+      disabled,
+      icon,
+      uiMode,
+      editable,
+      wrapperStyle,
+      inputContainerStyle,
+      containerStyle,
+      placeholder,
+      maxLength,
+      rawErrors,
+    } = this.props;
+
+    switch (uiMode) {
+      case 'material':
+        const showError = rawErrors && rawErrors.length > 0;
+        const errorMsg = showError ? rawErrors[0] : null;
+        return (
+          <>
+            <TextField
+              label={label || ''}
+              keyboardType="default"
+              blurOnSubmit={false}
+              // title={value}
+              onBlur={this.onBlur}
+              onFocus={this.onFocus}
+              value={value}
+              maxLength={maxLength}
+              style={wrapperStyle}
+              editable={false}
+              error={errorMsg}
+              ref={(ref) => {
+                this.inputRef = ref;
+              }}
+              inputContainerStyle={[inputContainerStyle]}
+              containerStyle={[containerStyle]}
+            />
+            {date && (
+              <TouchableOpacity style={styles.clearIconMaterial} onPress={this.onPressClear}>
+                <FontAwesome5 size={18} name="times-circle" color={csstyles.vars.csLightGrey} />
+              </TouchableOpacity>
+            )}
+          </>
+        );
+        break;
+
+      default:
+        return (
+          <View style={styles.wrapperInput}>
+            {icon && (
+              <View style={styles.inputIcon}>
+                <FontAwesome5 size={15} name={icon} color={'#646A64'} solid={true} />
+              </View>
+            )}
+            <View style={[styles.inputContainer]}>
+              <Text style={styles.inputText}>{value}</Text>
+              {date && (
+                <TouchableOpacity style={styles.clearIcon} onPress={this.onPressClear}>
+                  <FontAwesome5 size={16} name="times-circle" color={csstyles.vars.csLightGrey} />
+                </TouchableOpacity>
+              )}
+
+              <View style={styles.pickerIcon}>
+                <FontAwesome5 size={15} name="chevron-down" color={csstyles.vars.csGrey} />
+              </View>
+            </View>
+          </View>
+        );
+        break;
+    }
   };
 
   render() {
-    const { value, label, pickerCenter, schema, rawErrors, disabled, icon, mode } = this.props;
+    const {
+      value,
+      label,
+      pickerCenter,
+      schema,
+      rawErrors,
+      disabled,
+      icon,
+      uiMode,
+      endDate,
+    } = this.props;
     const { showingPicker } = this.state;
-    const showError = rawErrors && rawErrors.length > 0;
+    const showError = rawErrors && rawErrors.length > 0 && uiMode !== 'material';
 
     const date = value ? parserStringToDate(value) : null;
+    const endDatePicker = endDate ? parserStringToDate(endDate) : null;
     return (
       <>
         <DatePicker
@@ -111,6 +219,7 @@ class DateTimeWidget extends PureComponent<Props, State> {
           label={label}
           picking={'date'}
           center={pickerCenter}
+          endDate={endDatePicker}
         />
         <View
           style={{
@@ -124,25 +233,7 @@ class DateTimeWidget extends PureComponent<Props, State> {
                 flex: 1,
               }}
               disabled={disabled ? disabled : false}>
-              <View style={styles.wrapperInput}>
-                {icon && (
-                  <View style={styles.inputIcon}>
-                    <FontAwesome5 size={15} name={icon} color={'#646A64'} solid={true} />
-                  </View>
-                )}
-                <View style={[styles.inputContainer]}>
-                  <Text style={styles.inputText}>{value}</Text>
-                  {date && (
-                    <TouchableOpacity style={styles.clearIcon} onPress={this.onPressClear}>
-                      <FontAwesome5 size={20} name="times-circle" color={csstyles.vars.csGrey} />
-                    </TouchableOpacity>
-                  )}
-
-                  <View style={styles.pickerIcon}>
-                    <FontAwesome5 size={15} name="chevron-down" color={csstyles.vars.csGrey} />
-                  </View>
-                </View>
-              </View>
+              {this.renderFormUIMode(date)}
             </TouchableOpacity>
           </View>
           {showError && <Errors errors={rawErrors} />}
@@ -199,11 +290,19 @@ const styles = StyleSheet.create({
   },
   clearIcon: {
     width: csstyles.vars.csInputHeight,
-    height: csstyles.vars.csInputHeight - 2,
+    height: csstyles.vars.csInputHeight,
     ...csstyles.base.center,
     position: 'absolute',
     top: 0,
-    right: 44,
+    right: 40,
+  },
+  clearIconMaterial: {
+    width: csstyles.vars.csInputHeight,
+    height: csstyles.vars.csInputHeight,
+    ...csstyles.base.center,
+    position: 'absolute',
+    top: 20,
+    right: 0,
   },
   label: {
     paddingLeft: csstyles.vars.csInputHorizontalPadding,
