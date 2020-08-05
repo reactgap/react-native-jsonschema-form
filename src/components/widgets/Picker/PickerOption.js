@@ -1,8 +1,10 @@
 // @flow
 
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet, Platform, ViewStyle } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { Text, View, TouchableOpacity, StyleSheet, Platform, ViewStyle } from 'react-native';
+import { TextField, FilledTextField, OutlinedTextField } from 'react-native-material-textfield';
+
 import csstyles from '../../styles';
 import Picker from './Picker';
 
@@ -34,7 +36,7 @@ type State = {
 const getCurrentIndex = (props: Props): number => {
   const { value, data } = props;
   if (data && value) {
-    const findIndex = data.findIndex(item => item.name === value);
+    const findIndex = data.findIndex((item) => item.name === value);
     return findIndex;
   }
   return -1;
@@ -42,6 +44,7 @@ const getCurrentIndex = (props: Props): number => {
 
 class PickerOption extends Component<Props, State> {
   selectedIndex = null;
+  inputRef: TextInput | null = null;
 
   constructor(props: Props) {
     super(props);
@@ -92,6 +95,97 @@ class PickerOption extends Component<Props, State> {
     });
   };
 
+  renderUImode = () => {
+    const {
+      schema,
+      uiMode,
+      value,
+      label,
+      wrapperStyle,
+      inputContainerStyle,
+      textStyle,
+      disabled,
+      wrapStyles,
+      containerStyle,
+      maxLength,
+      rawErrors,
+      themeMode,
+      mainColor,
+      fontSize,
+      icon,
+      iconStyle,
+    } = this.props;
+    switch (uiMode) {
+      case 'material':
+        const showError = rawErrors && rawErrors.length > 0;
+        const errorMsg = showError ? rawErrors[0] : null;
+        return (
+          <View style={[styles.wrapper]}>
+            <TextField
+              label={label || ''}
+              keyboardType="default"
+              blurOnSubmit={false}
+              value={value}
+              maxLength={maxLength}
+              editable={false}
+              error={errorMsg}
+              ref={(ref) => {
+                this.inputRef = ref;
+              }}
+              inputContainerStyle={[inputContainerStyle]}
+              containerStyle={[{ marginBottom: 10 }, containerStyle]}
+            />
+          </View>
+        );
+
+        break;
+      default:
+        let iconName = icon || 'calendar-alt';
+        if (schema && schema.hasOwnProperty('icon')) {
+          iconName = schema['icon'];
+        }
+        let iconStyleTmp = null;
+        if (schema && schema.hasOwnProperty('iconStyle')) {
+          iconStyleTmp = schema['iconStyle'];
+        } else if (iconStyle != null) {
+          iconStyleTmp = iconStyle;
+        }
+        const fontTextStyle = fontSize ? { fontSize: fontSize } : { fontSize: 15 };
+        const textCustomStyle = mainColor ? { color: mainColor } : null;
+        let containerStyle = styles['inputContainerLight'];
+        let inputTextStyle = styles['inputTextLight'];
+        if (themeMode && themeMode === 'dark') {
+          containerStyle = styles['inputContainerDark'];
+          inputTextStyle = styles['inputTextDark'];
+        }
+        return (
+          <View
+            style={[
+              wrapStyles ? wrapStyles : containerStyle,
+              showError ? styles.inputContainerInvalid : null,
+            ]}>
+            {icon && (
+              <View style={styles.inputIcon}>
+                <FontAwesome5 size={15} name={icon} color={'#646A64'} solid={false} />
+              </View>
+            )}
+            <Text style={[inputTextStyle, fontTextStyle, textCustomStyle, textStyle]}>
+              {value && value.length > 0 ? value : placeHolder || ''}
+            </Text>
+            {!disabled && (
+              <View style={[styles.inputIconLight, iconStyleTmp]}>
+                <FontAwesome5
+                  size={15}
+                  name={'chevron-down'}
+                  color={mainColor ? mainColor : csstyles.vars.csGrey}
+                />
+              </View>
+            )}
+          </View>
+        );
+    }
+  };
+
   render() {
     const { schemaIndex } = this.state;
     const {
@@ -101,34 +195,17 @@ class PickerOption extends Component<Props, State> {
       schema,
       rawErrors,
       data,
-      icon,
-      iconStyle,
-      fontSize,
       currentIndex,
-      wrapStyles,
       themeMode,
-      mainColor,
-      textStyle,
       disabled,
       placeHolder,
+      uiMode,
     } = this.props;
     const { showingPicker } = this.state;
-    const showError = rawErrors && rawErrors.length > 0;
+    const showError = rawErrors && rawErrors.length > 0 && uiMode !== 'material';
     var dataPicker = data || [];
     if (schema && schema.hasOwnProperty('data')) {
       dataPicker = schema['data'];
-    }
-
-    var iconName = icon || 'calendar-alt';
-    if (schema && schema.hasOwnProperty('icon')) {
-      iconName = schema['icon'];
-    }
-
-    var iconStyleTmp = null;
-    if (schema && schema.hasOwnProperty('iconStyle')) {
-      iconStyleTmp = schema['iconStyle'];
-    } else if (iconStyle != null) {
-      iconStyleTmp = iconStyle;
     }
 
     var styleFromSchema = {
@@ -136,15 +213,6 @@ class PickerOption extends Component<Props, State> {
     };
     if (schema && schema.hasOwnProperty('style')) {
       styleFromSchema = schema['style'];
-    }
-
-    const fontTextStyle = fontSize ? { fontSize: fontSize } : { fontSize: 15 };
-    const textCustomStyle = mainColor ? { color: mainColor } : null;
-    var containerStyle = styles['inputContainerLight'];
-    var inputTextStyle = styles['inputTextLight'];
-    if (themeMode && themeMode === 'dark') {
-      containerStyle = styles['inputContainerDark'];
-      inputTextStyle = styles['inputTextDark'];
     }
 
     return (
@@ -169,29 +237,7 @@ class PickerOption extends Component<Props, State> {
                 flex: 1,
               }}
               disabled={disabled ? disabled : false}>
-              <View
-                style={[
-                  wrapStyles ? wrapStyles : containerStyle,
-                  showError ? styles.inputContainerInvalid : null,
-                ]}>
-                {icon && (
-                  <View style={styles.inputIcon}>
-                    <FontAwesome5 size={15} name={icon} color={'#646A64'} solid={false} />
-                  </View>
-                )}
-                <Text style={[inputTextStyle, fontTextStyle, textCustomStyle, textStyle]}>
-                  {value && value.length > 0 ? value : placeHolder || ''}
-                </Text>
-                {!disabled && (
-                  <View style={[styles.inputIconLight, iconStyleTmp]}>
-                    <FontAwesome5
-                      size={15}
-                      name={'chevron-down'}
-                      color={mainColor ? mainColor : csstyles.vars.csGrey}
-                    />
-                  </View>
-                )}
-              </View>
+              {this.renderUImode()}
             </TouchableOpacity>
           </View>
         </View>
@@ -213,6 +259,10 @@ class PickerOption extends Component<Props, State> {
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    marginBottom: 16,
+  },
   inputContainerDark: {
     height: csstyles.vars.csPickerHeight,
     overflow: 'visible',

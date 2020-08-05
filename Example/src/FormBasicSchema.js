@@ -1,7 +1,7 @@
 module.exports = {
   schema: {
     type: 'object',
-    required: ['lastName', 'firstName', 'gender', 'idNumber', 'phoneNumber', 'money', 'fee'],
+    required: ['lastName', 'firstName', 'gender', 'idNumber', 'phoneNumber', 'money', 'fee', 'dob'],
     properties: {
       radio: {
         type: 'string',
@@ -103,17 +103,8 @@ module.exports = {
       dob: {
         type: 'string',
         title: 'Ngày sinh',
-      },
-      idNumber: {
-        type: 'string',
-        title: 'Number',
-        keyboardAppearance: 'light',
-        keyboardType: 'number-pad',
-        maxLength: 20,
-        minLength: 9,
-        placeholder: '191755555',
-        pattern: '^\\d*$',
-        icon: 'id-card',
+        uiMode: 'material',
+        endDate: '05/08/2050',
       },
       gender: {
         type: 'string',
@@ -132,11 +123,20 @@ module.exports = {
         ],
         default: 'Nam',
         icon: 'venus-mars',
-        style: {
-          height: 44,
-          marginBottom: 5,
-        },
+        uiMode: 'material',
       },
+      idNumber: {
+        type: 'string',
+        title: 'Number',
+        keyboardAppearance: 'light',
+        keyboardType: 'number-pad',
+        maxLength: 20,
+        minLength: 9,
+        placeholder: '191755555',
+        pattern: '^\\d*$',
+        icon: 'id-card',
+      },
+
       money: {
         type: 'number',
         title: 'Tiền',
@@ -291,7 +291,7 @@ module.exports = {
     },
     gender: {
       'ui:widget': 'PickerOption',
-      'ui:disabled': true,
+      // 'ui:disabled': true,
     },
     money: {
       'ui:widget': 'SliderWidget',

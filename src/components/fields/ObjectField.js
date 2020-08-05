@@ -49,7 +49,7 @@ function DefaultObjectFieldTemplate(props) {
 
   const { TitleField, DescriptionField } = props;
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       {(props.uiSchema['ui:title'] || props.title) && (
         <TitleField
           id={`${props.idSchema.$id}__title`}
@@ -68,7 +68,7 @@ function DefaultObjectFieldTemplate(props) {
       {arrGroupProperties.map((prop) => {
         const contents = prop.contents;
         if (contents.length > 0) {
-          return <Row style={{ flex: 1 }}>{contents.map((content) => content)}</Row>;
+          return <Row style={{}}>{contents.map((content) => content)}</Row>;
         }
         return contents[0];
       })}
@@ -237,26 +237,28 @@ class ObjectField extends Component {
         const groupName = schemaField.groupName;
         return {
           content: (
-            <SchemaField
-              key={name}
-              name={name}
-              required={this.isRequired(name)}
-              schema={schema.properties[name]}
-              uiSchema={uiSchema[name]}
-              errorSchema={errorSchema[name]}
-              idSchema={idSchema[name]}
-              idPrefix={idPrefix}
-              formData={formData[name]}
-              referValue={referName ? formData[referName] : ''}
-              onKeyChange={this.onKeyChange(name)}
-              onChangeReferKey={(name, value) => this.onReferPropertyChange(name, value)}
-              onChange={this.onPropertyChange(name)}
-              onBlur={onBlur}
-              onFocus={onFocus}
-              registry={registry}
-              disabled={disabled}
-              readonly={readonly}
-            />
+            <View style={{ flex: 1 }}>
+              <SchemaField
+                key={name}
+                name={name}
+                required={this.isRequired(name)}
+                schema={schema.properties[name]}
+                uiSchema={uiSchema[name]}
+                errorSchema={errorSchema[name]}
+                idSchema={idSchema[name]}
+                idPrefix={idPrefix}
+                formData={formData[name]}
+                referValue={referName ? formData[referName] : ''}
+                onKeyChange={this.onKeyChange(name)}
+                onChangeReferKey={(name, value) => this.onReferPropertyChange(name, value)}
+                onChange={this.onPropertyChange(name)}
+                onBlur={onBlur}
+                onFocus={onFocus}
+                registry={registry}
+                disabled={disabled}
+                readonly={readonly}
+              />
+            </View>
           ),
           name,
           readonly,
