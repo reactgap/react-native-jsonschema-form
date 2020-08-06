@@ -105,6 +105,7 @@ class PickerOption extends Component<Props, State> {
       inputContainerStyle,
       textStyle,
       disabled,
+      required,
       wrapStyles,
       containerStyle,
       maxLength,
@@ -120,10 +121,11 @@ class PickerOption extends Component<Props, State> {
       case 'material':
         const showError = rawErrors && rawErrors.length > 0;
         const errorMsg = showError ? rawErrors[0] : null;
+        const labelDisplay = required ? `${label}*` : label;
         return (
           <View style={[styles.wrapper]}>
             <TextField
-              label={label || ''}
+              label={labelDisplay || ''}
               keyboardType="default"
               blurOnSubmit={false}
               value={value}
@@ -134,7 +136,7 @@ class PickerOption extends Component<Props, State> {
                 this.inputRef = ref;
               }}
               inputContainerStyle={[inputContainerStyle]}
-              containerStyle={[{ marginBottom: 10 }, containerStyle]}
+              containerStyle={containerStyle}
             />
           </View>
         );
@@ -217,7 +219,7 @@ class PickerOption extends Component<Props, State> {
 
     return (
       <>
-        <View style={styleFromSchema}>
+        <View style={[styleFromSchema]}>
           <Picker
             isOpen={showingPicker}
             value={value}
@@ -261,7 +263,6 @@ class PickerOption extends Component<Props, State> {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    marginBottom: 16,
   },
   inputContainerDark: {
     height: csstyles.vars.csPickerHeight,
