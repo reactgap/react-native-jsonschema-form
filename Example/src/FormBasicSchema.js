@@ -69,6 +69,7 @@ module.exports = {
         mode: 'city',
         referKey: 'district',
         districtRequired: false,
+        uiMode: 'material',
       },
       email: {
         type: 'string',

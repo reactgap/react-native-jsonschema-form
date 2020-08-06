@@ -3,9 +3,9 @@
 import React, { PureComponent } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-// import datetimeFormat from '../../utils/datetime/datetimeFormat'
+import { TextField, FilledTextField, OutlinedTextField } from 'react-native-material-textfield';
+
 import csstyles from '../../styles';
-// import DatePickerPicker from './DatePicker/DatePickerPicker'
 import Picker from '../Picker/Picker';
 import localData from '../../../data/vietnam_provinces_districts.json';
 import Errors from '../../widgets/Errors/ErrorTextField';
@@ -32,6 +32,8 @@ class TextFieldPicker extends PureComponent<Props, State> {
   mode = 'provinces';
   data = null;
   selectedIndex = null;
+  inputDistrictRef: TextField | null = null;
+  inputProvinceRef: TextField | null = null;
 
   onPress = (mode: 'provinces' | 'districts') => {
     const { value } = this.props;
@@ -60,10 +62,12 @@ class TextFieldPicker extends PureComponent<Props, State> {
         showingPicker: false,
       });
       onChange(value);
+      this.setProvinceInputValue(value);
       if (value !== this.props.value && this.props.value !== undefined) {
         // delay for onchange province
         setTimeout(() => {
           onChangeReferKey('district', null);
+          this.setDistrictInputValue(null);
         }, 300);
       }
     } else {
@@ -71,6 +75,19 @@ class TextFieldPicker extends PureComponent<Props, State> {
         showingPicker: false,
       });
       onChangeReferKey('district', value);
+      this.setDistrictInputValue(value);
+    }
+  };
+
+  setProvinceInputValue = (value) => {
+    if (this.inputProvinceRef) {
+      this.inputProvinceRef.setValue(value);
+    }
+  };
+
+  setDistrictInputValue = (value) => {
+    if (this.inputDistrictRef) {
+      this.inputDistrictRef.setValue(value);
     }
   };
 
@@ -78,6 +95,161 @@ class TextFieldPicker extends PureComponent<Props, State> {
     this.setState({
       showingPicker: false,
     });
+  };
+
+  renderProvinceUIMode = () => {
+    const {
+      uiMode,
+      label,
+      icon,
+      rawErrors,
+      value,
+      inputContainerStyle,
+      containerStyle,
+    } = this.props;
+    const showError = rawErrors && rawErrors.length > 0;
+
+    switch (uiMode) {
+      case 'material':
+        const errorMsg = null;
+        return (
+          <>
+            <TextField
+              label={label || ''}
+              keyboardType="default"
+              blurOnSubmit={false}
+              value={value}
+              editable={false}
+              error={errorMsg}
+              ref={(ref) => {
+                this.inputProvinceRef = ref;
+              }}
+              inputContainerStyle={[inputContainerStyle]}
+              containerStyle={containerStyle}
+            />
+            <View style={styles.iconMaterial}>
+              <FontAwesome5 size={20} name="sort-down" color={csstyles.vars.csLightGrey} />
+            </View>
+          </>
+        );
+        break;
+
+      default:
+        return (
+          <View style={styles.wrapperInput}>
+            {icon && (
+              <View style={styles.inputIcon}>
+                <FontAwesome5 size={15} name={icon} color={'#646A64'} solid={true} />
+              </View>
+            )}
+            <View style={[styles.inputContainer, showError ? styles.inputContainerInvalid : null]}>
+              <Text style={styles.inputText}>{value}</Text>
+
+              <View style={styles.pickerIcon}>
+                <FontAwesome5 size={15} name="chevron-down" color={csstyles.vars.csGrey} />
+              </View>
+            </View>
+          </View>
+        );
+        break;
+    }
+  };
+
+  renderDistrictUIMode = () => {
+    const {
+      uiMode,
+      subLabel,
+      icon,
+      value,
+      referValue,
+      rawErrors,
+      inputContainerStyle,
+      containerStyle,
+      disabled,
+      hiddenDistrict,
+      districtRequired,
+    } = this.props;
+    const showErrorDistrict = referValue == null || (referValue && referValue.length == 0);
+    const showDistrictForm = value && value.length > 0;
+    const isDistrictRequired =
+      !hiddenDistrict &&
+      (districtRequired === null || (typeof districtRequired === 'boolean' && districtRequired));
+
+    if (!(!hiddenDistrict && showDistrictForm)) {
+      return null;
+    }
+    switch (uiMode) {
+      case 'material':
+        const errorMsg = null;
+
+        return (
+          <View style={[csstyles.base.rowCenterLineBetween]}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => this.onPress('districts')}
+              style={{
+                flex: 1,
+              }}
+              disabled={disabled ? disabled : false}>
+              <TextField
+                label={subLabel || ''}
+                keyboardType="default"
+                blurOnSubmit={false}
+                value={referValue}
+                editable={false}
+                error={errorMsg}
+                ref={(ref) => {
+                  this.inputDistrictRef = ref;
+                }}
+                inputContainerStyle={[inputContainerStyle]}
+                containerStyle={containerStyle}
+              />
+              <View style={styles.iconMaterial}>
+                <FontAwesome5 size={20} name="sort-down" color={csstyles.vars.csLightGrey} />
+              </View>
+            </TouchableOpacity>
+          </View>
+        );
+        break;
+
+      default:
+        return (
+          <>
+            <View style={[csstyles.base.rowCenterLineBetween, { marginTop: 20 }]}>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => this.onPress('districts')}
+                style={{
+                  flex: 1,
+                }}
+                disabled={disabled ? disabled : false}>
+                <View
+                  style={[
+                    styles.wrapperInput,
+                    showErrorDistrict && isDistrictRequired ? styles.inputContainerInvalid : null,
+                  ]}>
+                  {icon && (
+                    <View style={styles.inputIcon}>
+                      <FontAwesome5 size={15} name={icon} color={'#646A64'} solid={false} />
+                    </View>
+                  )}
+                  <View style={[styles.inputContainer]}>
+                    <Text style={styles.inputText}>{referValue}</Text>
+
+                    <View style={styles.pickerIcon}>
+                      <FontAwesome5 size={15} name="chevron-down" color={csstyles.vars.csGrey} />
+                    </View>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            </View>
+            {isDistrictRequired && showDistrictForm && showErrorDistrict && (
+              <Errors errors={['Vui lòng chọn Quận/Huyện']} />
+            )}
+          </>
+        );
+        break;
+    }
   };
 
   render() {
@@ -90,17 +262,9 @@ class TextFieldPicker extends PureComponent<Props, State> {
       rawErrors,
       disabled,
       icon,
-      hiddenDistrict,
-      districtRequired,
     } = this.props;
-    console.log('districtRequired', districtRequired);
     const { showingPicker } = this.state;
     const showError = rawErrors && rawErrors.length > 0;
-    const showErrorDistrict = referValue == null || (referValue && referValue.length == 0);
-    const showDistrictForm = value && value.length > 0;
-    const isDistrictRequired =
-      !hiddenDistrict &&
-      (districtRequired === null || (typeof districtRequired === 'boolean' && districtRequired));
 
     return (
       <View
@@ -128,57 +292,11 @@ class TextFieldPicker extends PureComponent<Props, State> {
               flex: 1,
             }}
             disabled={disabled ? disabled : false}>
-            <View style={styles.wrapperInput}>
-              {icon && (
-                <View style={styles.inputIcon}>
-                  <FontAwesome5 size={15} name={icon} color={'#646A64'} solid={true} />
-                </View>
-              )}
-              <View
-                style={[styles.inputContainer, showError ? styles.inputContainerInvalid : null]}>
-                <Text style={styles.inputText}>{value}</Text>
-
-                <View style={styles.pickerIcon}>
-                  <FontAwesome5 size={15} name="chevron-down" color={csstyles.vars.csGrey} />
-                </View>
-              </View>
-            </View>
+            {this.renderProvinceUIMode()}
           </TouchableOpacity>
         </View>
         {showError && <Errors errors={rawErrors} />}
-        {!hiddenDistrict && showDistrictForm && (
-          <View style={[csstyles.base.rowCenterLineBetween, { marginTop: 20 }]}>
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={() => this.onPress('districts')}
-              style={{
-                flex: 1,
-              }}
-              disabled={disabled ? disabled : false}>
-              <View
-                style={[
-                  styles.wrapperInput,
-                  showErrorDistrict && isDistrictRequired ? styles.inputContainerInvalid : null,
-                ]}>
-                {icon && (
-                  <View style={styles.inputIcon}>
-                    <FontAwesome5 size={15} name={icon} color={'#646A64'} solid={false} />
-                  </View>
-                )}
-                <View style={[styles.inputContainer]}>
-                  <Text style={styles.inputText}>{referValue}</Text>
-
-                  <View style={styles.pickerIcon}>
-                    <FontAwesome5 size={15} name="chevron-down" color={csstyles.vars.csGrey} />
-                  </View>
-                </View>
-              </View>
-            </TouchableOpacity>
-          </View>
-        )}
-        {isDistrictRequired && showDistrictForm && showErrorDistrict && (
-          <Errors errors={['Vui lòng chọn Quận/Huyện']} />
-        )}
+        {this.renderDistrictUIMode()}
       </View>
     );
   }
@@ -235,6 +353,14 @@ const styles = StyleSheet.create({
     ...csstyles.text.medium,
     fontSize: 13,
     marginBottom: csstyles.vars.csBoxSpacingHalf,
+  },
+  iconMaterial: {
+    width: csstyles.vars.csInputHeight - 10,
+    height: csstyles.vars.csInputHeight,
+    ...csstyles.base.center,
+    position: 'absolute',
+    top: 25,
+    right: 0,
   },
 });
 
