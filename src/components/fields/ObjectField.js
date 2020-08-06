@@ -68,7 +68,7 @@ function DefaultObjectFieldTemplate(props) {
       {arrGroupProperties.map((prop) => {
         const contents = prop.contents;
         if (contents.length > 0) {
-          return <Row style={{}}>{contents.map((content) => content)}</Row>;
+          return <Row key={prop.group}>{contents.map((content) => content)}</Row>;
         }
         return contents[0];
       })}
@@ -237,7 +237,7 @@ class ObjectField extends Component {
         const groupName = schemaField.groupName;
         return {
           content: (
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1 }} key={name}>
               <SchemaField
                 key={name}
                 name={name}

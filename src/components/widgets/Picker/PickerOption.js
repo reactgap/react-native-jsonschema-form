@@ -26,6 +26,8 @@ type Props = {
   themeMode: 'light' | 'dark',
   disabled: boolean,
   placeHolder?: string,
+  containerStyle: ViewStyle,
+  inputContainerStyle: ViewStyle,
 };
 
 type State = {
@@ -44,7 +46,7 @@ const getCurrentIndex = (props: Props): number => {
 
 class PickerOption extends Component<Props, State> {
   selectedIndex = null;
-  inputRef: TextInput | null = null;
+  inputRef: TextField | null = null;
 
   constructor(props: Props) {
     super(props);
@@ -84,8 +86,19 @@ class PickerOption extends Component<Props, State> {
         schemaIndex: index,
       });
       onChange(value);
+      this.setTextInputValue(value);
     } else if (index !== null && typeof index === 'number') {
       onChange(value, index, type);
+      this.setTextInputValue(value);
+    }
+    if (this.inputRef) {
+      this.inputRef.setValue(value);
+    }
+  };
+
+  setTextInputValue = (value) => {
+    if (this.inputRef) {
+      this.inputRef.setValue(value);
     }
   };
 
@@ -138,6 +151,9 @@ class PickerOption extends Component<Props, State> {
               inputContainerStyle={[inputContainerStyle]}
               containerStyle={containerStyle}
             />
+            <View style={styles.iconMaterial}>
+              <FontAwesome5 size={20} name="sort-down" color={csstyles.vars.csLightGrey} />
+            </View>
           </View>
         );
 
@@ -155,16 +171,16 @@ class PickerOption extends Component<Props, State> {
         }
         const fontTextStyle = fontSize ? { fontSize: fontSize } : { fontSize: 15 };
         const textCustomStyle = mainColor ? { color: mainColor } : null;
-        let containerStyle = styles['inputContainerLight'];
+        let wrapStyle = styles['inputContainerLight'];
         let inputTextStyle = styles['inputTextLight'];
         if (themeMode && themeMode === 'dark') {
-          containerStyle = styles['inputContainerDark'];
+          wrapStyle = styles['inputContainerDark'];
           inputTextStyle = styles['inputTextDark'];
         }
         return (
           <View
             style={[
-              wrapStyles ? wrapStyles : containerStyle,
+              wrapStyles ? wrapStyles : wrapStyle,
               showError ? styles.inputContainerInvalid : null,
             ]}>
             {icon && (
@@ -342,6 +358,14 @@ const styles = StyleSheet.create({
     color: csstyles.vars.csDanger,
     fontStyle: 'italic',
     fontSize: 13,
+  },
+  iconMaterial: {
+    width: csstyles.vars.csInputHeight - 10,
+    height: csstyles.vars.csInputHeight,
+    ...csstyles.base.center,
+    position: 'absolute',
+    top: 25,
+    right: 0,
   },
 });
 
