@@ -103,6 +103,7 @@ class TextFieldMaterial extends PureComponent<Props, State> {
       textFieldType,
       inputContainerStyle,
       containerStyle,
+      required,
     } = this.props;
     const { touched } = this.state;
     const showError = rawErrors && rawErrors.length > 0;
@@ -114,11 +115,13 @@ class TextFieldMaterial extends PureComponent<Props, State> {
     if (schema && schema.hasOwnProperty('placeholder')) {
       placeholderUse = schema['placeholder'];
     }
+    const labelDisplay = required ? `${label}*` : label;
+
     return (
       <Fragment>
         {/* <View style={[styles.wrapper, wrapperStyle]}> */}
         <TextInput
-          label={label || ''}
+          label={labelDisplay || ''}
           keyboardType="default"
           title={placeholderUse}
           onChangeText={this._onChange}

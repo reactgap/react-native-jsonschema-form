@@ -132,16 +132,19 @@ class DateTimeWidget extends PureComponent<Props, State> {
       placeholder,
       maxLength,
       rawErrors,
+      required,
     } = this.props;
 
     switch (uiMode) {
       case 'material':
         const showError = rawErrors && rawErrors.length > 0;
         const errorMsg = showError ? rawErrors[0] : null;
+        const labelDisplay = required ? `${label}*` : label;
+
         return (
           <>
             <TextField
-              label={label || ''}
+              label={labelDisplay || ''}
               keyboardType="default"
               blurOnSubmit={false}
               // title={value}
@@ -301,7 +304,7 @@ const styles = StyleSheet.create({
     height: csstyles.vars.csInputHeight,
     ...csstyles.base.center,
     position: 'absolute',
-    top: 20,
+    top: 25,
     right: 0,
   },
   label: {
