@@ -121,7 +121,7 @@ class TextFieldMaterial extends PureComponent<Props, State> {
         {/* <View style={[styles.wrapper, wrapperStyle]}> */}
         <TextInput
           label={labelDisplay || ''}
-          keyboardType="default"
+          keyboardType={keyboardType}
           title={placeholderUse}
           onChangeText={this._onChange}
           blurOnSubmit={blurOnSubmit ? blurOnSubmit : true}
