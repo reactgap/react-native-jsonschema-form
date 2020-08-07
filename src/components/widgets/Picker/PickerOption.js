@@ -86,19 +86,8 @@ class PickerOption extends Component<Props, State> {
         schemaIndex: index,
       });
       onChange(value);
-      this.setTextInputValue(value);
     } else if (index !== null && typeof index === 'number') {
       onChange(value, index, type);
-      this.setTextInputValue(value);
-    }
-    if (this.inputRef) {
-      this.inputRef.setValue(value);
-    }
-  };
-
-  setTextInputValue = (value) => {
-    if (this.inputRef) {
-      this.inputRef.setValue(value);
     }
   };
 
@@ -273,6 +262,13 @@ class PickerOption extends Component<Props, State> {
         </View>
       </>
     );
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    const { value } = this.props;
+    if (value && prevProps.value && this.inputRef) {
+      this.inputRef.setValue(value);
+    }
   }
 }
 

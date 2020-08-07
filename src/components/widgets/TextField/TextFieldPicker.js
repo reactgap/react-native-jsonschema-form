@@ -62,12 +62,10 @@ class TextFieldPicker extends PureComponent<Props, State> {
         showingPicker: false,
       });
       onChange(value);
-      this.setProvinceInputValue(value);
       if (value !== this.props.value && this.props.value !== undefined) {
         // delay for onchange province
         setTimeout(() => {
           onChangeReferKey('district', null);
-          this.setDistrictInputValue(null);
         }, 300);
       }
     } else {
@@ -75,7 +73,6 @@ class TextFieldPicker extends PureComponent<Props, State> {
         showingPicker: false,
       });
       onChangeReferKey('district', value);
-      this.setDistrictInputValue(value);
     }
   };
 
@@ -299,6 +296,16 @@ class TextFieldPicker extends PureComponent<Props, State> {
         {this.renderDistrictUIMode()}
       </View>
     );
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    const { value, referValue } = this.props;
+    if (value && prevProps.value && this.inputProvinceRef) {
+      this.inputProvinceRef.setValue(value);
+    }
+    if (referValue && prevProps.referValue && this.inputDistrictRef) {
+      this.inputDistrictRef.setValue(value);
+    }
   }
 }
 
