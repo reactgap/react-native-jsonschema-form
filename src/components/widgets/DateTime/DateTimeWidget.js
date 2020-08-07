@@ -88,9 +88,6 @@ class DateTimeWidget extends PureComponent<Props, State> {
     if (value) {
       const dateValue = convertDateToString(value, null);
       onChange(dateValue);
-      if (this.inputRef) {
-        this.inputRef.setValue(dateValue);
-      }
     }
   };
 
@@ -243,6 +240,13 @@ class DateTimeWidget extends PureComponent<Props, State> {
         </View>
       </>
     );
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    const { value } = this.props;
+    if (value && prevProps.value && this.inputRef) {
+      this.inputRef.setValue(value);
+    }
   }
 }
 

@@ -68,7 +68,6 @@ class TextFieldMaterial extends PureComponent<Props, State> {
 
   _onChange = (value) => {
     const { options } = this.props;
-
     this.props.onChange(value === '' ? options.emptyValue : value);
   };
 
@@ -150,6 +149,13 @@ class TextFieldMaterial extends PureComponent<Props, State> {
         />
       </Fragment>
     );
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    const { value } = this.props;
+    if (value && prevProps.value && this.inputRef) {
+      this.inputRef.setValue(value);
+    }
   }
 }
 
