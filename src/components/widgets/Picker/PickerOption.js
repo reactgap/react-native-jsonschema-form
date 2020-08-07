@@ -266,7 +266,7 @@ class PickerOption extends Component<Props, State> {
 
   componentDidUpdate(prevProps: Props) {
     const { value } = this.props;
-    if (value && prevProps.value && this.inputRef) {
+    if (value !== prevProps.value && this.inputRef) {
       this.inputRef.setValue(value);
     }
   }

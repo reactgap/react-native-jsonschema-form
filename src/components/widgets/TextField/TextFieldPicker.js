@@ -300,10 +300,10 @@ class TextFieldPicker extends PureComponent<Props, State> {
 
   componentDidUpdate(prevProps: Props) {
     const { value, referValue } = this.props;
-    if (value && prevProps.value && this.inputProvinceRef) {
+    if (value !== prevProps.value && this.inputProvinceRef) {
       this.inputProvinceRef.setValue(value);
     }
-    if (referValue && prevProps.referValue && this.inputDistrictRef) {
+    if (referValue !== prevProps.referValue && this.inputDistrictRef) {
       this.inputDistrictRef.setValue(value);
     }
   }
