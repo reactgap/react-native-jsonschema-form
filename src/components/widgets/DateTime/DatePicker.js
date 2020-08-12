@@ -48,7 +48,7 @@ class DatePicker extends Component<Props, State> {
   }
 
   getDateFromProps(props: Props) {
-    const { startDate, endDate, value, format } = props;
+    const { startDate, endDate, value, format, afterCurrentDate } = props;
     const formatDate = format || 'MM/DD/YYYY';
     const dateState = {
       startDate: null,
