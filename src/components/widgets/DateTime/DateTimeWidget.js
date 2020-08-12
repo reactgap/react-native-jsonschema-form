@@ -204,12 +204,13 @@ class DateTimeWidget extends PureComponent<Props, State> {
       icon,
       uiMode,
       endDate,
+      afterCurrentDate,
+      format,
     } = this.props;
     const { showingPicker } = this.state;
     const showError = rawErrors && rawErrors.length > 0 && uiMode !== 'material';
 
     const date = value ? parserStringToDate(value) : null;
-    const endDatePicker = endDate ? parserStringToDate(endDate) : null;
     return (
       <>
         <DatePicker
@@ -219,7 +220,9 @@ class DateTimeWidget extends PureComponent<Props, State> {
           label={label}
           picking={'date'}
           center={pickerCenter}
-          endDate={endDatePicker}
+          endDate={endDate}
+          afterCurrentDate={afterCurrentDate}
+          format={format || 'MM/DD/YYYY'}
         />
         <View
           style={{
