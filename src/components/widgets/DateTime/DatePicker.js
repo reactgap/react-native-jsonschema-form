@@ -70,7 +70,13 @@ class DatePicker extends Component<Props, State> {
       dateState.currentDate = value;
     } else {
       const now = new Date();
-      dateState.currentDate = new Date(now.getFullYear() - 18, now.getMonth(), now.getDate());
+      if (afterCurrentDate && typeof afterCurrentDate === 'number' && afterCurrentDate !== 0) {
+        dateState.currentDate = new Date(
+          now.getFullYear() + afterCurrentDate,
+          now.getMonth(),
+          now.getDate(),
+        );
+      }
     }
     return dateState;
   }
