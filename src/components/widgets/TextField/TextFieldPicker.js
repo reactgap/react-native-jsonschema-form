@@ -304,7 +304,7 @@ class TextFieldPicker extends PureComponent<Props, State> {
       this.inputProvinceRef.setValue(value);
     }
     if (referValue !== prevProps.referValue && this.inputDistrictRef) {
-      this.inputDistrictRef.setValue(value);
+      this.inputDistrictRef.setValue(referValue);
     }
   }
 }
