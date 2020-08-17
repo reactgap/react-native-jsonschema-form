@@ -56,7 +56,7 @@ class DateTimeWidget extends PureComponent<Props, State> {
         const now = new Date();
         let endDatePicker = now;
         if (endDate) {
-          dateState.endDate = moment(endDate, formatDate).toDate();
+          endDatePicker = moment(endDate, formatDate).toDate();
         }
         let defaultDate = now;
         if (afterCurrentDate && typeof afterCurrentDate === 'number' && afterCurrentDate !== 0) {
@@ -70,7 +70,7 @@ class DateTimeWidget extends PureComponent<Props, State> {
 
         const { action, year, month, day } = await DatePickerAndroid.open({
           date,
-          maxDate: endDate,
+          maxDate: endDatePicker,
         });
 
         if (action !== DatePickerAndroid.dismissedAction) {
