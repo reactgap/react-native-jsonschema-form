@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { TextField, FilledTextField, OutlinedTextField } from 'react-native-material-textfield';
+import moment from 'moment';
 
 import { convertDateToString, parserStringToDate } from './DatetimeFormat';
 import csstyles from '../../styles';
@@ -49,23 +50,27 @@ class DateTimeWidget extends PureComponent<Props, State> {
       });
     } else {
       // For android
-      const { value, onChange } = this.props;
+      const { value, onChange, endDate, afterCurrentDate, format } = this.props;
       try {
+        const formatDate = format || 'MM/DD/YYYY';
         const now = new Date();
-        const date = value
-          ? parserStringToDate(value)
-          : new Date(
-              now.getFullYear() - 18,
-              now.getMonth(),
-              now.getDate(),
-              now.getHours(),
-              now.getHours(),
-              now.getMinutes(),
-            );
+        let endDatePicker = now;
+        if (endDate) {
+          dateState.endDate = moment(endDate, formatDate).toDate();
+        }
+        const defaultDate = now;
+        if (afterCurrentDate && typeof afterCurrentDate === 'number' && afterCurrentDate !== 0) {
+          defaultDate = new Date(
+            now.getFullYear() + afterCurrentDate,
+            now.getMonth(),
+            now.getDate(),
+          );
+        }
+        const date = value ? parserStringToDate(value) : defaultDate;
 
         const { action, year, month, day } = await DatePickerAndroid.open({
           date,
-          maxDate: now,
+          maxDate: endDate,
         });
 
         if (action !== DatePickerAndroid.dismissedAction) {
