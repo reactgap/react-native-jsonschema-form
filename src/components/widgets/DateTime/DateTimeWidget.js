@@ -58,7 +58,7 @@ class DateTimeWidget extends PureComponent<Props, State> {
         if (endDate) {
           dateState.endDate = moment(endDate, formatDate).toDate();
         }
-        const defaultDate = now;
+        let defaultDate = now;
         if (afterCurrentDate && typeof afterCurrentDate === 'number' && afterCurrentDate !== 0) {
           defaultDate = new Date(
             now.getFullYear() + afterCurrentDate,
