@@ -118,6 +118,8 @@ class PickerOption extends Component<Props, State> {
       icon,
       iconStyle,
       placeHolder,
+      labelTextStyle,
+      labelFontSize,
     } = this.props;
     switch (uiMode) {
       case 'material':
@@ -139,6 +141,8 @@ class PickerOption extends Component<Props, State> {
               }}
               inputContainerStyle={[inputContainerStyle]}
               containerStyle={containerStyle}
+              labelTextStyle={[{ paddingTop: 2 }, labelTextStyle]}
+              labelFontSize={labelFontSize || 13}
             />
             <View style={styles.iconMaterial}>
               <FontAwesome5 size={20} name="sort-down" color={csstyles.vars.csLightGrey} />
