@@ -135,6 +135,8 @@ class DateTimeWidget extends PureComponent<Props, State> {
       maxLength,
       rawErrors,
       required,
+      labelTextStyle,
+      labelFontSize,
     } = this.props;
 
     switch (uiMode) {
@@ -162,6 +164,8 @@ class DateTimeWidget extends PureComponent<Props, State> {
               }}
               inputContainerStyle={[inputContainerStyle]}
               containerStyle={[containerStyle]}
+              labelTextStyle={[{ paddingTop: 2 }, labelTextStyle]}
+              labelFontSize={labelFontSize || 13}
             />
             {date && (
               <TouchableOpacity style={styles.clearIconMaterial} onPress={this.onPressClear}>

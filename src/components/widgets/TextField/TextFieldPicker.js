@@ -103,6 +103,8 @@ class TextFieldPicker extends PureComponent<Props, State> {
       value,
       inputContainerStyle,
       containerStyle,
+      labelTextStyle,
+      labelFontSize,
     } = this.props;
     const showError = rawErrors && rawErrors.length > 0;
 
@@ -123,6 +125,8 @@ class TextFieldPicker extends PureComponent<Props, State> {
               }}
               inputContainerStyle={[inputContainerStyle]}
               containerStyle={containerStyle}
+              labelTextStyle={[{ paddingTop: 2 }, labelTextStyle]}
+              labelFontSize={labelFontSize || 13}
             />
             <View style={styles.iconMaterial}>
               <FontAwesome5 size={20} name="sort-down" color={csstyles.vars.csLightGrey} />
@@ -165,6 +169,8 @@ class TextFieldPicker extends PureComponent<Props, State> {
       disabled,
       hiddenDistrict,
       districtRequired,
+      labelTextStyle,
+      labelFontSize,
     } = this.props;
     const showErrorDistrict = referValue == null || (referValue && referValue.length == 0);
     const showDistrictForm = value && value.length > 0;
@@ -200,6 +206,8 @@ class TextFieldPicker extends PureComponent<Props, State> {
                 }}
                 inputContainerStyle={[inputContainerStyle]}
                 containerStyle={containerStyle}
+                labelTextStyle={[{ paddingTop: 2 }, labelTextStyle]}
+                labelFontSize={labelFontSize || 13}
               />
               <View style={styles.iconMaterial}>
                 <FontAwesome5 size={20} name="sort-down" color={csstyles.vars.csLightGrey} />

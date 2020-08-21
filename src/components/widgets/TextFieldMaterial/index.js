@@ -103,6 +103,8 @@ class TextFieldMaterial extends PureComponent<Props, State> {
       inputContainerStyle,
       containerStyle,
       required,
+      labelTextStyle,
+      labelFontSize,
     } = this.props;
     const { touched } = this.state;
     const showError = rawErrors && rawErrors.length > 0;
@@ -146,6 +148,8 @@ class TextFieldMaterial extends PureComponent<Props, State> {
           error={errorMsg}
           inputContainerStyle={[styles.inputContainerStyleDefault, inputContainerStyle]}
           containerStyle={[styles.containerStyleDefault, containerStyle]}
+          labelTextStyle={[{ paddingTop: 2 }, labelTextStyle]}
+          labelFontSize={labelFontSize || 13}
         />
       </Fragment>
     );
