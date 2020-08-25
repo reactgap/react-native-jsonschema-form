@@ -65,7 +65,7 @@ class TextFieldPicker extends PureComponent<Props, State> {
       if (value !== this.props.value && this.props.value !== undefined) {
         // delay for onchange province
         setTimeout(() => {
-          onChangeReferKey('district', null);
+          onChangeReferKey('district', undefined);
         }, 300);
       }
     } else {
@@ -111,7 +111,7 @@ class TextFieldPicker extends PureComponent<Props, State> {
 
     switch (uiMode) {
       case 'material':
-        const errorMsg = null;
+        const errorMsg = showError ? rawErrors[0] : null;
         const labelDisplay = required ? `${label}*` : label;
         return (
           <>
@@ -185,7 +185,7 @@ class TextFieldPicker extends PureComponent<Props, State> {
     }
     switch (uiMode) {
       case 'material':
-        const errorMsg = null;
+        const errorMsg = showErrorDistrict ? 'Vui lòng chọn Quận/Huyện' : null;
         const subLabelDisplay = isDistrictRequired ? `${subLabel}*` : subLabel;
         return (
           <View style={[csstyles.base.rowCenterLineBetween]}>
@@ -269,9 +269,10 @@ class TextFieldPicker extends PureComponent<Props, State> {
       rawErrors,
       disabled,
       icon,
+      uiMode,
     } = this.props;
     const { showingPicker } = this.state;
-    const showError = rawErrors && rawErrors.length > 0;
+    const showError = rawErrors && rawErrors.length > 0 && uiMode !== 'material';
 
     return (
       <View
