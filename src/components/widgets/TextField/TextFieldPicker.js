@@ -105,16 +105,18 @@ class TextFieldPicker extends PureComponent<Props, State> {
       containerStyle,
       labelTextStyle,
       labelFontSize,
+      required,
     } = this.props;
     const showError = rawErrors && rawErrors.length > 0;
 
     switch (uiMode) {
       case 'material':
         const errorMsg = null;
+        const labelDisplay = required ? `${label}*` : label;
         return (
           <>
             <TextField
-              label={label || ''}
+              label={labelDisplay || ''}
               keyboardType="default"
               blurOnSubmit={false}
               value={value}
@@ -184,7 +186,7 @@ class TextFieldPicker extends PureComponent<Props, State> {
     switch (uiMode) {
       case 'material':
         const errorMsg = null;
-
+        const subLabelDisplay = isDistrictRequired ? `${subLabel}*` : subLabel;
         return (
           <View style={[csstyles.base.rowCenterLineBetween]}>
             <TouchableOpacity
@@ -195,7 +197,7 @@ class TextFieldPicker extends PureComponent<Props, State> {
               }}
               disabled={disabled ? disabled : false}>
               <TextField
-                label={subLabel || ''}
+                label={subLabelDisplay || ''}
                 keyboardType="default"
                 blurOnSubmit={false}
                 value={referValue}
