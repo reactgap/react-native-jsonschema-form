@@ -7,6 +7,7 @@ import { TextField, FilledTextField, OutlinedTextField } from 'react-native-mate
 
 import csstyles from '../../styles';
 import Picker from './Picker';
+import PickerRangeOfDates from './PickerRangeOfDates';
 
 type Props = {
   value: string,
@@ -33,6 +34,7 @@ type Props = {
 type State = {
   showingPicker: boolean,
   schemaIndex: number,
+  rangeOfDates: boolean,
 };
 
 const getCurrentIndex = (props: Props): number => {
@@ -51,6 +53,7 @@ class PickerOption extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
+      rangeOfDates: false,
       showingPicker: false,
       schemaIndex: props.currentIndex ? props.currentIndex : getCurrentIndex(props),
     };
@@ -76,18 +79,24 @@ class PickerOption extends Component<Props, State> {
     }
   };
 
-  onChange = (value: String, index: Number) => {
+  onChange = (value: string, index: number) => {
     const { schema, onChange, type } = this.props;
-    this.setState({
-      showingPicker: false,
-    });
-    if (schema) {
+    if (value?.toLowerCase() === 'tuỳ chọn') {
       this.setState({
-        schemaIndex: index,
+        rangeOfDates: true,
       });
-      onChange(value);
-    } else if (index !== null && typeof index === 'number') {
-      onChange(value, index, type);
+    } else {
+      this.setState({
+        showingPicker: false,
+      });
+      if (schema) {
+        this.setState({
+          schemaIndex: index,
+        });
+        onChange(value);
+      } else if (index !== null && typeof index === 'number') {
+        onChange(value, index, type);
+      }
     }
   };
 
@@ -211,8 +220,10 @@ class PickerOption extends Component<Props, State> {
       themeMode,
       disabled,
       uiMode,
+      onChange,
+      type,
     } = this.props;
-    const { showingPicker } = this.state;
+    const { showingPicker, rangeOfDates } = this.state;
     const showError = rawErrors && rawErrors.length > 0 && uiMode !== 'material';
     var dataPicker = data || [];
     if (schema && schema.hasOwnProperty('data')) {
@@ -239,11 +250,25 @@ class PickerOption extends Component<Props, State> {
             label={label}
             center={pickerCenter}
             mode={this.mode}
+            rangeOfDates={rangeOfDates}
+            onPressBackFoward={() => {
+              this.setState({ rangeOfDates: false });
+            }}
+            onChangeDatePicker={(rangeDates, index) => {
+              this.setState(
+                {
+                  showingPicker: false,
+                },
+                () => {
+                  onChange(rangeDates, index, type);
+                },
+              );
+            }}
           />
           <View style={csstyles.base.rowCenterLineBetween}>
             <TouchableOpacity
               activeOpacity={0.8}
-              onPress={() => this.onPress()}
+              onPress={this.onPress}
               style={{
                 flex: 1,
               }}
