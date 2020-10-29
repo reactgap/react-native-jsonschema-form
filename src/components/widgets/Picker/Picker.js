@@ -13,6 +13,8 @@ import {
   TouchableOpacity,
   type LayoutChangeEvent,
 } from 'react-native';
+import _isEmpty from 'lodash/isEmpty';
+
 import csstyles from '../../styles';
 import {
   DEVICE_BOTTOM_SAFE,
@@ -46,6 +48,13 @@ class Picker extends Component<Props> {
     rangeOfDates: false,
   };
 
+  state = {
+    start: {},
+    end: {},
+    period: {},
+    error: null,
+  };
+
   animateValue: Animated.Value = new Animated.Value(-999);
 
   contentHeight: number = 0;
@@ -54,7 +63,7 @@ class Picker extends Component<Props> {
 
   selected: string = null;
 
-  shouldComponentUpdate(nextProps: Props) {
+  shouldComponentUpdate(nextProps: Props, nextState: any) {
     const { isOpen, value, center, selectedIndex, rangeOfDates } = this.props;
     if (!isOpen && nextProps.isOpen) {
       this.selectedIndex = nextProps.selectedIndex;
@@ -72,7 +81,8 @@ class Picker extends Component<Props> {
     return (
       isOpen !== nextProps.isOpen ||
       value !== nextProps.value ||
-      rangeOfDates !== nextProps.rangeOfDates
+      rangeOfDates !== nextProps.rangeOfDates ||
+      nextState !== this.state
     );
   }
 
@@ -118,8 +128,30 @@ class Picker extends Component<Props> {
   };
 
   onDone = () => {
-    const { onChange } = this.props;
-    onChange(this.selected, this.selectedIndex);
+    const { onChange, onChangeDatePicker, rangeOfDates } = this.props;
+    if (rangeOfDates) {
+      const { start, end, period } = this.state;
+      if (_isEmpty(start) || _isEmpty(end)) {
+        this.setState({ error: 'Vui lòng chọn đầy đủ khoảng thời gian' });
+      } else {
+        const startDateStr = start.dateString;
+        const endDateStr = end.dateString;
+
+        this.setState({ error: null }, () => {
+          onChangeDatePicker(`${startDateStr}|${endDateStr}`, this.selectedIndex);
+        });
+      }
+    } else {
+      onChange(this.selected, this.selectedIndex);
+    }
+  };
+
+  onRangeDatesPicker = ({ start, end, period }) => {
+    this.setState({
+      start,
+      end,
+      period,
+    });
   };
 
   renderItem = ({ item, index }) => {
@@ -143,6 +175,7 @@ class Picker extends Component<Props> {
 
   renderContent = () => {
     const { value, center, mode, data, rangeOfDates, onPressBackFoward } = this.props;
+    const { error } = this.state;
     const pHeight = rangeOfDates ? 400 : (DEVICE_SCREEN_HEIGHT * 1) / 3;
     return (
       <View
@@ -158,14 +191,18 @@ class Picker extends Component<Props> {
           }}>
           {rangeOfDates ? (
             <View>
-              <PickerRangeOfDates title={''} />
-              <View>
-                <CSButton
-                  type="secondary"
-                  leftIcon="times"
-                  iconOnly
-                  onPress={() => onPressBackFoward()}
-                />
+              <PickerRangeOfDates title={''} onRangeDatesPicker={this.onRangeDatesPicker} />
+              <View style={{ padding: 16 }}>
+                {error && (
+                  <Text
+                    style={{
+                      color: csstyles.vars.csDanger,
+                      lineHeight: 24,
+                      paddingBottom: 8,
+                      textAlign: 'center',
+                    }}>{`${error}`}</Text>
+                )}
+                <CSButton type="secondary" title="Trở lại" onPress={() => onPressBackFoward()} />
               </View>
             </View>
           ) : (

@@ -79,7 +79,7 @@ class PickerOption extends Component<Props, State> {
     }
   };
 
-  onChange = (value: String, index: Number) => {
+  onChange = (value: string, index: number) => {
     const { schema, onChange, type } = this.props;
     if (value?.toLowerCase() === 'tuỳ chọn') {
       this.setState({
@@ -221,6 +221,7 @@ class PickerOption extends Component<Props, State> {
       disabled,
       uiMode,
       onChange,
+      type,
     } = this.props;
     const { showingPicker, rangeOfDates } = this.state;
     const showError = rawErrors && rawErrors.length > 0 && uiMode !== 'material';
@@ -252,6 +253,16 @@ class PickerOption extends Component<Props, State> {
             rangeOfDates={rangeOfDates}
             onPressBackFoward={() => {
               this.setState({ rangeOfDates: false });
+            }}
+            onChangeDatePicker={(rangeDates, index) => {
+              this.setState(
+                {
+                  showingPicker: false,
+                },
+                () => {
+                  onChange(rangeDates, index, type);
+                },
+              );
             }}
           />
           <View style={csstyles.base.rowCenterLineBetween}>

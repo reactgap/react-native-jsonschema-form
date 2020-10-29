@@ -5,26 +5,12 @@ import { Calendar } from 'react-native-calendars';
 
 class PickerRangeOfDates extends Component {
   static defaultProps = {
-    data: [],
     title: '',
     error: '',
-    selected: -1,
-    disabled: false,
-    onChangeText: (value, index) => value,
   };
 
   state = { start: {}, end: {}, period: {} };
 
-  onSelect = (index) => {
-    let { data, valueExtractor, onChangeText } = this.props;
-
-    let value = data[index];
-    if (typeof onChangeText === 'function') {
-      onChangeText(value, index);
-    }
-  };
-
-  onPress = () => {};
   getDateString(timestamp) {
     const date = new Date(timestamp);
     const year = date.getFullYear();
@@ -80,16 +66,25 @@ class PickerRangeOfDates extends Component {
           startingDay: true,
         },
       };
-      this.setState({ start: newDayObj, period, end: {} });
+      const rangeDatesObj = { start: newDayObj, period, end: {} };
+      this.setState({ ...rangeDatesObj }, () => {
+        this.props.onRangeDatesPicker(rangeDatesObj);
+      });
     } else {
       // if end date is older than start date switch
       const { timestamp: savedTimestamp } = start;
       if (savedTimestamp > timestamp) {
         const period = this.getPeriod(timestamp, savedTimestamp);
-        this.setState({ start: newDayObj, end: start, period });
+        const rangeDatesObj = { start: newDayObj, end: start, period };
+        this.setState({ ...rangeDatesObj }, () => {
+          this.props.onRangeDatesPicker(rangeDatesObj);
+        });
       } else {
         const period = this.getPeriod(savedTimestamp, timestamp);
-        this.setState({ end: newDayObj, start, period });
+        const rangeDatesObj = { end: newDayObj, start, period };
+        this.setState({ ...rangeDatesObj }, () => {
+          this.props.onRangeDatesPicker(rangeDatesObj);
+        });
       }
     }
   }

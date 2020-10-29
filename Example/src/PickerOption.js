@@ -57,6 +57,7 @@ class PickerOption extends PureComponent<Props> {
   }
 
   pickerOnchange = (value: string, index: number, type: string) => {
+    console.log('index', index);
     this.setState({
       time: timeList[index],
     });
