@@ -183,11 +183,7 @@ class PickerOption extends Component<Props, State> {
           inputTextStyle = styles['inputTextDark'];
         }
 
-        const valueDisplay = _isEmpty(value)
-          ? placeHolder || ''
-          : rangeDates
-          ? `${value} ( ${rangeDates} )`
-          : value;
+        const valueDisplay = _isEmpty(value) ? placeHolder || '' : value;
         return (
           <View
             style={[
@@ -199,8 +195,16 @@ class PickerOption extends Component<Props, State> {
                 <FontAwesome5 size={15} name={icon} color={'#646A64'} solid={false} />
               </View>
             )}
-            <Text style={[inputTextStyle, fontTextStyle, textCustomStyle, textStyle]}>
+            <Text
+              style={[
+                { ...csstyles.text.regular },
+                inputTextStyle,
+                fontTextStyle,
+                textCustomStyle,
+                textStyle,
+              ]}>
               {valueDisplay}
+              {rangeDates && <Text style={{ ...csstyles.text.medium }}>{` (${rangeDates})`}</Text>}
             </Text>
             {!disabled && (
               <View style={[styles.inputIconLight, iconStyleTmp]}>
