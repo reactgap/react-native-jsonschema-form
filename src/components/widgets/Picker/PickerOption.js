@@ -4,16 +4,18 @@ import React, { Component } from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Text, View, TouchableOpacity, StyleSheet, Platform, ViewStyle } from 'react-native';
 import { TextField, FilledTextField, OutlinedTextField } from 'react-native-material-textfield';
+import _isEmpty from 'lodash/isEmpty';
 
 import csstyles from '../../styles';
 import Picker from './Picker';
 import PickerRangeOfDates from './PickerRangeOfDates';
 
 type Props = {
+  rangeDates: string,
   value: string,
   icon?: string,
   iconStyle?: ViewStyle,
-  onChange: (value: string, index: number) => void,
+  onChange: (value: string, index: number, type: string, rangeDates: string) => void,
   label?: string,
   pickerCenter?: boolean,
   schema: Object,
@@ -129,6 +131,7 @@ class PickerOption extends Component<Props, State> {
       placeHolder,
       labelTextStyle,
       labelFontSize,
+      rangeDates,
     } = this.props;
     switch (uiMode) {
       case 'material':
@@ -179,6 +182,12 @@ class PickerOption extends Component<Props, State> {
           wrapStyle = styles['inputContainerDark'];
           inputTextStyle = styles['inputTextDark'];
         }
+
+        const valueDisplay = _isEmpty(value)
+          ? placeHolder || ''
+          : rangeDates
+          ? `${value} ( ${rangeDates} )`
+          : value;
         return (
           <View
             style={[
@@ -191,7 +200,7 @@ class PickerOption extends Component<Props, State> {
               </View>
             )}
             <Text style={[inputTextStyle, fontTextStyle, textCustomStyle, textStyle]}>
-              {value && value.length > 0 ? value : placeHolder || ''}
+              {valueDisplay}
             </Text>
             {!disabled && (
               <View style={[styles.inputIconLight, iconStyleTmp]}>
@@ -254,13 +263,15 @@ class PickerOption extends Component<Props, State> {
             onPressBackFoward={() => {
               this.setState({ rangeOfDates: false });
             }}
-            onChangeDatePicker={(rangeDates, index) => {
+            onChangeDatePicker={(value, rangeDates, index) => {
               this.setState(
                 {
                   showingPicker: false,
+                  rangeOfDates: false,
+                  rangeDates,
                 },
                 () => {
-                  onChange(rangeDates, index, type);
+                  onChange(value, index, type, rangeDates);
                 },
               );
             }}

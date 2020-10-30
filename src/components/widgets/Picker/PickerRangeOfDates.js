@@ -1,15 +1,24 @@
 import React, { Component, Fragment } from 'react';
-import { FlatList, TouchableOpacity, View } from 'react-native';
+import { FlatList, TouchableOpacity, View, Text } from 'react-native';
 import _isEmpty from 'lodash/isEmpty';
+import moment from 'moment';
+
 import { Calendar } from 'react-native-calendars';
+import { rangeOfMinMax } from '../../../utils';
+import csstyles from '../../styles';
+
+const MAX_RANGE_OF_DATES = 32;
 
 class PickerRangeOfDates extends Component {
   static defaultProps = {
     title: '',
-    error: '',
   };
 
-  state = { start: {}, end: {}, period: {} };
+  constructor(props) {
+    super(props);
+    const maxDate = moment().format('YYYY/MM/DD');
+    this.state = { start: {}, end: {}, period: {}, min: null, max: maxDate, error: null };
+  }
 
   getDateString(timestamp) {
     const date = new Date(timestamp);
@@ -74,27 +83,61 @@ class PickerRangeOfDates extends Component {
       // if end date is older than start date switch
       const { timestamp: savedTimestamp } = start;
       if (savedTimestamp > timestamp) {
+        // end to start
+        console.log('endate >>');
         const period = this.getPeriod(timestamp, savedTimestamp);
-        const rangeDatesObj = { start: newDayObj, end: start, period };
-        this.setState({ ...rangeDatesObj }, () => {
-          this.props.onRangeDatesPicker(rangeDatesObj);
-        });
+        const days = Object.keys(period).length;
+        if (days >= MAX_RANGE_OF_DATES) {
+          this.setState({
+            error: 'Bạn chỉ được chọn khoảng thời gian trong vòng 31 ngày',
+          });
+        } else {
+          const rangeDatesObj = { start: newDayObj, end: start, period, error: null };
+          this.setState({ ...rangeDatesObj }, () => {
+            this.props.onRangeDatesPicker(rangeDatesObj);
+          });
+        }
       } else {
+        // start -> end
+        console.log('start >>');
         const period = this.getPeriod(savedTimestamp, timestamp);
-        const rangeDatesObj = { end: newDayObj, start, period };
-        this.setState({ ...rangeDatesObj }, () => {
-          this.props.onRangeDatesPicker(rangeDatesObj);
-        });
+        const days = Object.keys(period).length;
+        if (days >= MAX_RANGE_OF_DATES) {
+          this.setState({
+            error: 'Bạn chỉ được chọn khoảng thời gian trong vòng 1 tháng',
+          });
+        } else {
+          const rangeDatesObj = { end: newDayObj, start, period, error: null };
+          this.setState({ ...rangeDatesObj }, () => {
+            this.props.onRangeDatesPicker(rangeDatesObj);
+          });
+        }
       }
     }
   }
 
   render() {
     const { disabled, style, data } = this.props;
-    const { period } = this.state;
+    const { period, min, max, error } = this.state;
     return (
       <View>
-        <Calendar onDayPress={this.setDay.bind(this)} markingType="period" markedDates={period} />
+        <Calendar
+          onDayPress={this.setDay.bind(this)}
+          markingType="period"
+          markedDates={period}
+          maxDate={max}
+          minDate={min}
+        />
+        {error && (
+          <Text
+            style={{
+              color: csstyles.vars.csDanger,
+              lineHeight: 24,
+              marginTop: 8,
+              paddingBottom: 8,
+              textAlign: 'center',
+            }}>{`${error}`}</Text>
+        )}
       </View>
     );
   }

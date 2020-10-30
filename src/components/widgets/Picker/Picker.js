@@ -31,7 +31,7 @@ import PickerRangeOfDates from './PickerRangeOfDates';
 type Props = {
   isOpen: boolean,
   value: string,
-  onChange: (value: string, index: Number) => void,
+  onChange: (value: string, index: number, type: string) => void,
   onClose: () => void,
   center?: boolean,
   mode: 'provinces' | 'districts' | 'options',
@@ -132,13 +132,13 @@ class Picker extends Component<Props> {
     if (rangeOfDates) {
       const { start, end, period } = this.state;
       if (_isEmpty(start) || _isEmpty(end)) {
-        this.setState({ error: 'Vui lòng chọn đầy đủ khoảng thời gian' });
+        this.setState({ error: 'Vui lòng chọn đầy đủ thời gian bắt đầu và kết thúc' });
       } else {
         const startDateStr = start.dateString;
         const endDateStr = end.dateString;
 
-        this.setState({ error: null }, () => {
-          onChangeDatePicker(`${startDateStr}|${endDateStr}`, this.selectedIndex);
+        this.setState({ error: null, start: {}, end: {}, period: {} }, () => {
+          onChangeDatePicker(this.selected, `${startDateStr}|${endDateStr}`, this.selectedIndex);
         });
       }
     } else {
@@ -176,7 +176,7 @@ class Picker extends Component<Props> {
   renderContent = () => {
     const { value, center, mode, data, rangeOfDates, onPressBackFoward } = this.props;
     const { error } = this.state;
-    const pHeight = rangeOfDates ? 400 : (DEVICE_SCREEN_HEIGHT * 1) / 3;
+    const pHeight = rangeOfDates ? 410 : (DEVICE_SCREEN_HEIGHT * 1) / 3;
     return (
       <View
         style={[styles.contentContainer, center && styles.contentContainerCenter]}
