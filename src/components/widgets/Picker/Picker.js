@@ -176,7 +176,7 @@ class Picker extends Component<Props> {
   renderContent = () => {
     const { value, center, mode, data, rangeOfDates, onPressBackFoward } = this.props;
     const { error } = this.state;
-    const pHeight = rangeOfDates ? 410 : (DEVICE_SCREEN_HEIGHT * 1) / 3;
+    const pHeight = rangeOfDates ? 435 : (DEVICE_SCREEN_HEIGHT * 1) / 3;
     return (
       <View
         style={[styles.contentContainer, center && styles.contentContainerCenter]}
@@ -190,9 +190,9 @@ class Picker extends Component<Props> {
             height: pHeight,
           }}>
           {rangeOfDates ? (
-            <View>
+            <View style={{ flex: 1 }}>
               <PickerRangeOfDates title={''} onRangeDatesPicker={this.onRangeDatesPicker} />
-              <View style={{ padding: 16 }}>
+              <View style={{ padding: 16, flex: 1 }}>
                 {error && (
                   <Text
                     style={{
@@ -202,7 +202,9 @@ class Picker extends Component<Props> {
                       textAlign: 'center',
                     }}>{`${error}`}</Text>
                 )}
-                <CSButton type="secondary" title="Trở lại" onPress={() => onPressBackFoward()} />
+                <View style={{ justifyContent: 'center', flex: 1, paddingHorizontal: 16 }}>
+                  <CSButton type="secondary" title="Trở lại" onPress={() => onPressBackFoward()} />
+                </View>
               </View>
             </View>
           ) : (

@@ -16,7 +16,7 @@ class PickerRangeOfDates extends Component {
 
   constructor(props) {
     super(props);
-    const maxDate = moment().format('YYYY/MM/DD');
+    const maxDate = moment().format('YYYY-MM-DD');
     this.state = { start: {}, end: {}, period: {}, min: null, max: maxDate, error: null };
   }
 
@@ -126,7 +126,6 @@ class PickerRangeOfDates extends Component {
           markingType="period"
           markedDates={period}
           maxDate={max}
-          minDate={min}
         />
         {error && (
           <Text
