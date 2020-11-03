@@ -105,6 +105,7 @@ class PickerOption extends Component<Props, State> {
   onClose = () => {
     this.setState({
       showingPicker: false,
+      rangeOfDates: false,
     });
   };
 
