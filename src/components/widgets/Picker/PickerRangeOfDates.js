@@ -46,16 +46,20 @@ class PickerRangeOfDates extends Component {
     while (currentTimestamp < endTimestamp) {
       const dateString = this.getDateString(currentTimestamp);
       period[dateString] = {
-        color: 'green',
+        color: '#A7E0A3',
         startingDay: currentTimestamp === startTimestamp,
       };
       currentTimestamp += 24 * 60 * 60 * 1000;
     }
     const dateString = this.getDateString(endTimestamp);
     period[dateString] = {
-      color: 'green',
+      color: '#A7E0A3',
       endingDay: true,
     };
+    if (!_isEmpty(period)) {
+      period[Object.keys(period)[0]].color = csstyles.vars.csGreen;
+      period[Object.keys(period).pop()].color = csstyles.vars.csGreen;
+    }
     return period;
   }
 
@@ -70,7 +74,7 @@ class PickerRangeOfDates extends Component {
     if (startIsEmpty || (!startIsEmpty && !_isEmpty(end))) {
       const period = {
         [dateString]: {
-          color: 'green',
+          color: '#A7E0A3',
           endingDay: true,
           startingDay: true,
         },
