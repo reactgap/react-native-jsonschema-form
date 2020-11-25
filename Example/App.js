@@ -17,8 +17,8 @@ const App = () => {
     <Fragment>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
-        {/* <FormBasic /> */}
-        <PickerOption />
+        <FormBasic />
+        {/* <PickerOption /> */}
       </SafeAreaView>
     </Fragment>
   );
