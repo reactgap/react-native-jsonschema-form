@@ -163,7 +163,7 @@ class DateTimeWidget extends PureComponent<Props, State> {
                 this.inputRef = ref;
               }}
               inputContainerStyle={[inputContainerStyle]}
-              containerStyle={[containerStyle]}
+              containerStyle={[styles.textfieldContainer, containerStyle]}
               labelTextStyle={[{ paddingTop: 2 }, labelTextStyle]}
               labelFontSize={labelFontSize || 13}
             />
@@ -329,6 +329,9 @@ const styles = StyleSheet.create({
     ...csstyles.text.medium,
     fontSize: 13,
     marginBottom: csstyles.vars.csBoxSpacingHalf,
+  },
+  textfieldContainer: {
+    height: 80,
   },
 });
 
