@@ -236,6 +236,7 @@ class PickerOption extends Component<Props, State> {
       uiMode,
       onChange,
       type,
+      numberMonthsFuture,
     } = this.props;
     const { showingPicker, rangeOfDates } = this.state;
     const showError = rawErrors && rawErrors.length > 0 && uiMode !== 'material';
@@ -264,6 +265,7 @@ class PickerOption extends Component<Props, State> {
             label={label}
             center={pickerCenter}
             mode={this.mode}
+            numberMonthsFuture={numberMonthsFuture}
             rangeOfDates={rangeOfDates}
             onPressBackFoward={() => {
               this.setState({ rangeOfDates: false });
