@@ -35,6 +35,7 @@ type Props = {
   onClose: () => void,
   center?: boolean,
   mode: 'provinces' | 'districts' | 'options',
+  numberMonthsFuture?: number,
   rangeOfDates: boolean,
   province: string,
   district: string,
@@ -174,7 +175,15 @@ class Picker extends Component<Props> {
   };
 
   renderContent = () => {
-    const { value, center, mode, data, rangeOfDates, onPressBackFoward } = this.props;
+    const {
+      value,
+      center,
+      mode,
+      data,
+      rangeOfDates,
+      onPressBackFoward,
+      numberMonthsFuture,
+    } = this.props;
     const { error } = this.state;
     const pHeight = rangeOfDates ? 435 : (DEVICE_SCREEN_HEIGHT * 1) / 3;
     return (
@@ -191,7 +200,11 @@ class Picker extends Component<Props> {
           }}>
           {rangeOfDates ? (
             <View style={{ flex: 1 }}>
-              <PickerRangeOfDates title={''} onRangeDatesPicker={this.onRangeDatesPicker} />
+              <PickerRangeOfDates
+                title={''}
+                onRangeDatesPicker={this.onRangeDatesPicker}
+                numberMonthsFuture={numberMonthsFuture}
+              />
               <View style={{ padding: 16, flex: 1 }}>
                 {error && (
                   <Text

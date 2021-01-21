@@ -79,6 +79,7 @@ class PickerOption extends PureComponent<Props> {
           themeMode="light"
           mainColor={'grey'}
           textStyle={{ paddingLeft: 5 }}
+          numberMonthsFuture={3}
         />
       </View>
     );
