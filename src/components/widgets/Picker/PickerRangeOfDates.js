@@ -8,7 +8,7 @@ import { rangeOfMinMax } from '../../../utils';
 import csstyles from '../../styles';
 
 const MAX_RANGE_OF_DATES = 32;
-
+const DATE_FORMAT = 'YYYY-MM-DD';
 class PickerRangeOfDates extends Component {
   static defaultProps = {
     title: '',
@@ -16,13 +16,25 @@ class PickerRangeOfDates extends Component {
 
   constructor(props) {
     super(props);
-    let maxDate = moment().format('YYYY-MM-DD');
+    let minDate = null;
+    if (!_isEmpty(props.minDate)) {
+      minDate = moment(props.minDate, 'DD-MM-YYYY').format(DATE_FORMAT);
+      console.log('props.minDate', props.minDate);
+      console.log('minDateState', minDate);
+    }
+    let maxDate = null;
+    if (_isEmpty(props.maxDate)) {
+      maxDate = moment().format(DATE_FORMAT);
+    } else {
+      maxDate = moment(props.maxDate, 'DD-MM-YYYY').format(DATE_FORMAT);
+    }
+
     if (props.numberMonthsFuture && typeof props.numberMonthsFuture === 'number') {
       const endOfMonth = moment().clone().endOf('month');
-      var futureMonth = endOfMonth.add(props.numberMonthsFuture, 'M');
-      maxDate = futureMonth.format('YYYY-MM-DD');
+      const futureMonth = endOfMonth.add(props.numberMonthsFuture, 'M');
+      maxDate = futureMonth.format(DATE_FORMAT);
     }
-    this.state = { start: {}, end: {}, period: {}, min: null, max: maxDate, error: null };
+    this.state = { start: {}, end: {}, period: {}, min: minDate, max: maxDate, error: null };
   }
 
   getDateString(timestamp) {
@@ -135,6 +147,7 @@ class PickerRangeOfDates extends Component {
           markingType="period"
           markedDates={period}
           maxDate={max}
+          minDate={min}
         />
         {error && (
           <Text
