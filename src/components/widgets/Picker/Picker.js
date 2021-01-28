@@ -36,6 +36,8 @@ type Props = {
   center?: boolean,
   mode: 'provinces' | 'districts' | 'options',
   numberMonthsFuture?: number,
+  minDate?: string,
+  maxDate?: string,
   rangeOfDates: boolean,
   province: string,
   district: string,
@@ -181,6 +183,8 @@ class Picker extends Component<Props> {
       mode,
       data,
       rangeOfDates,
+      minDate,
+      maxDate,
       onPressBackFoward,
       numberMonthsFuture,
     } = this.props;
@@ -204,6 +208,8 @@ class Picker extends Component<Props> {
                 title={''}
                 onRangeDatesPicker={this.onRangeDatesPicker}
                 numberMonthsFuture={numberMonthsFuture}
+                minDate={minDate}
+                maxDate={maxDate}
               />
               <View style={{ padding: 16, flex: 1 }}>
                 {error && (

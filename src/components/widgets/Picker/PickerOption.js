@@ -31,6 +31,8 @@ type Props = {
   placeHolder?: string,
   containerStyle: ViewStyle,
   inputContainerStyle: ViewStyle,
+  minDate?: string,
+  maxDate?: string,
 };
 
 type State = {
@@ -237,6 +239,8 @@ class PickerOption extends Component<Props, State> {
       onChange,
       type,
       numberMonthsFuture,
+      minDate,
+      maxDate,
     } = this.props;
     const { showingPicker, rangeOfDates } = this.state;
     const showError = rawErrors && rawErrors.length > 0 && uiMode !== 'material';
@@ -266,6 +270,8 @@ class PickerOption extends Component<Props, State> {
             center={pickerCenter}
             mode={this.mode}
             numberMonthsFuture={numberMonthsFuture}
+            minDate={minDate}
+            maxDate={maxDate}
             rangeOfDates={rangeOfDates}
             onPressBackFoward={() => {
               this.setState({ rangeOfDates: false });
