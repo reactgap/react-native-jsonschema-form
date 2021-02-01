@@ -80,7 +80,7 @@ class PickerOption extends PureComponent<Props> {
           mainColor={'grey'}
           textStyle={{ paddingLeft: 5 }}
           numberMonthsFuture={3}
-          minDate={'28-01-2021'}
+          // minDate={'28-01-2021'}
           maxDate={'02-02-2021'}
         />
       </View>

@@ -31,8 +31,9 @@ class PickerRangeOfDates extends Component {
 
     if (props.numberMonthsFuture && typeof props.numberMonthsFuture === 'number') {
       const endOfMonth = moment().clone().endOf('month');
-      const futureMonth = endOfMonth.add(props.numberMonthsFuture, 'M');
-      maxDate = futureMonth.format(DATE_FORMAT);
+      const futureMonth = endOfMonth.add(3, 'months');
+      const endDateFutureMonth = futureMonth.clone().endOf('month');
+      maxDate = endDateFutureMonth.format(DATE_FORMAT);
     }
     this.state = { start: {}, end: {}, period: {}, min: minDate, max: maxDate, error: null };
   }
