@@ -175,6 +175,7 @@ const styles = StyleSheet.create({
   inputContainerStyleDefault: {},
   containerStyleDefault: {
     marginBottom: 8,
+    height: 80,
   },
 });
 

@@ -155,7 +155,7 @@ class PickerOption extends Component<Props, State> {
                 this.inputRef = ref;
               }}
               inputContainerStyle={[inputContainerStyle]}
-              containerStyle={containerStyle}
+              containerStyle={[styles.textfieldContainer, containerStyle]}
               labelTextStyle={[{ paddingTop: 2 }, labelTextStyle]}
               labelFontSize={labelFontSize || 13}
             />
@@ -415,6 +415,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 25,
     right: 0,
+  },
+  textfieldContainer: {
+    height: 80,
   },
 });
 
