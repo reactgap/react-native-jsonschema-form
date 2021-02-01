@@ -189,7 +189,7 @@ class Picker extends Component<Props> {
       numberMonthsFuture,
     } = this.props;
     const { error } = this.state;
-    const pHeight = rangeOfDates ? 435 : (DEVICE_SCREEN_HEIGHT * 1) / 3;
+    const pHeight = rangeOfDates ? 450 : (DEVICE_SCREEN_HEIGHT * 1) / 3;
     return (
       <View
         style={[styles.contentContainer, center && styles.contentContainerCenter]}
@@ -204,14 +204,16 @@ class Picker extends Component<Props> {
           }}>
           {rangeOfDates ? (
             <View style={{ flex: 1 }}>
-              <PickerRangeOfDates
-                title={''}
-                onRangeDatesPicker={this.onRangeDatesPicker}
-                numberMonthsFuture={numberMonthsFuture}
-                minDate={minDate}
-                maxDate={maxDate}
-              />
-              <View style={{ padding: 16, flex: 1 }}>
+              <View style={{ flex: 1 }}>
+                <PickerRangeOfDates
+                  title={''}
+                  onRangeDatesPicker={this.onRangeDatesPicker}
+                  numberMonthsFuture={numberMonthsFuture}
+                  minDate={minDate}
+                  maxDate={maxDate}
+                />
+              </View>
+              <View style={{ padding: 16 }}>
                 {error && (
                   <Text
                     style={{
@@ -221,7 +223,7 @@ class Picker extends Component<Props> {
                       textAlign: 'center',
                     }}>{`${error}`}</Text>
                 )}
-                <View style={{ justifyContent: 'center', flex: 1, paddingHorizontal: 16 }}>
+                <View style={{ paddingHorizontal: 16, marginBottom: 0, backgroundColor: 'red' }}>
                   <CSButton type="secondary" title="Trở lại" onPress={() => onPressBackFoward()} />
                 </View>
               </View>
