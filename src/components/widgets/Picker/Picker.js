@@ -223,7 +223,7 @@ class Picker extends Component<Props> {
                       textAlign: 'center',
                     }}>{`${error}`}</Text>
                 )}
-                <View style={{ paddingHorizontal: 16, marginBottom: 0, backgroundColor: 'red' }}>
+                <View style={{ paddingHorizontal: 16, marginBottom: 0 }}>
                   <CSButton type="secondary" title="Trở lại" onPress={() => onPressBackFoward()} />
                 </View>
               </View>
