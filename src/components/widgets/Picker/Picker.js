@@ -211,18 +211,10 @@ class Picker extends Component<Props> {
                   numberMonthsFuture={numberMonthsFuture}
                   minDate={minDate}
                   maxDate={maxDate}
+                  schemaError={error}
                 />
               </View>
               <View style={{ padding: 16 }}>
-                {error && (
-                  <Text
-                    style={{
-                      color: csstyles.vars.csDanger,
-                      lineHeight: 24,
-                      paddingBottom: 8,
-                      textAlign: 'center',
-                    }}>{`${error}`}</Text>
-                )}
                 <View style={{ paddingHorizontal: 16, marginBottom: 0 }}>
                   <CSButton type="secondary" title="Trở lại" onPress={() => onPressBackFoward()} />
                 </View>

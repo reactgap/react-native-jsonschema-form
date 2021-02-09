@@ -139,7 +139,7 @@ class PickerRangeOfDates extends Component {
   }
 
   render() {
-    const { disabled, style, data } = this.props;
+    const { disabled, style, data, schemaError } = this.props;
     const { period, min, max, error } = this.state;
     return (
       <View>
@@ -150,15 +150,14 @@ class PickerRangeOfDates extends Component {
           maxDate={max}
           minDate={min}
         />
-        {error && (
+        {(error || schemaError) && (
           <Text
             style={{
               color: csstyles.vars.csDanger,
               lineHeight: 24,
-              marginTop: 8,
-              paddingBottom: 8,
+              marginBottom: 8,
               textAlign: 'center',
-            }}>{`${error}`}</Text>
+            }}>{`${error ? error : schemaError}`}</Text>
         )}
       </View>
     );
