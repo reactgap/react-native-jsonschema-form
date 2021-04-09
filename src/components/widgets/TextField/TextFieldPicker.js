@@ -185,7 +185,7 @@ class TextFieldPicker extends PureComponent<Props, State> {
     }
     switch (uiMode) {
       case 'material':
-        const errorMsg = showErrorDistrict ? 'Vui lòng chọn Quận/Huyện' : null;
+        const errorMsg = (showErrorDistrict && isDistrictRequired) ? 'Vui lòng chọn Quận/Huyện' : null;
         const subLabelDisplay = isDistrictRequired ? `${subLabel}*` : subLabel;
         return (
           <View style={[csstyles.base.rowCenterLineBetween]}>
