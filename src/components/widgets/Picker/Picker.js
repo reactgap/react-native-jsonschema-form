@@ -12,7 +12,11 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  type LayoutChangeEvent, Platform,
+  type LayoutChangeEvent,
+  Platform,
+  StyleProp,
+  ViewStyle,
+  Keyboard,
 } from 'react-native';
 import _isEmpty from 'lodash/isEmpty';
 
@@ -46,9 +50,10 @@ type Props = {
   data: any[],
   selectedIndex: number,
   onPressBackFoward: () => void,
-  isFilter?: boolean,
+  showSearchBar?: boolean,
   onChangeSearch?: () => void,
-  filterValue?: string,
+  searchValue?: string,
+  searchStyle?: StyleProp<ViewStyle>
 };
 
 class Picker extends Component<Props> {
@@ -194,12 +199,13 @@ class Picker extends Component<Props> {
       onPressBackFoward,
       onChangeSearch,
       numberMonthsFuture,
-      isFilter,
-      filterValue
+      showSearchBar,
+      searchValue,
+      searchStyle,
     } = this.props;
     const { error } = this.state;
     let pHeight = rangeOfDates ? 450 : (DEVICE_SCREEN_HEIGHT * 1) / 3;
-    if (isFilter) {
+    if (showSearchBar) {
       pHeight = Platform.OS === 'android' ? DEVICE_SCREEN_HEIGHT/2 : 450
     }
     return (
@@ -210,7 +216,7 @@ class Picker extends Component<Props> {
           <CSButton type="secondary" leftIcon="times" iconOnly onPress={this.onClose} />
           <CSButton type="primary" leftIcon="check" iconOnly onPress={this.onDone} />
         </View>
-       {isFilter && <SearchView onChangeText={onChangeSearch} value={filterValue} />}
+       {showSearchBar && <SearchView onChangeText={onChangeSearch} value={searchValue} contanierStyle={searchStyle}  onSubmitEditing ={() => Keyboard.dismiss()} />}
         <View
           style={{
             height: pHeight,
@@ -310,14 +316,14 @@ class Picker extends Component<Props> {
     );
   }
 }
-export const SearchView = ({ onChangeText, value, onChange, onSubmitEditing }) => {
+export const SearchView = ({ onChangeText, value, onChange, onSubmitEditing, placeholder = 'Tìm Kiếm', contanierStyle }) => {
   return (
-    <View style={styles.search}>
+    <View style={[styles.search, {...contanierStyle}]}>
       <TextInput
         style={{ paddingVertical: 10, flex: 1, paddingHorizontal: 5 }}
         onChangeText={onChangeText}
         value={value}
-        placeholder="Tìm Kiếm"
+        placeholder={placeholder}
         onChange={onChange}
         returnKeyType="search"
         onSubmitEditing={onSubmitEditing}

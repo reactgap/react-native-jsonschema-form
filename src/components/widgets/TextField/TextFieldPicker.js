@@ -1,9 +1,9 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, Platform, Keyboard } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { TextField } from 'react-native-material-textfield';
+import { TextField, FilledTextField, OutlinedTextField } from 'react-native-material-textfield';
 
 import csstyles from '../../styles';
 import Picker from '../Picker/Picker';
@@ -306,8 +306,8 @@ class TextFieldPicker extends PureComponent<Props, State> {
           onChange={this.onChange}
           label={label}
           onChangeSearch={this.onChangeSearch}
-          isFilter={true}
-          filterValue={search}
+          showSearchBar={true}
+          searchValue={search}
           center={pickerCenter}
           mode={this.mode}
         />
