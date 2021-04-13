@@ -8,7 +8,6 @@ import _isEmpty from 'lodash/isEmpty';
 
 import csstyles from '../../styles';
 import Picker from './Picker';
-import PickerRangeOfDates from './PickerRangeOfDates';
 
 type Props = {
   rangeDates: string,
@@ -33,6 +32,7 @@ type Props = {
   inputContainerStyle: ViewStyle,
   minDate?: string,
   maxDate?: string,
+  rightIcon?: string
 };
 
 type State = {
@@ -135,6 +135,7 @@ class PickerOption extends Component<Props, State> {
       labelTextStyle,
       labelFontSize,
       rangeDates,
+      rightIcon = "chevron-down"
     } = this.props;
     switch (uiMode) {
       case 'material':
@@ -213,7 +214,7 @@ class PickerOption extends Component<Props, State> {
               <View style={[styles.inputIconLight, iconStyleTmp]}>
                 <FontAwesome5
                   size={15}
-                  name={'chevron-down'}
+                  name={rightIcon}
                   color={mainColor ? mainColor : csstyles.vars.csGrey}
                 />
               </View>
