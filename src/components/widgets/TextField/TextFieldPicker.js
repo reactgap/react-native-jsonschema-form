@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, Platform, Keyboard } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { TextField, FilledTextField, OutlinedTextField } from 'react-native-material-textfield';
 
@@ -28,18 +28,24 @@ type State = {
 class TextFieldPicker extends PureComponent<Props, State> {
   state: State = {
     showingPicker: false,
+    search: null,
   };
   mode = 'provinces';
   data = null;
+  dataSearch = [];
   selectedIndex = null;
   inputDistrictRef: TextField | null = null;
   inputProvinceRef: TextField | null = null;
 
   onPress = (mode: 'provinces' | 'districts') => {
     const { value } = this.props;
+    const {search} = this.state
     const district = this.props.referValue;
     this.mode = mode;
     var name = '';
+    if (search) {
+      this.setState({search: null})
+    }
     if (mode === 'districts') {
       name = district;
       let provinceData = localData.find((x) => x.name === value);
@@ -48,7 +54,6 @@ class TextFieldPicker extends PureComponent<Props, State> {
       this.data = localData;
       name = value;
     }
-
     this.selectedIndex = this.data.findIndex((x) => x.name === name);
     this.setState({
       showingPicker: true,
@@ -258,6 +263,9 @@ class TextFieldPicker extends PureComponent<Props, State> {
         break;
     }
   };
+  onChangeSearch = (txt) => {
+    this.setState({search: txt})
+  }
 
   render() {
     const {
@@ -271,11 +279,21 @@ class TextFieldPicker extends PureComponent<Props, State> {
       icon,
       uiMode,
     } = this.props;
-    const { showingPicker } = this.state;
+    const { showingPicker, search } = this.state;
     const showError = rawErrors && rawErrors.length > 0 && uiMode !== 'material';
+    this.dataSearch = this.data;
+    if (search) {
+      let newSearchValue = search.trim()
+      newSearchValue =removeAccents(newSearchValue)
+
+      const regex = new RegExp(newSearchValue, 'i')
+      
+      this.dataSearch = this.dataSearch.filter(e => removeAccents(e?.name)?.search(regex) >=0)
+    }
 
     return (
       <View
+
         style={{
           marginBottom: csstyles.vars.csBoxSpacing,
         }}>
@@ -284,9 +302,12 @@ class TextFieldPicker extends PureComponent<Props, State> {
           value={this.mode == 'provinces' ? value : referValue}
           selectedIndex={this.selectedIndex}
           onClose={this.onClose}
-          data={this.data}
+          data={search ? this.dataSearch : this.data}
           onChange={this.onChange}
           label={label}
+          onChangeSearch={this.onChangeSearch}
+          showSearchBar={true}
+          searchValue={search}
           center={pickerCenter}
           mode={this.mode}
         />
@@ -381,5 +402,10 @@ const styles = StyleSheet.create({
     right: 0,
   },
 });
+function removeAccents(str) {
+  return str.normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/đ/g, 'd').replace(/Đ/g, 'D');
+}
 
 export default TextFieldPicker;
