@@ -66,6 +66,7 @@ class Picker extends Component<Props> {
     end: {},
     period: {},
     error: null,
+    searchValue: null
   };
 
   animateValue: Animated.Value = new Animated.Value(-999);
@@ -75,9 +76,23 @@ class Picker extends Component<Props> {
   shouldOpen = false;
 
   selected: string = null;
-
+  dataSearch = [];
+  itemSelected = {};
+  componentDidMount() {
+    const {data  =[], selectedIndex} = this.props;
+    this.itemSelected = (data || []).find((e, i) => i=== selectedIndex) || {};
+  }
+  componentDidUpdate(prevProps) {
+    const {mode} = this.props;
+    const {searchValue} = this.state;
+    if (mode && prevProps?.mode !== mode && searchValue ) {
+      this.setState({searchValue: null})
+    }
+  }
   shouldComponentUpdate(nextProps: Props, nextState: any) {
     const { isOpen, value, center, selectedIndex, rangeOfDates, data } = this.props;
+    const { searchValue } = this.state;
+
     if (!isOpen && nextProps.isOpen) {
       this.selectedIndex = nextProps.selectedIndex;
       this.selected = nextProps.value;
@@ -96,7 +111,8 @@ class Picker extends Component<Props> {
       value !== nextProps.value ||
       rangeOfDates !== nextProps.rangeOfDates ||
       nextState !== this.state ||
-      nextProps?.data !== data
+      nextProps?.data !== data ||
+      nextState?.searchValue !== searchValue
     );
   }
 
@@ -169,12 +185,14 @@ class Picker extends Component<Props> {
   };
 
   renderItem = ({ item, index }) => {
+    const {searchValue} = this.state;
+    let selected = searchValue ? item?.name === this.itemSelected?.name : index === this.selectedIndex;
     return (
       <ListGroupSelectableItem
         id={item}
         leftTitle={item.name}
         rightTitle={''}
-        selected={index === this.selectedIndex}
+        selected={selected}
         onPress={this.onSelected}
       />
     );
@@ -183,10 +201,13 @@ class Picker extends Component<Props> {
   onSelected = (item: String) => {
     const { data } = this.props;
     this.selectedIndex = data.findIndex((x) => x.id === item.id);
+    this.itemSelected = item;
     this.selected = item.name;
     this.forceUpdate();
   };
-
+  onChangeText = (txt) => {
+    this.setState({searchValue: txt})
+  }
   renderContent = () => {
     const {
       value,
@@ -200,13 +221,20 @@ class Picker extends Component<Props> {
       onChangeSearch,
       numberMonthsFuture,
       showSearchBar,
-      searchValue,
       searchStyle,
     } = this.props;
-    const { error } = this.state;
+    const { error, searchValue } = this.state;
     let pHeight = rangeOfDates ? 450 : (DEVICE_SCREEN_HEIGHT * 1) / 3;
     if (showSearchBar) {
       pHeight = Platform.OS === 'android' ? DEVICE_SCREEN_HEIGHT/2 : 450
+    }
+    if (searchValue) {
+      let newSearchValue = searchValue.trim()
+      newSearchValue =removeAccents(newSearchValue)
+
+      const regex = new RegExp(newSearchValue, 'i')
+      
+      this.dataSearch = data.filter(e => removeAccents(e?.name)?.search(regex) >=0)
     }
     return (
       <View
@@ -216,7 +244,7 @@ class Picker extends Component<Props> {
           <CSButton type="secondary" leftIcon="times" iconOnly onPress={this.onClose} />
           <CSButton type="primary" leftIcon="check" iconOnly onPress={this.onDone} />
         </View>
-       {showSearchBar && <SearchView onChangeText={onChangeSearch} value={searchValue} contanierStyle={searchStyle}  onSubmitEditing ={() => Keyboard.dismiss()} />}
+       {showSearchBar && <SearchView onChangeText={this.onChangeText} value={searchValue} contanierStyle={searchStyle}  onSubmitEditing ={() => Keyboard.dismiss()} />}
         <View
           style={{
             height: pHeight,
@@ -242,7 +270,7 @@ class Picker extends Component<Props> {
           ) : (
             <FlatList
               style={csstyles.base.full}
-              data={data}
+              data={ searchValue ? this.dataSearch :data}
               extraData={this.selectedIndex}
               keyExtractor={(item) => `${item.id || item._id}`}
               renderItem={this.renderItem}
@@ -304,7 +332,6 @@ class Picker extends Component<Props> {
 
   render() {
     const { isOpen, center, data } = this.props;
-
     return (
       <Modal
         visible={isOpen}
@@ -382,5 +409,9 @@ const styles = StyleSheet.create({
   },
   searchIcon: { alignSelf: 'center', marginRight: 10 },
 });
-
+function removeAccents(str) {
+  return str.normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/đ/g, 'd').replace(/Đ/g, 'D');
+}
 export default Picker;

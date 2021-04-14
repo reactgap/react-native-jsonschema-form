@@ -2,8 +2,8 @@
 
 import React, { Component } from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { Text, View, TouchableOpacity, StyleSheet, Platform, ViewStyle } from 'react-native';
-import { TextField, FilledTextField, OutlinedTextField } from 'react-native-material-textfield';
+import { Text, View, TouchableOpacity, StyleSheet, ViewStyle, StyleProp } from 'react-native';
+import { TextField } from 'react-native-material-textfield';
 import _isEmpty from 'lodash/isEmpty';
 
 import csstyles from '../../styles';
@@ -32,7 +32,9 @@ type Props = {
   inputContainerStyle: ViewStyle,
   minDate?: string,
   maxDate?: string,
-  rightIcon?: string
+  rightIcon?: string,
+  showSearchBar?: boolean,
+  searchStyle?:  StyleProp<ViewStyle>
 };
 
 type State = {
@@ -60,6 +62,7 @@ class PickerOption extends Component<Props, State> {
       rangeOfDates: false,
       showingPicker: false,
       schemaIndex: props.currentIndex ? props.currentIndex : getCurrentIndex(props),
+      searchValue: null
     };
   }
 
@@ -242,10 +245,12 @@ class PickerOption extends Component<Props, State> {
       numberMonthsFuture,
       minDate,
       maxDate,
+      showSearchBar,
+      searchStyle
     } = this.props;
     const { showingPicker, rangeOfDates } = this.state;
     const showError = rawErrors && rawErrors.length > 0 && uiMode !== 'material';
-    var dataPicker = data || [];
+    let dataPicker = data || [];
     if (schema && schema.hasOwnProperty('data')) {
       dataPicker = schema['data'];
     }
@@ -256,6 +261,7 @@ class PickerOption extends Component<Props, State> {
     if (schema && schema.hasOwnProperty('style')) {
       styleFromSchema = schema['style'];
     }
+    let indexSelected = schema ? schemaIndex : currentIndex;
 
     return (
       <>
@@ -263,8 +269,8 @@ class PickerOption extends Component<Props, State> {
           <Picker
             isOpen={showingPicker}
             value={value}
-            selectedIndex={schema ? schemaIndex : currentIndex}
-            data={dataPicker}
+            selectedIndex={indexSelected}
+            data={data}
             onChange={this.onChange}
             onClose={this.onClose}
             label={label}
@@ -289,6 +295,8 @@ class PickerOption extends Component<Props, State> {
                 },
               );
             }}
+            showSearchBar={showSearchBar}
+            searchStyle={searchStyle}
           />
           <View style={csstyles.base.rowCenterLineBetween}>
             <TouchableOpacity
