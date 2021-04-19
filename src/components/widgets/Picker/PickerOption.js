@@ -34,7 +34,8 @@ type Props = {
   maxDate?: string,
   rightIcon?: string,
   showSearchBar?: boolean,
-  searchStyle?:  StyleProp<ViewStyle>
+  searchStyle?:  StyleProp<ViewStyle>,
+  numberOfLines?: string
 };
 
 type State = {
@@ -138,7 +139,8 @@ class PickerOption extends Component<Props, State> {
       labelTextStyle,
       labelFontSize,
       rangeDates,
-      rightIcon = "chevron-down"
+      rightIcon = "chevron-down",
+      numberOfLines
     } = this.props;
     switch (uiMode) {
       case 'material':
@@ -203,6 +205,7 @@ class PickerOption extends Component<Props, State> {
               </View>
             )}
             <Text
+              numberOfLines={numberOfLines}
               style={[
                 { ...csstyles.text.regular },
                 inputTextStyle,
