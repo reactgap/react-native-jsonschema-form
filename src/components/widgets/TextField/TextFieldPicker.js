@@ -1,7 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { TextField, FilledTextField, OutlinedTextField } from 'rn-material-ui-textfield';
 
@@ -19,6 +19,7 @@ type Props = {
   disabled: boolean,
   hiddenDistrict: boolean,
   districtRequired: boolean,
+  searchStyle: StyleProp<ViewStyle>,
 };
 
 type State = {
@@ -40,6 +41,7 @@ class TextFieldPicker extends PureComponent<Props, State> {
     const district = this.props.referValue;
     this.mode = mode;
     var name = '';
+
     if (mode === 'districts') {
       name = district;
       let provinceData = localData.find((x) => x.name === value);
@@ -48,7 +50,6 @@ class TextFieldPicker extends PureComponent<Props, State> {
       this.data = localData;
       name = value;
     }
-
     this.selectedIndex = this.data.findIndex((x) => x.name === name);
     this.setState({
       showingPicker: true,
@@ -185,7 +186,8 @@ class TextFieldPicker extends PureComponent<Props, State> {
     }
     switch (uiMode) {
       case 'material':
-        const errorMsg = showErrorDistrict ? 'Vui lòng chọn Quận/Huyện' : null;
+        const errorMsg =
+          showErrorDistrict && isDistrictRequired ? 'Vui lòng chọn Quận/Huyện' : null;
         const subLabelDisplay = isDistrictRequired ? `${subLabel}*` : subLabel;
         return (
           <View style={[csstyles.base.rowCenterLineBetween]}>
@@ -260,8 +262,19 @@ class TextFieldPicker extends PureComponent<Props, State> {
   };
 
   render() {
-    const { value, referValue, label, pickerCenter, schema, rawErrors, disabled, icon, uiMode } =
-      this.props;
+    const {
+      value,
+      referValue,
+      label,
+      pickerCenter,
+      schema,
+      rawErrors,
+      disabled,
+      icon,
+      uiMode,
+      searchStyle,
+    } = this.props;
+
     const { showingPicker } = this.state;
     const showError = rawErrors && rawErrors.length > 0 && uiMode !== 'material';
 
@@ -278,6 +291,8 @@ class TextFieldPicker extends PureComponent<Props, State> {
           data={this.data}
           onChange={this.onChange}
           label={label}
+          showSearchBar={true}
+          searchStyle={searchStyle}
           center={pickerCenter}
           mode={this.mode}
         />

@@ -2,13 +2,12 @@
 
 import React, { Component } from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { Text, View, TouchableOpacity, StyleSheet, Platform, ViewStyle } from 'react-native';
 import { TextField, FilledTextField, OutlinedTextField } from 'rn-material-ui-textfield';
+import { Text, View, TouchableOpacity, StyleSheet, ViewStyle, StyleProp } from 'react-native';
 import _isEmpty from 'lodash/isEmpty';
 
 import csstyles from '../../styles';
 import Picker from './Picker';
-import PickerRangeOfDates from './PickerRangeOfDates';
 
 type Props = {
   rangeDates: string,
@@ -33,6 +32,10 @@ type Props = {
   inputContainerStyle: ViewStyle,
   minDate?: string,
   maxDate?: string,
+  rightIcon?: string,
+  showSearchBar?: boolean,
+  searchStyle?: StyleProp<ViewStyle>,
+  numberOfLines?: string,
 };
 
 type State = {
@@ -60,6 +63,7 @@ class PickerOption extends Component<Props, State> {
       rangeOfDates: false,
       showingPicker: false,
       schemaIndex: props.currentIndex ? props.currentIndex : getCurrentIndex(props),
+      searchValue: null,
     };
   }
 
@@ -135,6 +139,8 @@ class PickerOption extends Component<Props, State> {
       labelTextStyle,
       labelFontSize,
       rangeDates,
+      rightIcon = 'chevron-down',
+      numberOfLines,
     } = this.props;
     switch (uiMode) {
       case 'material':
@@ -199,6 +205,7 @@ class PickerOption extends Component<Props, State> {
               </View>
             )}
             <Text
+              numberOfLines={numberOfLines}
               style={[
                 { ...csstyles.text.regular },
                 inputTextStyle,
@@ -213,7 +220,7 @@ class PickerOption extends Component<Props, State> {
               <View style={[styles.inputIconLight, iconStyleTmp]}>
                 <FontAwesome5
                   size={15}
-                  name={'chevron-down'}
+                  name={rightIcon}
                   color={mainColor ? mainColor : csstyles.vars.csGrey}
                 />
               </View>
@@ -241,10 +248,12 @@ class PickerOption extends Component<Props, State> {
       numberMonthsFuture,
       minDate,
       maxDate,
+      showSearchBar,
+      searchStyle,
     } = this.props;
     const { showingPicker, rangeOfDates } = this.state;
     const showError = rawErrors && rawErrors.length > 0 && uiMode !== 'material';
-    var dataPicker = data || [];
+    let dataPicker = data || [];
     if (schema && schema.hasOwnProperty('data')) {
       dataPicker = schema['data'];
     }
@@ -255,6 +264,7 @@ class PickerOption extends Component<Props, State> {
     if (schema && schema.hasOwnProperty('style')) {
       styleFromSchema = schema['style'];
     }
+    let indexSelected = schema ? schemaIndex : currentIndex;
 
     return (
       <>
@@ -262,8 +272,8 @@ class PickerOption extends Component<Props, State> {
           <Picker
             isOpen={showingPicker}
             value={value}
-            selectedIndex={schema ? schemaIndex : currentIndex}
-            data={dataPicker}
+            selectedIndex={indexSelected}
+            data={data}
             onChange={this.onChange}
             onClose={this.onClose}
             label={label}
@@ -288,6 +298,8 @@ class PickerOption extends Component<Props, State> {
                 },
               );
             }}
+            showSearchBar={showSearchBar}
+            searchStyle={searchStyle}
           />
           <View style={csstyles.base.rowCenterLineBetween}>
             <TouchableOpacity
