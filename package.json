@@ -26,7 +26,8 @@
     "react-native-image-crop-picker": ">=0.25.3",
     "react-native-vector-icons": "6.6.0",
     "moment": ">=2.24.0",
-    "react-native-easy-grid": ">=0.2.2"
+    "react-native-easy-grid": ">=0.2.2",
+    "react-native-keyboard-aware-scroll-view": "^0.9.4"
   },
   "dependencies": {
     "ajv": "6.10.2",
@@ -37,7 +38,6 @@
     "lodash.topath": "^4.5.2",
     "lodash.isempty": "^4.4.0",
     "prop-types": "^15.5.8",
-    "react-native-keyboard-aware-scroll-view": "0.9.1",
     "react-native-calendars": "^1.282.0",
     "url": "^0.11.0"
   },
@@ -46,6 +46,6 @@
     "babel-eslint": "^10.0.1",
     "babel-preset-flow": "^6.23.0",
     "eslint": "^6.3.0",
-    "rn-material-ui-textfield": "^0.16.1"
+    "rn-material-ui-textfield": "^1.0.4"
   }
 }
