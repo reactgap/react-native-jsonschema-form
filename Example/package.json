@@ -20,7 +20,7 @@
     "react-native-fast-image": "7.0.2",
     "react-native-image-crop-picker": "^0.32.2",
     "react-native-jsonschema-form": "../",
-    "react-native-material-textfield": "^0.16.1",
+    "rn-material-ui-textfield": "^0.16.1",
     "react-native-vector-icons": "6.6.0"
   },
   "devDependencies": {

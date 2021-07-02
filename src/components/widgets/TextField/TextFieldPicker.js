@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { TextField, FilledTextField, OutlinedTextField } from 'react-native-material-textfield';
+import { TextField, FilledTextField, OutlinedTextField } from 'rn-material-ui-textfield';
 
 import csstyles from '../../styles';
 import Picker from '../Picker/Picker';
@@ -260,17 +260,8 @@ class TextFieldPicker extends PureComponent<Props, State> {
   };
 
   render() {
-    const {
-      value,
-      referValue,
-      label,
-      pickerCenter,
-      schema,
-      rawErrors,
-      disabled,
-      icon,
-      uiMode,
-    } = this.props;
+    const { value, referValue, label, pickerCenter, schema, rawErrors, disabled, icon, uiMode } =
+      this.props;
     const { showingPicker } = this.state;
     const showError = rawErrors && rawErrors.length > 0 && uiMode !== 'material';
 

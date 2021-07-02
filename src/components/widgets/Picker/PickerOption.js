@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Text, View, TouchableOpacity, StyleSheet, Platform, ViewStyle } from 'react-native';
-import { TextField, FilledTextField, OutlinedTextField } from 'react-native-material-textfield';
+import { TextField, FilledTextField, OutlinedTextField } from 'rn-material-ui-textfield';
 import _isEmpty from 'lodash/isEmpty';
 
 import csstyles from '../../styles';
