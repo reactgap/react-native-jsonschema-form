@@ -39,6 +39,7 @@
     "prop-types": "^15.5.8",
     "react-native-keyboard-aware-scroll-view": "0.9.1",
     "react-native-calendars": "^1.282.0",
+    "@react-native-community/datetimepicker": "^3.5.2",
     "url": "^0.11.0"
   },
   "devDependencies": {

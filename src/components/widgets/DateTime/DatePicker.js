@@ -5,7 +5,6 @@ import {
   View,
   Modal,
   Animated,
-  DatePickerIOS,
   Easing,
   StyleSheet,
   TouchableOpacity,
@@ -15,7 +14,7 @@ import csstyles from '../../styles';
 import { DEVICE_BOTTOM_SAFE } from '../../../deviceHelper';
 import CSButton from '../Button/CSButton/CSButton';
 import moment from 'moment';
-
+import DateTimePicker from '@react-native-community/datetimepicker';
 type Props = {
   isOpen: boolean,
   value: Date | null,
@@ -168,11 +167,12 @@ class DatePicker extends Component<Props, State> {
       <View
         style={[styles.contentContainer, center && styles.contentContainerCenter]}
         onLayout={center ? null : this.onContentLayout}>
-        <DatePickerIOS
-          date={this.state.currentDate}
+        <DateTimePicker
+          value={this.state.currentDate}
           maximumDate={this.state.endDate}
-          onDateChange={this.onDateChange}
+          onChange={this.onDateChange}
           mode={picking}
+          display="spinner"
           timeZoneOffsetInMinutes={new Date().getTimezoneOffset() * -1}
           locale={'vi'}
         />
