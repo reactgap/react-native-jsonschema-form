@@ -5,7 +5,7 @@ import { TouchableOpacity, StyleSheet, Image, View } from 'react-native';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import csstyles from '../styles';
 import Photo from './Photo/Photo';
-// import ActionSheet, { type ActionSheetConfig } from './ActionSheet/ActionSheet';
+import ActionSheet from 'react-native-actionsheet';
 
 type Props = {
   photoURL?: string,
