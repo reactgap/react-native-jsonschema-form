@@ -11,7 +11,7 @@ import {
   Keyboard,
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { TextField, FilledTextField, OutlinedTextField } from 'react-native-material-textfield';
+import { TextField, FilledTextField, OutlinedTextField } from 'rn-material-ui-textfield';
 import moment from 'moment';
 
 import { convertDateToString, parserStringToDate } from './DatetimeFormat';

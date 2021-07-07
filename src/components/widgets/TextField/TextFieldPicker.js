@@ -3,7 +3,7 @@
 import React, { PureComponent } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { TextField, FilledTextField, OutlinedTextField } from 'react-native-material-textfield';
+import { TextField, FilledTextField, OutlinedTextField } from 'rn-material-ui-textfield';
 
 import csstyles from '../../styles';
 import Picker from '../Picker/Picker';
@@ -19,7 +19,7 @@ type Props = {
   disabled: boolean,
   hiddenDistrict: boolean,
   districtRequired: boolean,
-  searchStyle: StyleProp<ViewStyle>
+  searchStyle: StyleProp<ViewStyle>,
 };
 
 type State = {
@@ -186,7 +186,8 @@ class TextFieldPicker extends PureComponent<Props, State> {
     }
     switch (uiMode) {
       case 'material':
-        const errorMsg = (showErrorDistrict && isDistrictRequired) ? 'Vui lòng chọn Quận/Huyện' : null;
+        const errorMsg =
+          showErrorDistrict && isDistrictRequired ? 'Vui lòng chọn Quận/Huyện' : null;
         const subLabelDisplay = isDistrictRequired ? `${subLabel}*` : subLabel;
         return (
           <View style={[csstyles.base.rowCenterLineBetween]}>
@@ -260,7 +261,6 @@ class TextFieldPicker extends PureComponent<Props, State> {
     }
   };
 
-
   render() {
     const {
       value,
@@ -274,13 +274,12 @@ class TextFieldPicker extends PureComponent<Props, State> {
       uiMode,
       searchStyle,
     } = this.props;
+
     const { showingPicker } = this.state;
     const showError = rawErrors && rawErrors.length > 0 && uiMode !== 'material';
 
-
     return (
       <View
-
         style={{
           marginBottom: csstyles.vars.csBoxSpacing,
         }}>
@@ -289,7 +288,7 @@ class TextFieldPicker extends PureComponent<Props, State> {
           value={this.mode == 'provinces' ? value : referValue}
           selectedIndex={this.selectedIndex}
           onClose={this.onClose}
-          data={ this.data}
+          data={this.data}
           onChange={this.onChange}
           label={label}
           showSearchBar={true}
@@ -388,6 +387,5 @@ const styles = StyleSheet.create({
     right: 0,
   },
 });
-
 
 export default TextFieldPicker;

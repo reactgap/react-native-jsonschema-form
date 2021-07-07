@@ -4,7 +4,7 @@ import React, { PureComponent, Fragment } from 'react';
 import { Text, View, StyleSheet, type ViewStyle } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import csstyles from '../../styles';
-import { TextField, FilledTextField, OutlinedTextField } from 'react-native-material-textfield';
+import { TextField, FilledTextField, OutlinedTextField } from 'rn-material-ui-textfield';
 
 type Props = {
   placeholder: string,

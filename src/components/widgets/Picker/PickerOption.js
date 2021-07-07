@@ -2,8 +2,8 @@
 
 import React, { Component } from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { TextField, FilledTextField, OutlinedTextField } from 'rn-material-ui-textfield';
 import { Text, View, TouchableOpacity, StyleSheet, ViewStyle, StyleProp } from 'react-native';
-import { TextField } from 'react-native-material-textfield';
 import _isEmpty from 'lodash/isEmpty';
 
 import csstyles from '../../styles';
@@ -34,8 +34,8 @@ type Props = {
   maxDate?: string,
   rightIcon?: string,
   showSearchBar?: boolean,
-  searchStyle?:  StyleProp<ViewStyle>,
-  numberOfLines?: string
+  searchStyle?: StyleProp<ViewStyle>,
+  numberOfLines?: string,
 };
 
 type State = {
@@ -63,7 +63,7 @@ class PickerOption extends Component<Props, State> {
       rangeOfDates: false,
       showingPicker: false,
       schemaIndex: props.currentIndex ? props.currentIndex : getCurrentIndex(props),
-      searchValue: null
+      searchValue: null,
     };
   }
 
@@ -139,8 +139,8 @@ class PickerOption extends Component<Props, State> {
       labelTextStyle,
       labelFontSize,
       rangeDates,
-      rightIcon = "chevron-down",
-      numberOfLines
+      rightIcon = 'chevron-down',
+      numberOfLines,
     } = this.props;
     switch (uiMode) {
       case 'material':
@@ -249,7 +249,7 @@ class PickerOption extends Component<Props, State> {
       minDate,
       maxDate,
       showSearchBar,
-      searchStyle
+      searchStyle,
     } = this.props;
     const { showingPicker, rangeOfDates } = this.state;
     const showError = rawErrors && rawErrors.length > 0 && uiMode !== 'material';
