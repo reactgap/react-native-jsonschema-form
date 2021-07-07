@@ -37,6 +37,10 @@ const imgCropConfig = {
 };
 
 class Avatar extends PureComponent<Props, State> {
+  constructor(props) {
+    super(props);
+    this.actionSheet = React.createRef();
+  }
   state: State = {
     pickerMode: null,
     photoURL: null,
