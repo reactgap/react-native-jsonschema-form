@@ -11,7 +11,7 @@ import {
   type LayoutChangeEvent,
 } from 'react-native';
 import csstyles from '../../styles';
-import { DEVICE_BOTTOM_SAFE } from '../../../deviceHelper';
+import { DEVICE_BOTTOM_SAFE, DEVICE_SCREEN_HEIGHT } from '../../../deviceHelper';
 import CSButton from '../Button/CSButton/CSButton';
 import moment from 'moment';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -29,7 +29,7 @@ type State = {
 };
 
 class DatePicker extends Component<Props, State> {
-  animateValue: Animated.Value = new Animated.Value(-999);
+  animateValue: Animated.Value = new Animated.Value(999);
 
   contentHeight: number = 0;
 
@@ -110,10 +110,6 @@ class DatePicker extends Component<Props, State> {
   }: LayoutChangeEvent) => {
     const heightPlusBottom = height + DEVICE_BOTTOM_SAFE + csstyles.vars.csBoxSpacing;
 
-    if (this.contentHeight === 0) {
-      this.animateValue.setValue(-heightPlusBottom);
-    }
-
     this.contentHeight = heightPlusBottom;
 
     if (this.shouldOpen) {
@@ -127,7 +123,8 @@ class DatePicker extends Component<Props, State> {
     this.selectedDate = value;
 
     Animated.spring(this.animateValue, {
-      toValue: 0,
+      toValue: DEVICE_SCREEN_HEIGHT - this.contentHeight,
+      useNativeDriver: true,
     }).start(() => {
       this.shouldOpen = false;
     });
@@ -136,14 +133,15 @@ class DatePicker extends Component<Props, State> {
   toggleDown = () => {
     Animated.timing(this.animateValue, {
       duration: 250,
-      toValue: -this.contentHeight,
+      toValue: DEVICE_SCREEN_HEIGHT * 2,
+      useNativeDriver: true,
       easing: Easing.inOut(Easing.ease),
     }).start(() => {
       this.forceUpdate();
     });
   };
 
-  onDateChange = (value: Date) => {
+  onDateChange = (event: any, value: Date) => {
     if (value) {
       this.setState({ currentDate: value });
     }
@@ -164,7 +162,7 @@ class DatePicker extends Component<Props, State> {
     const { value, picking, center } = this.props;
 
     return (
-      <View
+      <Animated.View
         style={[styles.contentContainer, center && styles.contentContainerCenter]}
         onLayout={center ? null : this.onContentLayout}>
         <DateTimePicker
@@ -179,7 +177,7 @@ class DatePicker extends Component<Props, State> {
         <View style={[styles.actionBtnContainer]}>
           <CSButton type="primary" leftIcon="check" iconOnly onPress={this.onDone} />
         </View>
-      </View>
+      </Animated.View>
     );
   };
 
@@ -222,7 +220,11 @@ class DatePicker extends Component<Props, State> {
           style={[
             styles.animationView,
             {
-              bottom: this.animateValue,
+              transform: [
+                {
+                  translateY: this.animateValue,
+                },
+              ],
             },
           ]}>
           {this.renderContent()}
