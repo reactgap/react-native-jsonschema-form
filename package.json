@@ -27,7 +27,8 @@
     "react-native-vector-icons": "6.6.0",
     "moment": ">=2.24.0",
     "react-native-easy-grid": ">=0.2.2",
-    "react-native-keyboard-aware-scroll-view": "^0.9.4"
+    "react-native-keyboard-aware-scroll-view": "^0.9.4",
+    "react-native-actionsheet": ">= 2.4.2"
   },
   "dependencies": {
     "ajv": "6.10.2",

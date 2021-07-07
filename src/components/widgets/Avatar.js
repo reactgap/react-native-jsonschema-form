@@ -5,7 +5,7 @@ import { TouchableOpacity, StyleSheet, Image, View } from 'react-native';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import csstyles from '../styles';
 import Photo from './Photo/Photo';
-import ActionSheet, { type ActionSheetConfig } from './ActionSheet/ActionSheet';
+// import ActionSheet, { type ActionSheetConfig } from './ActionSheet/ActionSheet';
 
 type Props = {
   photoURL?: string,
@@ -16,7 +16,6 @@ type Props = {
 };
 
 type State = {
-  profilePhotoSelecting: boolean,
   pickerMode: 'library' | 'camera' | null,
   photoURL: String,
   imageLocal: String,
@@ -25,17 +24,26 @@ type State = {
 
 const widthAvatar = 100;
 
+const imgCropConfig = {
+  width: 300,
+  height: 300,
+  cropping: true,
+  includeBase64: true,
+  useFrontCamera: true,
+  cropperTintColor: csstyles.vars.csGrey,
+  cropperToolbarTitle: 'Choose A Photo',
+  cropperChooseText: 'Done',
+  cropperCancelText: 'Cancel',
+};
+
 class Avatar extends PureComponent<Props, State> {
   state: State = {
-    profilePhotoSelecting: false,
     pickerMode: null,
     photoURL: null,
   };
 
   onProfilePhotoPress = () => {
-    this.setState({
-      profilePhotoSelecting: true,
-    });
+    this.actionSheet?.current?.show();
   };
 
   onProfilePhotoSelected = (image?: Image) => {
@@ -48,92 +56,8 @@ class Avatar extends PureComponent<Props, State> {
     }
   };
 
-  getActionSheetConfig = (): ActionSheetConfig => {
-    const { profilePhotoSelecting } = this.state;
-
-    if (profilePhotoSelecting) {
-      return {
-        isOpen: true,
-        title: 'Chọn ảnh đại diện',
-        actions: [
-          {
-            key: 'camera',
-            title: 'Chụp ảnh',
-            type: 'primary',
-            icon: 'camera',
-            onPress: () => {
-              this.setState({
-                profilePhotoSelecting: false,
-                pickerMode: 'camera',
-              });
-            },
-          },
-          {
-            key: 'library',
-            title: 'Chọn từ thư viện',
-            type: 'primary',
-            icon: 'images',
-            onPress: () => {
-              this.setState({
-                profilePhotoSelecting: false,
-                pickerMode: 'library',
-              });
-            },
-          },
-        ],
-        onClose: () => {
-          this.setState({
-            profilePhotoSelecting: false,
-            pickerMode: null,
-          });
-        },
-      };
-    }
-
-    return {
-      isOpen: false,
-      onDismiss: () => {
-        const imgCropConfig = {
-          width: 300,
-          height: 300,
-          cropping: true,
-          includeBase64: true,
-          useFrontCamera: true,
-          cropperTintColor: csstyles.vars.csGrey,
-          cropperToolbarTitle: 'Choose A Photo',
-          cropperChooseText: 'Done',
-          cropperCancelText: 'Cancel',
-        };
-
-        // debugger
-
-        const { pickerMode } = this.state;
-
-        switch (pickerMode) {
-          case 'library':
-            ImageCropPicker.openPicker(imgCropConfig)
-              .then(this.onProfilePhotoSelected)
-              .catch(() => {
-                this.onProfilePhotoSelected();
-              });
-            break;
-          case 'camera':
-            ImageCropPicker.openCamera(imgCropConfig)
-              .then(this.onProfilePhotoSelected)
-              .catch(() => {
-                this.onProfilePhotoSelected();
-              });
-            break;
-          default:
-            break;
-        }
-      },
-    };
-  };
-
   render() {
     const { photoURL, schema, value, disabled, accessToken } = this.props;
-    const actionSheetConfig = this.getActionSheetConfig();
     let url = photoURL ? photoURL : '';
     if (schema && value) {
       url = value;
@@ -141,7 +65,28 @@ class Avatar extends PureComponent<Props, State> {
 
     return (
       <View style={[styles.basicInfo]}>
-        <ActionSheet {...actionSheetConfig} />
+        <ActionSheet
+          ref={this.actionSheet}
+          title={'Chọn ảnh đại diện'}
+          options={['Chụp ảnh', 'Chọn từ thư viện', 'Huỷ']}
+          cancelButtonIndex={2}
+          onPress={(_index) => {
+            /* do something */
+            if (_index === 0) {
+              ImageCropPicker.openCamera(imgCropConfig)
+                .then(this.onProfilePhotoSelected)
+                .catch(() => {
+                  this.onProfilePhotoSelected();
+                });
+            } else if (_index === 1) {
+              ImageCropPicker.openPicker(imgCropConfig)
+                .then(this.onProfilePhotoSelected)
+                .catch(() => {
+                  this.onProfilePhotoSelected();
+                });
+            }
+          }}
+        />
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={this.onProfilePhotoPress}
