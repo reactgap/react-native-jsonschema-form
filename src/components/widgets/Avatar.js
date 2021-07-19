@@ -5,12 +5,8 @@ import { TouchableOpacity, StyleSheet, Image, View } from 'react-native';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import csstyles from '../styles';
 import Photo from './Photo/Photo';
-<<<<<<< HEAD
-import ActionSheet, { type ActionSheetConfig } from './ActionSheet/ActionSheet';
-import { checkPermission } from '../checkPermission';
-=======
 import ActionSheet from 'react-native-actionsheet';
->>>>>>> af6be8edf58cb136340e36fbd6f4bb7291c6a1e6
+import { checkPermission } from '../checkPermission';
 
 type Props = {
   photoURL?: string,
@@ -86,15 +82,14 @@ class Avatar extends PureComponent<Props, State> {
                 .then(this.onProfilePhotoSelected)
                 .catch(() => {
                   this.onProfilePhotoSelected();
-                  checkPermission({type: "CAMERA"})
+                  checkPermission({ type: 'CAMERA' });
                 });
             } else if (_index === 1) {
               ImageCropPicker.openPicker(imgCropConfig)
                 .then(this.onProfilePhotoSelected)
                 .catch(() => {
                   this.onProfilePhotoSelected();
-                  checkPermission({type: "LIBRARY"})
-
+                  checkPermission({ type: 'LIBRARY' });
                 });
             }
           }}
