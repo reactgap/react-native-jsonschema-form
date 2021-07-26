@@ -167,10 +167,14 @@ class DateTimeWidget extends PureComponent<Props, State> {
               labelTextStyle={[{ paddingTop: 2 }, labelTextStyle]}
               labelFontSize={labelFontSize || 13}
             />
-            {date && (
+            {date ? (
               <TouchableOpacity style={styles.clearIconMaterial} onPress={this.onPressClear}>
                 <FontAwesome5 size={18} name="times-circle" color={csstyles.vars.csLightGrey} />
               </TouchableOpacity>
+            ) : (
+              <View style={styles.iconMaterial}>
+                <FontAwesome5 size={20} name="sort-down" color={csstyles.vars.csLightGrey} />
+              </View>
             )}
           </>
         );
@@ -332,6 +336,14 @@ const styles = StyleSheet.create({
   },
   textfieldContainer: {
     height: 80,
+  },
+  iconMaterial: {
+    width: csstyles.vars.csInputHeight - 10,
+    height: csstyles.vars.csInputHeight,
+    ...csstyles.base.center,
+    position: 'absolute',
+    top: 20,
+    right: 0,
   },
 });
 

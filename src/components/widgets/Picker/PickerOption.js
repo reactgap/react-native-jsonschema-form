@@ -425,7 +425,7 @@ const styles = StyleSheet.create({
     height: csstyles.vars.csInputHeight,
     ...csstyles.base.center,
     position: 'absolute',
-    top: 25,
+    top: 20,
     right: 0,
   },
   textfieldContainer: {
