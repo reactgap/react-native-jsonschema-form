@@ -6,6 +6,7 @@ import ImageCropPicker from 'react-native-image-crop-picker';
 import csstyles from '../styles';
 import Photo from './Photo/Photo';
 import ActionSheet from 'react-native-actionsheet';
+import { checkPermission } from '../../checkPermissionHelper';
 
 type Props = {
   photoURL?: string,
@@ -81,12 +82,14 @@ class Avatar extends PureComponent<Props, State> {
                 .then(this.onProfilePhotoSelected)
                 .catch(() => {
                   this.onProfilePhotoSelected();
+                  checkPermission({ type: 'CAMERA' });
                 });
             } else if (_index === 1) {
               ImageCropPicker.openPicker(imgCropConfig)
                 .then(this.onProfilePhotoSelected)
                 .catch(() => {
                   this.onProfilePhotoSelected();
+                  checkPermission({ type: 'LIBRARY' });
                 });
             }
           }}
