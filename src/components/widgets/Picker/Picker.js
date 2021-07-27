@@ -32,7 +32,7 @@ import localData from '../../../data/vietnam_provinces_districts.json';
 // import { currLanguage } from '../../../utils/i18n'
 // import UniversalScreenContainer from '../../UniversalScreenContainer/UniversalScreenContainer'
 import PickerRangeOfDates from './PickerRangeOfDates';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5'
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
 type Props = {
   isOpen: boolean,
@@ -53,7 +53,7 @@ type Props = {
   showSearchBar?: boolean,
   onChangeSearch?: () => void,
   searchValue?: string,
-  searchStyle?: StyleProp<ViewStyle>
+  searchStyle?: StyleProp<ViewStyle>,
 };
 
 class Picker extends Component<Props> {
@@ -66,10 +66,10 @@ class Picker extends Component<Props> {
     end: {},
     period: {},
     error: null,
-    searchValue: null
+    searchValue: null,
   };
 
-  animateValue: Animated.Value = new Animated.Value(-999);
+  animateValue: Animated.Value = new Animated.Value(999);
 
   contentHeight: number = 0;
 
@@ -79,14 +79,14 @@ class Picker extends Component<Props> {
   dataSearch = [];
   itemSelected = {};
   componentDidMount() {
-    const {data  =[], selectedIndex} = this.props;
-    this.itemSelected = (data || []).find((e, i) => i=== selectedIndex) || {};
+    const { data = [], selectedIndex } = this.props;
+    this.itemSelected = (data || []).find((e, i) => i === selectedIndex) || {};
   }
   componentDidUpdate(prevProps) {
-    const {mode} = this.props;
-    const {searchValue} = this.state;
-    if (mode && prevProps?.mode !== mode && searchValue ) {
-      this.setState({searchValue: null})
+    const { mode } = this.props;
+    const { searchValue } = this.state;
+    if (mode && prevProps?.mode !== mode && searchValue) {
+      this.setState({ searchValue: null });
     }
   }
   shouldComponentUpdate(nextProps: Props, nextState: any) {
@@ -121,10 +121,6 @@ class Picker extends Component<Props> {
       layout: { height },
     },
   }: LayoutChangeEvent) => {
-    if (this.contentHeight === 0) {
-      this.animateValue.setValue(-height);
-    }
-
     this.contentHeight = height;
 
     if (this.shouldOpen) {
@@ -135,8 +131,9 @@ class Picker extends Component<Props> {
   toggleUp = () => {
     Animated.timing(this.animateValue, {
       duration: 250,
-      toValue: 0,
+      toValue: DEVICE_SCREEN_HEIGHT - this.contentHeight,
       easing: Easing.inOut(Easing.ease),
+      useNativeDriver: true,
     }).start(() => {
       this.shouldOpen = false;
     });
@@ -144,8 +141,9 @@ class Picker extends Component<Props> {
 
   toggleDown = () => {
     Animated.timing(this.animateValue, {
-      duration: 250,
-      toValue: -this.contentHeight,
+      duration: 300,
+      toValue: DEVICE_SCREEN_HEIGHT,
+      useNativeDriver: true,
       easing: Easing.inOut(Easing.ease),
     }).start(() => {
       this.forceUpdate();
@@ -185,8 +183,10 @@ class Picker extends Component<Props> {
   };
 
   renderItem = ({ item, index }) => {
-    const {searchValue} = this.state;
-    let selected = searchValue ? item?.name === this.itemSelected?.name : index === this.selectedIndex;
+    const { searchValue } = this.state;
+    let selected = searchValue
+      ? item?.name === this.itemSelected?.name
+      : index === this.selectedIndex;
     return (
       <ListGroupSelectableItem
         id={item}
@@ -206,8 +206,8 @@ class Picker extends Component<Props> {
     this.forceUpdate();
   };
   onChangeText = (txt) => {
-    this.setState({searchValue: txt})
-  }
+    this.setState({ searchValue: txt });
+  };
   renderContent = () => {
     const {
       value,
@@ -226,15 +226,15 @@ class Picker extends Component<Props> {
     const { error, searchValue } = this.state;
     let pHeight = rangeOfDates ? 450 : (DEVICE_SCREEN_HEIGHT * 1) / 3;
     if (showSearchBar) {
-      pHeight = Platform.OS === 'android' ? DEVICE_SCREEN_HEIGHT/2 : 450
+      pHeight = Platform.OS === 'android' ? DEVICE_SCREEN_HEIGHT / 2 : 450;
     }
     if (searchValue) {
-      let newSearchValue = searchValue.trim()
-      newSearchValue =removeAccents(newSearchValue)
+      let newSearchValue = searchValue.trim();
+      newSearchValue = removeAccents(newSearchValue);
 
-      const regex = new RegExp(newSearchValue, 'i')
-      
-      this.dataSearch = data.filter(e => removeAccents(e?.name)?.search(regex) >=0)
+      const regex = new RegExp(newSearchValue, 'i');
+
+      this.dataSearch = data.filter((e) => removeAccents(e?.name)?.search(regex) >= 0);
     }
     return (
       <View
@@ -244,7 +244,14 @@ class Picker extends Component<Props> {
           <CSButton type="secondary" leftIcon="times" iconOnly onPress={this.onClose} />
           <CSButton type="primary" leftIcon="check" iconOnly onPress={this.onDone} />
         </View>
-       {showSearchBar && <SearchView onChangeText={this.onChangeText} value={searchValue} contanierStyle={searchStyle}  onSubmitEditing ={() => Keyboard.dismiss()} />}
+        {showSearchBar && (
+          <SearchView
+            onChangeText={this.onChangeText}
+            value={searchValue}
+            contanierStyle={searchStyle}
+            onSubmitEditing={() => Keyboard.dismiss()}
+          />
+        )}
         <View
           style={{
             height: pHeight,
@@ -270,7 +277,7 @@ class Picker extends Component<Props> {
           ) : (
             <FlatList
               style={csstyles.base.full}
-              data={ searchValue ? this.dataSearch :data}
+              data={searchValue ? this.dataSearch : data}
               extraData={this.selectedIndex}
               keyExtractor={(item) => `${item.id || item._id}`}
               renderItem={this.renderItem}
@@ -313,15 +320,19 @@ class Picker extends Component<Props> {
         </View>
       );
     }
-
     return (
       <>
         {this.renderBgTouchable()}
         <Animated.View
           style={[
             styles.animationView,
+
             {
-              bottom: this.animateValue,
+              transform: [
+                {
+                  translateY: this.animateValue,
+                },
+              ],
             },
           ]}>
           {this.renderContent()}
@@ -343,9 +354,16 @@ class Picker extends Component<Props> {
     );
   }
 }
-export const SearchView = ({ onChangeText, value, onChange, onSubmitEditing, placeholder = 'Tìm Kiếm', contanierStyle }) => {
+export const SearchView = ({
+  onChangeText,
+  value,
+  onChange,
+  onSubmitEditing,
+  placeholder = 'Tìm Kiếm',
+  contanierStyle,
+}) => {
   return (
-    <View style={[styles.search, {...contanierStyle}]}>
+    <View style={[styles.search, { ...contanierStyle }]}>
       <TextInput
         style={{ paddingVertical: 10, flex: 1, paddingHorizontal: 5 }}
         onChangeText={onChangeText}
@@ -405,13 +423,15 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: csstyles.vars.csLight,
     backgroundColor: csstyles.vars.csLight,
-    marginHorizontal: 10
+    marginHorizontal: 10,
   },
   searchIcon: { alignSelf: 'center', marginRight: 10 },
 });
 function removeAccents(str) {
-  return str.normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .replace(/đ/g, 'd').replace(/Đ/g, 'D');
+  return str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'D');
 }
 export default Picker;
