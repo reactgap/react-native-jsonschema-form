@@ -78,7 +78,7 @@ class Picker extends Component<Props> {
   selected: string = null;
   dataSearch = [];
   itemSelected = {};
-  
+
   componentDidMount() {
     const { data = [], selectedIndex } = this.props;
     this.itemSelected = (data || []).find((e, i) => i === selectedIndex) || {};
@@ -132,7 +132,7 @@ class Picker extends Component<Props> {
   toggleUp = () => {
     Animated.timing(this.animateValue, {
       duration: 250,
-      toValue: DEVICE_SCREEN_HEIGHT - this.contentHeight  + (Platform.OS === 'android' ? 50 : 0),
+      toValue: DEVICE_SCREEN_HEIGHT - this.contentHeight + (Platform.OS === 'android' ? 50 : 0),
       easing: Easing.inOut(Easing.ease),
       useNativeDriver: true,
     }).start(() => {
@@ -225,11 +225,11 @@ class Picker extends Component<Props> {
       searchStyle,
     } = this.props;
     const { error, searchValue } = this.state;
-    let pHeight = rangeOfDates ? 450 : (DEVICE_SCREEN_HEIGHT * 1) / 3 ;
+    let pHeight = rangeOfDates ? 450 : (DEVICE_SCREEN_HEIGHT * 1) / 3;
     if (showSearchBar) {
       pHeight = Platform.OS === 'android' ? DEVICE_SCREEN_HEIGHT / 2 : 450;
     }
-    pHeight = Platform.OS === 'android' && pHeight + 100;
+    pHeight = Platform.OS === 'android' ? pHeight + 100 : pHeight;
 
     if (searchValue) {
       let newSearchValue = searchValue.trim();
