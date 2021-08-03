@@ -137,6 +137,7 @@ class DateTimeWidget extends PureComponent<Props, State> {
       required,
       labelTextStyle,
       labelFontSize,
+      disableResetDate,
     } = this.props;
 
     switch (uiMode) {
@@ -167,7 +168,7 @@ class DateTimeWidget extends PureComponent<Props, State> {
               labelTextStyle={[{ paddingTop: 2 }, labelTextStyle]}
               labelFontSize={labelFontSize || 13}
             />
-            {date ? (
+            {date && !disableResetDate ? (
               <TouchableOpacity style={styles.clearIconMaterial} onPress={this.onPressClear}>
                 <FontAwesome5 size={18} name="times-circle" color={csstyles.vars.csLightGrey} />
               </TouchableOpacity>
