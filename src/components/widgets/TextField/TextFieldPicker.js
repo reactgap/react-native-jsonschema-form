@@ -379,11 +379,12 @@ const styles = StyleSheet.create({
     marginBottom: csstyles.vars.csBoxSpacingHalf,
   },
   iconMaterial: {
-    width: csstyles.vars.csInputHeight - 10,
+    width: '100%',
     height: csstyles.vars.csInputHeight,
-    ...csstyles.base.center,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
     position: 'absolute',
-    top: 25,
+    top: 20,
     right: 0,
   },
 });

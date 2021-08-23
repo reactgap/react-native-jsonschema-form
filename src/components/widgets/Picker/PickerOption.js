@@ -421,9 +421,10 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   iconMaterial: {
-    width: csstyles.vars.csInputHeight - 10,
+    width: '100%',
     height: csstyles.vars.csInputHeight,
-    ...csstyles.base.center,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
     position: 'absolute',
     top: 20,
     right: 0,

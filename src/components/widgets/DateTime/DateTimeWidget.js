@@ -338,9 +338,10 @@ const styles = StyleSheet.create({
     height: 80,
   },
   iconMaterial: {
-    width: csstyles.vars.csInputHeight - 10,
+    width: '100%',
     height: csstyles.vars.csInputHeight,
-    ...csstyles.base.center,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
     position: 'absolute',
     top: 20,
     right: 0,
