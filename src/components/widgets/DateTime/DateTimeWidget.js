@@ -103,7 +103,7 @@ class DateTimeWidget extends PureComponent<Props, State> {
   };
 
   onFocus = () => {
-    // Keyboard.dismiss();
+    Keyboard.dismiss();
     this.setState(
       {
         showingPicker: true,
@@ -157,7 +157,7 @@ class DateTimeWidget extends PureComponent<Props, State> {
               value={value}
               maxLength={maxLength}
               style={wrapperStyle}
-              editable={false}
+              editable={true}
               error={errorMsg}
               ref={(ref) => {
                 this.inputRef = ref;
