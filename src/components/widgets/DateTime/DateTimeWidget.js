@@ -33,6 +33,7 @@ type Props = {
 type State = {
   showingPicker: boolean,
 };
+const IS_ANDROID = Platform.OS === 'android';
 
 class DateTimeWidget extends PureComponent<Props, State> {
   state: State = {
@@ -157,7 +158,7 @@ class DateTimeWidget extends PureComponent<Props, State> {
               value={value}
               maxLength={maxLength}
               style={wrapperStyle}
-              editable={true}
+              editable={!IS_ANDROID}
               error={errorMsg}
               ref={(ref) => {
                 this.inputRef = ref;
