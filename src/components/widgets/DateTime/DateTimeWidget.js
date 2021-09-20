@@ -11,14 +11,14 @@ import {
   Keyboard,
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { TextField, FilledTextField, OutlinedTextField } from 'rn-material-ui-textfield';
+import { TextField } from 'rn-material-ui-textfield';
 import moment from 'moment';
 
 import { convertDateToString, parserStringToDate } from './DatetimeFormat';
 import csstyles from '../../styles';
 import DatePicker from './DatePicker';
-import Picker from '../Picker/Picker';
 import Errors from '../Errors/ErrorTextField';
+const IS_ANDROID = Platform.OS === 'android';
 
 type Props = {
   value: string,
@@ -33,7 +33,6 @@ type Props = {
 type State = {
   showingPicker: boolean,
 };
-const IS_ANDROID = Platform.OS === 'android';
 
 class DateTimeWidget extends PureComponent<Props, State> {
   state: State = {
@@ -147,12 +146,11 @@ class DateTimeWidget extends PureComponent<Props, State> {
         const labelDisplay = required ? `${label}*` : label;
 
         return (
-          <>
+          <TouchableOpacity style={styles.pickerContainer} onPress={this.onPress}>
             <TextField
               label={labelDisplay || ''}
               keyboardType="default"
               blurOnSubmit={false}
-              // title={value}
               onBlur={this.onBlur}
               onFocus={this.onFocus}
               value={value}
@@ -169,17 +167,23 @@ class DateTimeWidget extends PureComponent<Props, State> {
               labelFontSize={labelFontSize || 13}
             />
             {date ? (
-              <TouchableOpacity style={styles.clearIconMaterial} onPress={this.onPressClear}>
-                <FontAwesome5 size={18} name="times-circle" color={csstyles.vars.csLightGrey} />
+              <TouchableOpacity
+                style={[styles.iconMaterial, { width: 20 }]}
+                onPress={this.onPressClear}>
+                <FontAwesome5
+                  size={18}
+                  style={{ top: 3 }}
+                  name="times-circle"
+                  color={csstyles.vars.csLightGrey}
+                />
               </TouchableOpacity>
             ) : (
               <View style={styles.iconMaterial}>
                 <FontAwesome5 size={20} name="sort-down" color={csstyles.vars.csLightGrey} />
               </View>
             )}
-          </>
+          </TouchableOpacity>
         );
-        break;
 
       default:
         return (
@@ -203,7 +207,6 @@ class DateTimeWidget extends PureComponent<Props, State> {
             </View>
           </View>
         );
-        break;
     }
   };
 
@@ -346,6 +349,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 20,
     right: 0,
+  },
+  pickerContainer: {
+    width: '100%',
   },
 });
 
