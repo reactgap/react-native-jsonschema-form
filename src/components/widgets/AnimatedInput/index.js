@@ -35,6 +35,7 @@ const AnimatedInput = (props: Props) => {
     value,
     label,
     containerStyle,
+    autoCapitalize,
   } = props;
   const showError = rawErrors && rawErrors.length > 0;
   let keyboardTypeUse = keyboardType ? keyboardType : 'default';
@@ -64,6 +65,7 @@ const AnimatedInput = (props: Props) => {
         styleLabel={labelStyle}
         maxLength={maxLength}
         keyboardType={keyboardType}
+        autoCapitalize={autoCapitalize | 'none'}
       />
     </View>
   );
