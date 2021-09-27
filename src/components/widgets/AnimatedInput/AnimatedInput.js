@@ -24,6 +24,7 @@ const AnimatedTextInput = ({
   title,
   autoFocus,
   keyboardType,
+  autoCapitalize,
   ...others
 }) => {
   const [showInput, setShowInput] = useState(false);
@@ -170,6 +171,7 @@ const AnimatedTextInput = ({
                 ref={innerRef}
                 selectionColor="#0088FF"
                 keyboardType={keyboardType || 'default'}
+                autoCapitalize={autoCapitalize}
               />
             </View>
           )}

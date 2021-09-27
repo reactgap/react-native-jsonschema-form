@@ -65,7 +65,7 @@ const AnimatedInput = (props: Props) => {
         styleLabel={labelStyle}
         maxLength={maxLength}
         keyboardType={keyboardType}
-        autoCapitalize={autoCapitalize | 'none'}
+        autoCapitalize={autoCapitalize || 'words'}
       />
     </View>
   );
