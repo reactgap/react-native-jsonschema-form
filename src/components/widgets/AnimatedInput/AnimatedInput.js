@@ -23,6 +23,7 @@ const AnimatedTextInput = ({
   onChangeEnd = () => null,
   title,
   autoFocus,
+  keyboardType,
   ...others
 }) => {
   const [showInput, setShowInput] = useState(false);
@@ -168,6 +169,7 @@ const AnimatedTextInput = ({
                 onEndEditing={() => onBlur()}
                 ref={innerRef}
                 selectionColor="#0088FF"
+                keyboardType={keyboardType || 'default'}
               />
             </View>
           )}

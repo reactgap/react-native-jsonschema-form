@@ -223,6 +223,7 @@ class DateTimeWidget extends PureComponent<Props, State> {
       endDate,
       afterCurrentDate,
       format,
+      minimumDate,
     } = this.props;
     const { showingPicker } = this.state;
     const showError = rawErrors && rawErrors.length > 0 && uiMode !== 'material';
@@ -240,6 +241,7 @@ class DateTimeWidget extends PureComponent<Props, State> {
           endDate={endDate}
           afterCurrentDate={afterCurrentDate}
           format={format || 'MM/DD/YYYY'}
+          minimumDate={minimumDate}
         />
         <View
           style={{

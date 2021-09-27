@@ -63,6 +63,7 @@ const AnimatedInput = (props: Props) => {
         disabled={disabled}
         styleLabel={labelStyle}
         maxLength={maxLength}
+        keyboardType={keyboardType}
       />
     </View>
   );
