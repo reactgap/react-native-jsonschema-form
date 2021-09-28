@@ -50,7 +50,7 @@ class DateTimeWidget extends PureComponent<Props, State> {
       });
     } else {
       // For android
-      const { value, onChange, endDate, afterCurrentDate, format } = this.props;
+      const { value, onChange, endDate, afterCurrentDate, format, minimumDate } = this.props;
       try {
         const formatDate = format || 'MM/DD/YYYY';
         const now = new Date();
@@ -71,6 +71,7 @@ class DateTimeWidget extends PureComponent<Props, State> {
         const { action, year, month, day } = await DatePickerAndroid.open({
           date,
           maxDate: endDatePicker,
+          minDate: minimumDate,
         });
 
         if (action !== DatePickerAndroid.dismissedAction) {
