@@ -154,12 +154,15 @@ class DatePicker extends Component<Props, State> {
   };
 
   onDone = () => {
-    const { onChange, minimumDate } = this.props;
+    const { onChange, minimumDate, endDate } = this.props;
     const { currentDate } = this.state;
     let newDate = currentDate;
 
     if (minimumDate && moment(currentDate, 'DD/MM/YYYY').isBefore(moment(minimumDate))) {
       newDate = moment(minimumDate).format('DD/MM/YYYY');
+    }
+    if (endDate && endDate.isBefore(moment(currentDate, 'DD/MM/YYYY'))) {
+      newDate = endDate.format('DD/MM/YYYY');
     }
 
     onChange(newDate);
