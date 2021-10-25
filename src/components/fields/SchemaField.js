@@ -232,6 +232,10 @@ function SchemaFieldRender(props) {
   if (uiSchema['ui:widget'] === 'TextFieldMaterial') {
     displayLabel = false;
   }
+
+  if (uiSchema['ui:widget'] === 'AnimatedInput') {
+    displayLabel = false;
+  }
   if (schema.uiMode === 'material') {
     displayLabel = false;
   }
