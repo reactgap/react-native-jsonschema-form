@@ -161,8 +161,8 @@ class DatePicker extends Component<Props, State> {
     if (minimumDate && moment(currentDate, 'DD/MM/YYYY').isBefore(moment(minimumDate))) {
       newDate = moment(minimumDate).format('DD/MM/YYYY');
     }
-    if (endDate && endDate.isBefore(moment(currentDate, 'DD/MM/YYYY'))) {
-      newDate = endDate.format('DD/MM/YYYY');
+    if (endDate && moment(endDate).isBefore(moment(currentDate, 'DD/MM/YYYY'))) {
+      newDate = moment(endDate).format('DD/MM/YYYY');
     }
 
     onChange(newDate);
@@ -250,7 +250,7 @@ class DatePicker extends Component<Props, State> {
       <Modal
         visible={isOpen}
         animationType={center ? 'fade' : 'none'}
-        onRequestClose={() => {}}
+        onRequestClose={() => { }}
         transparent>
         <View style={styles.modalWrapper}>{this.renderAnimationContent()}</View>
       </Modal>
