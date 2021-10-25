@@ -36,6 +36,7 @@ const widgetMap = {
     PickerOption: 'PickerOption',
     TextField: 'TextField',
     TextFieldMaterial: 'TextFieldMaterial',
+    AnimatedInput: 'AnimatedInput',
   },
   number: {
     text: 'TextWidget',

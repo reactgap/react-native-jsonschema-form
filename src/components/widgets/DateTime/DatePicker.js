@@ -22,6 +22,7 @@ type Props = {
   onChange: (value: Date) => void,
   center?: boolean,
   startDate: Date | null,
+  minimumDate: Date | null,
 };
 
 type State = {
@@ -153,13 +154,22 @@ class DatePicker extends Component<Props, State> {
   };
 
   onDone = () => {
-    const { onChange } = this.props;
+    const { onChange, minimumDate, endDate } = this.props;
+    const { currentDate } = this.state;
+    let newDate = currentDate;
 
-    onChange(this.state.currentDate);
+    if (minimumDate && moment(currentDate, 'DD/MM/YYYY').isBefore(moment(minimumDate))) {
+      newDate = moment(minimumDate).format('DD/MM/YYYY');
+    }
+    if (endDate && endDate.isBefore(moment(currentDate, 'DD/MM/YYYY'))) {
+      newDate = endDate.format('DD/MM/YYYY');
+    }
+
+    onChange(newDate);
   };
 
   renderContent = () => {
-    const { value, picking, center } = this.props;
+    const { value, picking, center, minimumDate } = this.props;
 
     return (
       <Animated.View
@@ -173,6 +183,7 @@ class DatePicker extends Component<Props, State> {
           display="spinner"
           timeZoneOffsetInMinutes={new Date().getTimezoneOffset() * -1}
           locale={'vi'}
+          minimumDate={minimumDate}
         />
         <View style={[styles.actionBtnContainer]}>
           <CSButton type="primary" leftIcon="check" iconOnly onPress={this.onDone} />
