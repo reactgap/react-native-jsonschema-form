@@ -107,6 +107,7 @@ class TextFieldPicker extends PureComponent<Props, State> {
       labelTextStyle,
       labelFontSize,
       required,
+      disabled,
     } = this.props;
     const showError = rawErrors && rawErrors.length > 0;
 
@@ -115,7 +116,7 @@ class TextFieldPicker extends PureComponent<Props, State> {
         const errorMsg = showError ? rawErrors[0] : null;
         const labelDisplay = required ? `${label}*` : label;
         return (
-          <>
+          <View style={{ flex: 1 }}>
             <TextField
               label={labelDisplay || ''}
               keyboardType="default"
@@ -134,26 +135,41 @@ class TextFieldPicker extends PureComponent<Props, State> {
             <View style={styles.iconMaterial}>
               <FontAwesome5 size={20} name="sort-down" color={csstyles.vars.csLightGrey} />
             </View>
-          </>
+            <TouchableOpacity
+              disabled={disabled ? disabled : false}
+              style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+              onPress={() => this.onPress('provinces')}>
+              <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+            </TouchableOpacity>
+          </View>
         );
         break;
 
       default:
         return (
-          <View style={styles.wrapperInput}>
-            {icon && (
-              <View style={styles.inputIcon}>
-                <FontAwesome5 size={15} name={icon} color={'#646A64'} solid={true} />
-              </View>
-            )}
-            <View style={[styles.inputContainer, showError ? styles.inputContainerInvalid : null]}>
-              <Text style={styles.inputText}>{value}</Text>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => this.onPress('provinces')}
+            style={{
+              flex: 1,
+            }}
+            disabled={disabled ? disabled : false}>
+            <View style={styles.wrapperInput}>
+              {icon && (
+                <View style={styles.inputIcon}>
+                  <FontAwesome5 size={15} name={icon} color={'#646A64'} solid={true} />
+                </View>
+              )}
+              <View
+                style={[styles.inputContainer, showError ? styles.inputContainerInvalid : null]}>
+                <Text style={styles.inputText}>{value}</Text>
 
-              <View style={styles.pickerIcon}>
-                <FontAwesome5 size={15} name="chevron-down" color={csstyles.vars.csGrey} />
+                <View style={styles.pickerIcon}>
+                  <FontAwesome5 size={15} name="chevron-down" color={csstyles.vars.csGrey} />
+                </View>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
         );
         break;
     }
@@ -191,13 +207,7 @@ class TextFieldPicker extends PureComponent<Props, State> {
         const subLabelDisplay = isDistrictRequired ? `${subLabel}*` : subLabel;
         return (
           <View style={[csstyles.base.rowCenterLineBetween]}>
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={() => this.onPress('districts')}
-              style={{
-                flex: 1,
-              }}
-              disabled={disabled ? disabled : false}>
+            <View style={{ flex: 1 }}>
               <TextField
                 label={subLabelDisplay || ''}
                 keyboardType="default"
@@ -216,7 +226,13 @@ class TextFieldPicker extends PureComponent<Props, State> {
               <View style={styles.iconMaterial}>
                 <FontAwesome5 size={20} name="sort-down" color={csstyles.vars.csLightGrey} />
               </View>
-            </TouchableOpacity>
+              <TouchableOpacity
+                disabled={disabled ? disabled : false}
+                style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+                onPress={() => this.onPress('districts')}>
+                <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+              </TouchableOpacity>
+            </View>
           </View>
         );
         break;
@@ -298,17 +314,7 @@ class TextFieldPicker extends PureComponent<Props, State> {
         />
 
         {/* {label && <Text style={styles.label}>{label}</Text>} */}
-        <View style={csstyles.base.rowCenter}>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => this.onPress('provinces')}
-            style={{
-              flex: 1,
-            }}
-            disabled={disabled ? disabled : false}>
-            {this.renderProvinceUIMode()}
-          </TouchableOpacity>
-        </View>
+        <View style={csstyles.base.rowCenter}>{this.renderProvinceUIMode()}</View>
         {showError && <Errors errors={rawErrors} />}
         {this.renderDistrictUIMode()}
       </View>
