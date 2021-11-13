@@ -147,7 +147,7 @@ class DateTimeWidget extends PureComponent<Props, State> {
         const labelDisplay = required ? `${label}*` : label;
 
         return (
-          <TouchableOpacity style={styles.pickerContainer} onPress={this.onPress}>
+          <View style={styles.pickerContainer}>
             <TextField
               label={labelDisplay || ''}
               keyboardType="default"
@@ -183,7 +183,12 @@ class DateTimeWidget extends PureComponent<Props, State> {
                 <FontAwesome5 size={20} name="sort-down" color={csstyles.vars.csLightGrey} />
               </View>
             )}
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+              onPress={this.onPress}>
+              <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+            </TouchableOpacity>
+          </View>
         );
 
       default:
@@ -354,7 +359,7 @@ const styles = StyleSheet.create({
     right: 0,
   },
   pickerContainer: {
-    width: '100%',
+    height: '100%',
   },
 });
 
