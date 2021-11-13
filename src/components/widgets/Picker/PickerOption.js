@@ -168,6 +168,12 @@ class PickerOption extends Component<Props, State> {
             <View style={styles.iconMaterial}>
               <FontAwesome5 size={20} name="sort-down" color={csstyles.vars.csLightGrey} />
             </View>
+            <TouchableOpacity
+              disabled={disabled ? disabled : false}
+              style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+              onPress={this.onPress}>
+              <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+            </TouchableOpacity>
           </View>
         );
 
@@ -194,38 +200,48 @@ class PickerOption extends Component<Props, State> {
 
         const valueDisplay = _isEmpty(value) ? placeHolder || '' : value;
         return (
-          <View
-            style={[
-              wrapStyles ? wrapStyles : wrapStyle,
-              showError ? styles.inputContainerInvalid : null,
-            ]}>
-            {icon && (
-              <View style={styles.inputIcon}>
-                <FontAwesome5 size={15} name={icon} color={'#646A64'} solid={false} />
-              </View>
-            )}
-            <Text
-              numberOfLines={numberOfLines}
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={this.onPress}
+            style={{
+              flex: 1,
+            }}
+            disabled={disabled ? disabled : false}>
+            <View
               style={[
-                { ...csstyles.text.regular },
-                inputTextStyle,
-                fontTextStyle,
-                textCustomStyle,
-                textStyle,
+                wrapStyles ? wrapStyles : wrapStyle,
+                showError ? styles.inputContainerInvalid : null,
               ]}>
-              {valueDisplay}
-              {rangeDates && <Text style={{ ...csstyles.text.medium }}>{` (${rangeDates})`}</Text>}
-            </Text>
-            {!disabled && (
-              <View style={[styles.inputIconLight, iconStyleTmp]}>
-                <FontAwesome5
-                  size={15}
-                  name={rightIcon}
-                  color={mainColor ? mainColor : csstyles.vars.csGrey}
-                />
-              </View>
-            )}
-          </View>
+              {icon && (
+                <View style={styles.inputIcon}>
+                  <FontAwesome5 size={15} name={icon} color={'#646A64'} solid={false} />
+                </View>
+              )}
+              <Text
+                numberOfLines={numberOfLines}
+                style={[
+                  { ...csstyles.text.regular },
+                  inputTextStyle,
+                  fontTextStyle,
+                  textCustomStyle,
+                  textStyle,
+                ]}>
+                {valueDisplay}
+                {rangeDates && (
+                  <Text style={{ ...csstyles.text.medium }}>{` (${rangeDates})`}</Text>
+                )}
+              </Text>
+              {!disabled && (
+                <View style={[styles.inputIconLight, iconStyleTmp]}>
+                  <FontAwesome5
+                    size={15}
+                    name={rightIcon}
+                    color={mainColor ? mainColor : csstyles.vars.csGrey}
+                  />
+                </View>
+              )}
+            </View>
+          </TouchableOpacity>
         );
     }
   };
@@ -301,17 +317,7 @@ class PickerOption extends Component<Props, State> {
             showSearchBar={showSearchBar}
             searchStyle={searchStyle}
           />
-          <View style={csstyles.base.rowCenterLineBetween}>
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={this.onPress}
-              style={{
-                flex: 1,
-              }}
-              disabled={disabled ? disabled : false}>
-              {this.renderUImode()}
-            </TouchableOpacity>
-          </View>
+          <View style={csstyles.base.rowCenterLineBetween}>{this.renderUImode()}</View>
         </View>
         <View>
           {showError && (
