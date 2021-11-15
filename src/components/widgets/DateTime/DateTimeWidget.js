@@ -7,12 +7,10 @@ import {
   TouchableOpacity,
   StyleSheet,
   Platform,
-  DatePickerAndroid,
   Keyboard,
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { TextField } from 'rn-material-ui-textfield';
-import moment from 'moment';
 
 import { convertDateToString, parserStringToDate } from './DatetimeFormat';
 import csstyles from '../../styles';
@@ -44,46 +42,10 @@ class DateTimeWidget extends PureComponent<Props, State> {
   inputRef: TextInput | null = null;
 
   onPress = async () => {
-    if (Platform.OS === 'ios') {
       this.setState({
         showingPicker: true,
       });
-    } else {
-      // For android
-      const { value, onChange, endDate, afterCurrentDate, format, minimumDate } = this.props;
-      try {
-        const formatDate = format || 'MM/DD/YYYY';
-        const now = new Date();
-        let endDatePicker = now;
-        if (endDate) {
-          endDatePicker = moment(endDate, formatDate).toDate();
-        }
-        let defaultDate = now;
-        if (afterCurrentDate && typeof afterCurrentDate === 'number' && afterCurrentDate !== 0) {
-          defaultDate = new Date(
-            now.getFullYear() + afterCurrentDate,
-            now.getMonth(),
-            now.getDate(),
-          );
-        }
-        const date = value ? parserStringToDate(value) : defaultDate;
 
-        const { action, year, month, day } = await DatePickerAndroid.open({
-          date,
-          maxDate: endDatePicker,
-          minDate: minimumDate,
-        });
-
-        if (action !== DatePickerAndroid.dismissedAction) {
-          const selectedDate = new Date(year, month, day);
-          this.onChange(selectedDate);
-        }
-
-        // onChange(selectedValue)
-      } catch (error) {
-        console.log(error);
-      }
-    }
   };
 
   onChange = (value: Date) => {
@@ -248,6 +210,7 @@ class DateTimeWidget extends PureComponent<Props, State> {
           afterCurrentDate={afterCurrentDate}
           format={format || 'MM/DD/YYYY'}
           minimumDate={minimumDate}
+          onCloseModel={this.onClose}
         />
         <View
           style={{
