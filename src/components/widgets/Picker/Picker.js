@@ -258,7 +258,7 @@ class Picker extends Component<Props> {
         <View
           style={{
             height: pHeight,
-            paddingBottom: 20,
+            paddingBottom: Platform.OS === 'android' ? 50 : 20,
           }}>
           {rangeOfDates ? (
             <View style={{ flex: 1 }}>
