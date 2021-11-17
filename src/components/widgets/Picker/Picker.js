@@ -54,6 +54,7 @@ type Props = {
   onChangeSearch?: () => void,
   searchValue?: string,
   searchStyle?: StyleProp<ViewStyle>,
+  pickerHeight?: number,
 };
 
 class Picker extends Component<Props> {
@@ -223,6 +224,7 @@ class Picker extends Component<Props> {
       numberMonthsFuture,
       showSearchBar,
       searchStyle,
+      pickerHeight
     } = this.props;
     const { error, searchValue } = this.state;
     let pHeight = rangeOfDates ? 450 : (DEVICE_SCREEN_HEIGHT * 1) / 3;
@@ -238,6 +240,9 @@ class Picker extends Component<Props> {
       const regex = new RegExp(newSearchValue, 'i');
 
       this.dataSearch = data.filter((e) => removeAccents(e?.name)?.search(regex) >= 0);
+    }
+    if (pickerHeight) {
+      pHeight = pickerHeight;
     }
     return (
       <View

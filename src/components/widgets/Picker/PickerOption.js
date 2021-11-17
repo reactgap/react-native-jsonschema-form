@@ -36,6 +36,8 @@ type Props = {
   showSearchBar?: boolean,
   searchStyle?: StyleProp<ViewStyle>,
   numberOfLines?: string,
+  pickerHeight?: number,
+
 };
 
 type State = {
@@ -266,6 +268,7 @@ class PickerOption extends Component<Props, State> {
       maxDate,
       showSearchBar,
       searchStyle,
+      pickerHeight
     } = this.props;
     const { showingPicker, rangeOfDates } = this.state;
     const showError = rawErrors && rawErrors.length > 0 && uiMode !== 'material';
@@ -316,6 +319,7 @@ class PickerOption extends Component<Props, State> {
             }}
             showSearchBar={showSearchBar}
             searchStyle={searchStyle}
+            pickerHeight={pickerHeight}
           />
           <View style={csstyles.base.rowCenterLineBetween}>{this.renderUImode()}</View>
         </View>
