@@ -17,6 +17,7 @@ import {
   StyleProp,
   ViewStyle,
   Keyboard,
+  ScrollView,
 } from 'react-native';
 import _isEmpty from 'lodash/isEmpty';
 
@@ -266,7 +267,7 @@ class Picker extends Component<Props> {
             paddingBottom: Platform.OS === 'android' ? 50 : 20,
           }}>
           {rangeOfDates ? (
-            <View style={{ flex: 1 }}>
+            <ScrollView style={{ flex: 1 }}>
               <View style={{ flex: 1 }}>
                 <PickerRangeOfDates
                   title={''}
@@ -282,7 +283,7 @@ class Picker extends Component<Props> {
                   <CSButton type="secondary" title="Trở lại" onPress={() => onPressBackFoward()} />
                 </View>
               </View>
-            </View>
+            </ScrollView>
           ) : (
             <FlatList
               style={csstyles.base.full}
