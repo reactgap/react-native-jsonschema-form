@@ -1,14 +1,7 @@
 // @flow
 
 import React, { PureComponent } from 'react';
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  Platform,
-  Keyboard,
-} from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, Platform, Keyboard } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { TextField } from 'rn-material-ui-textfield';
 
@@ -42,10 +35,9 @@ class DateTimeWidget extends PureComponent<Props, State> {
   inputRef: TextInput | null = null;
 
   onPress = async () => {
-      this.setState({
-        showingPicker: true,
-      });
-
+    this.setState({
+      showingPicker: true,
+    });
   };
 
   onChange = (value: Date) => {
@@ -129,6 +121,11 @@ class DateTimeWidget extends PureComponent<Props, State> {
               labelTextStyle={[{ paddingTop: 2 }, labelTextStyle]}
               labelFontSize={labelFontSize || 13}
             />
+            <TouchableOpacity
+              style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+              onPress={this.onPress}>
+              <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+            </TouchableOpacity>
             {date ? (
               <TouchableOpacity
                 style={[styles.iconMaterial, { width: 20 }]}
@@ -145,11 +142,6 @@ class DateTimeWidget extends PureComponent<Props, State> {
                 <FontAwesome5 size={20} name="sort-down" color={csstyles.vars.csLightGrey} />
               </View>
             )}
-            <TouchableOpacity
-              style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
-              onPress={this.onPress}>
-              <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
-            </TouchableOpacity>
           </View>
         );
 
