@@ -9,7 +9,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   type LayoutChangeEvent,
-  Platform
+  Platform,
 } from 'react-native';
 import csstyles from '../../styles';
 import { DEVICE_BOTTOM_SAFE, DEVICE_SCREEN_HEIGHT } from '../../../deviceHelper';
@@ -148,10 +148,9 @@ class DatePicker extends Component<Props, State> {
       this.setState({ currentDate: value });
     }
     if (Platform.OS === 'android') {
-      value &&  this.onDone(value);
-      this.props.onCloseModel()
+      value && this.onDone(value);
+      this.props.onCloseModel();
     }
-
   };
 
   onClose = () => {
@@ -165,10 +164,10 @@ class DatePicker extends Component<Props, State> {
     let newDate = currentDate;
 
     if (minimumDate && moment(currentDate, 'DD/MM/YYYY').isBefore(moment(minimumDate))) {
-      newDate = moment(minimumDate).format('DD/MM/YYYY');
+      newDate = moment(minimumDate);
     }
     if (endDate && moment(endDate).isBefore(moment(currentDate, 'DD/MM/YYYY'))) {
-      newDate = moment(endDate).format('DD/MM/YYYY');
+      newDate = moment(endDate);
     }
 
     onChange(newDate);
@@ -191,7 +190,7 @@ class DatePicker extends Component<Props, State> {
           locale={'vi'}
           minimumDate={minimumDate}
         />
-        {Platform.OS === 'ios' && <RenderConfirmButton onPress={this.onDone} /> }
+        {Platform.OS === 'ios' && <RenderConfirmButton onPress={this.onDone} />}
       </Animated.View>
     );
   };
@@ -220,16 +219,12 @@ class DatePicker extends Component<Props, State> {
     const { center } = this.props;
 
     if (center) {
-      return (
-        <View style={csstyles.base.fullCenter}>
-          {this.renderContent()}
-        </View>
-      );
+      return <View style={csstyles.base.fullCenter}>{this.renderContent()}</View>;
     }
 
     return (
       <>
-       { Platform.OS === 'ios' && this.renderBgTouchable()}
+        {Platform.OS === 'ios' && this.renderBgTouchable()}
         <Animated.View
           style={[
             styles.animationView,
@@ -250,13 +245,13 @@ class DatePicker extends Component<Props, State> {
   render() {
     const { isOpen, center } = this.props;
     if (Platform.OS === 'android' && isOpen) {
-     return this.renderAnimationContent()
+      return this.renderAnimationContent();
     } else {
       return (
         <Modal
           visible={isOpen}
           animationType={center ? 'fade' : 'none'}
-          onRequestClose={() => { }}
+          onRequestClose={() => {}}
           transparent>
           <View style={styles.modalWrapper}>{this.renderAnimationContent()}</View>
         </Modal>
@@ -264,13 +259,13 @@ class DatePicker extends Component<Props, State> {
     }
   }
 }
-const RenderConfirmButton = ({onPress}) => {
+const RenderConfirmButton = ({ onPress }) => {
   return (
     <View style={styles.actionBtnContainer}>
       <CSButton type="primary" leftIcon="check" iconOnly onPress={onPress} />
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   modalWrapper: {
